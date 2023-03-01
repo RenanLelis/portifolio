@@ -1,5 +1,5 @@
-const jwtGen = require('../../business/token');
-const msg = require('../../business/message');
+const jwtGen = require('../../util/token');
+const msg = require('../../util/message');
 
 const validateUserLoggedIn = (req, res, next) => {
     if (!req.headers.auth) {
@@ -17,3 +17,7 @@ const validateUserLoggedIn = (req, res, next) => {
         });
     }
 }
+
+module.exports = {
+    validateUserLoggedIn
+};

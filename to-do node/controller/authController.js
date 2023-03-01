@@ -135,4 +135,10 @@ const activateUser = (req, res) => {
     );
 }
 
-module.exports = { login, getNewPasswordCode, registerNewPassword, registerUser, activateUser }
+module.exports = { 
+    login, 
+    getNewPasswordCode, 
+    registerNewPassword, 
+    registerUser, 
+    activateUser 
+}

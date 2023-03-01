@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require("cors");
 // const bodyParser = require('body-parser');
 const routes = require('./controller/routes');
-const path = require('path');
+// const path = require('path');
 require('dotenv').config()
 
 const port = process.env.PORT || 5000;
@@ -16,7 +16,7 @@ app.use(cors(corsOptions));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 // app.use(express.static('public'));
-app.use(routes);
+app.use(routes.router);
 
 app.listen(port, () => {
     console.log(`Executing on port ${port}`)
