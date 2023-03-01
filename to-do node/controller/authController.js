@@ -6,7 +6,7 @@ const authBo = require('../business/authBo');
 const login = (req, res) => {
     if (!req.body || !req.body.email || !req.body.password) {
         return res.status(400).json({
-            erro: msg.getErrorMessageInputValues()
+            error: msg.getErrorMessageInputValues()
         });
     }
     authBo.login(req.body.email, req.body.password).then(
@@ -24,10 +24,10 @@ const login = (req, res) => {
             return res.status(200).json(returnValue);
         },
         (error) => {
-            if (error.status && error.erro) {
-                return res.status(error.status).json({ erro: error.erro });
+            if (error.status && error.error) {
+                return res.status(error.status).json({ error: error.error });
             }
-            return res.status(500).json({ erro: msg.getErrorMessage() });
+            return res.status(500).json({ error: msg.getErrorMessage() });
         }
     );
 }
@@ -36,7 +36,7 @@ const login = (req, res) => {
 const getNewPasswordCode = (req, res) => {
     if (!req.body || !req.body.email || !validator.validate(email)) {
         return res.status(400).json({
-            erro: msg.getErrorMessageInputValues()
+            error: msg.getErrorMessageInputValues()
         });
     }
     authBo.getNewPasswordCode(req.body.email).then(
@@ -44,10 +44,10 @@ const getNewPasswordCode = (req, res) => {
             return res.status(200).send();
         },
         (error) => {
-            if (error.status && error.erro) {
-                return res.status(error.status).json({ erro: error.erro });
+            if (error.status && error.error) {
+                return res.status(error.status).json({ error: error.error });
             }
-            return res.status(500).json({ erro: msg.getErrorMessage() });
+            return res.status(500).json({ error: msg.getErrorMessage() });
         }
     );
 }
@@ -56,7 +56,7 @@ const getNewPasswordCode = (req, res) => {
 const registerNewPassword = (req, res) => {
     if (!req.body || !req.body.email || !req.body.password || !req.body.newPasswordCode) {
         return res.status(400).json({
-            erro: msg.getErrorMessageInputValues()
+            error: msg.getErrorMessageInputValues()
         });
     }
     authBo.registerNewPassword(req.body.email, req.body.password, req.body.newPasswordCode).then(
@@ -65,10 +65,10 @@ const registerNewPassword = (req, res) => {
         },
         (error) => {
             console.log(error)
-            if (error.status && error.erro) {
-                return res.status(error.status).json({ erro: error.erro });
+            if (error.status && error.error) {
+                return res.status(error.status).json({ error: error.error });
             }
-            return res.status(500).json({ erro: msg.getMensagemErro() });
+            return res.status(500).json({ error: msg.getErrorMessage() });
         }
     );
 }
@@ -77,7 +77,7 @@ const registerNewPassword = (req, res) => {
 const registerUser = (req, res) => {
     if (!req.body || !req.body.email || !req.body.password || !req.body.userName) {
         return res.status(400).json({
-            erro: msg.getErrorMessageInputValues()
+            error: msg.getErrorMessageInputValues()
         });
     }
     authBo.registerUser(req.body.email, req.body.password, req.body.userName, req.body.lastName).then(
@@ -96,10 +96,10 @@ const registerUser = (req, res) => {
         },
         (error) => {
             console.log(error)
-            if (error.status && error.erro) {
-                return res.status(error.status).json({ erro: error.erro });
+            if (error.status && error.error) {
+                return res.status(error.status).json({ error: error.error });
             }
-            return res.status(500).json({ erro: msg.getMensagemErro() });
+            return res.status(500).json({ error: msg.getErrorMessage() });
         }
     );
 }
@@ -108,7 +108,7 @@ const registerUser = (req, res) => {
 const activateUser = (req, res) => {
     if (!req.body || !req.body.email || !req.body.activationCode) {
         return res.status(400).json({
-            erro: msg.getErrorMessageInputValues()
+            error: msg.getErrorMessageInputValues()
         });
     }
     authBo.activateUser(req.body.email, req.body.activationCode).then(
@@ -127,10 +127,10 @@ const activateUser = (req, res) => {
         },
         (error) => {
             console.log(error)
-            if (error.status && error.erro) {
-                return res.status(error.status).json({ erro: error.erro });
+            if (error.status && error.error) {
+                return res.status(error.status).json({ error: error.error });
             }
-            return res.status(500).json({ erro: msg.getMensagemErro() });
+            return res.status(500).json({ error: msg.getErrorMessage() });
         }
     );
 }
