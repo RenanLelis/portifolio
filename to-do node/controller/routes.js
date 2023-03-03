@@ -20,6 +20,21 @@ router.post('/api/auth/registerUser', authController.registerUser)
 //Activate User
 router.post('/api/auth/activateUser', authController.activateUser)
 
+// getTasksAndLists,
+// getTasksByList,
+// getTasksUserWithoutList,
+// getLists,
+// createList,
+// updateList,
+// deleteList,
+// deleteTasksFromList,
+// moveTasksForList,
+// createTask,
+// updateTask,
+// deleteTask,
+// completeTask,
+// unCompleteTask
+
 module.exports = {
     router
 };
