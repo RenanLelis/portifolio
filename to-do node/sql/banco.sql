@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS TASK(
     ID int auto_increment primary key,
     TASK_NAME varchar(50) not null,
     TASK_DESCRIPTION TEXT,
-    DEADLINE timestamp,
+    DEADLINE DATE,
     TASK_STATUS INT NOT NULL,
     ID_USER int not null,
     FOREIGN KEY (ID_USER)
