@@ -1,11 +1,20 @@
 package com.renan.todo.business;
 
 import com.renan.todo.dto.UserDTO;
+import com.renan.todo.entities.User;
+import com.renan.todo.persistence.UserRepository;
+import com.renan.todo.util.CriptoUtil;
+import com.renan.todo.util.MessageUtil;
+import com.renan.todo.util.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Services for user authentication, reset password, register and change his data
  */
 public class UserServiceImpl implements UserService {
+
+    @Autowired
+    private UserRepository repository;
 
     /**
      * Makes user authentication
@@ -16,7 +25,15 @@ public class UserServiceImpl implements UserService {
      * @throws BusinessException - in cases of any errors or invalid operations
      */
     public UserDTO login(String email, String password) throws BusinessException {
-        //TODO Implement
+        if (!validateLoginData(email, password)) {
+            throw new BusinessException(MessageUtil.getErrorMessageInputValues(), BusinessException.BUSINESS_MESSAGE, AppErrorType.INVALID_INPUT);
+        }
+        User user = repository.findByEmail(email);
+        if (user == null) {
+            throw new BusinessException(MessageUtil.getErrorMessageLogin(), BusinessException.BUSINESS_MESSAGE, AppErrorType.INVALID_INPUT);
+        }
+        String hashPassword = CriptoUtil.generateHashString(password);
+        if () {}
         return null;
     }
 
@@ -70,6 +87,17 @@ public class UserServiceImpl implements UserService {
     public UserDTO activateUser(String email, String activationCode) throws BusinessException {
         //TODO Implement
         return null;
+    }
+
+    /**
+     * Validate the user data for login operation
+     *
+     * @param email    - user email
+     * @param password - user password
+     * @return - true if is valid
+     */
+    private boolean validateLoginData(String email, String password) {
+        return StringUtil.isNotEmpty(password) && StringUtil.isNotEmpty(email) && StringUtil.ismail(email);
     }
 
 }

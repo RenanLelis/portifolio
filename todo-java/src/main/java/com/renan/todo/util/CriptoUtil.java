@@ -35,7 +35,7 @@ public class CriptoUtil {
      * @param text - text
      * @return - a String with the text's hash
      */
-    public static String geraHashString(String text) {
+    public static String generateHashString(String text) {
         return stringHexa(Objects.requireNonNull(generateHash(text)));
     }
 
