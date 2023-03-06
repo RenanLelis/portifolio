@@ -137,6 +137,36 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
+     * Update information about the user
+     *
+     * @param id       - user id
+     * @param name     - name of user
+     * @param lastName - last name
+     * @throws BusinessException - in cases of any errors or invalid operations
+     */
+    public void updateUser(Integer id, String name, String lastName) throws BusinessException {
+        if (id == null || id <= 0 || StringUtil.isEmpty(name)) {
+            throw new BusinessException(MessageUtil.getErrorMessageInputValues(), BusinessException.BUSINESS_MESSAGE, AppErrorType.INVALID_INPUT);
+        }
+        repository.updateUserInfo(id, name, lastName);
+    }
+
+    /**
+     * Update information about the user
+     *
+     * @param id       - user id
+     * @param password - new password
+     * @throws BusinessException - in cases of any errors or invalid operations
+     */
+    public void updateUserPassword(Integer id, String password) throws BusinessException {
+        if (id == null || id <= 0 || StringUtil.isEmpty(password)) {
+            throw new BusinessException(MessageUtil.getErrorMessageInputValues(), BusinessException.BUSINESS_MESSAGE, AppErrorType.INVALID_INPUT);
+        }
+        String hashPassword = CriptoUtil.generateHashString(password);
+        repository.updateUserPassword(id, hashPassword);
+    }
+
+    /**
      * Validate the user data for login operation
      *
      * @param email    - user email

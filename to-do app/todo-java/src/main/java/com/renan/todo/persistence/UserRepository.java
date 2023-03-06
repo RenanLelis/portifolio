@@ -7,6 +7,9 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+/**
+ * Repository for user operations
+ */
 public interface UserRepository extends JpaRepository<User, Integer> {
 
     /**
@@ -51,4 +54,28 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Modifying
     @Query(value = "UPDATE User u set u.userStatus = :status, u.activationCode = null WHERE u.email = :email AND u.activationCode = :activationCode")
     public void activateUser(@Param("email") String email, @Param("activationCode") String activationCode, @Param("status") Integer status);
+
+    /**
+     * Update user info on database
+     *
+     * @param id       - user id
+     * @param name     - name of user
+     * @param lastName - last name
+     */
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE User u set u.userName = :name, u.lastName = lastName WHERE u.id = :id")
+    public void updateUserInfo(@Param("id") Integer id, @Param("name") String name, @Param("lastName") String lastName);
+
+    /**
+     * Update user password on database
+     *
+     * @param id       - user id
+     * @param password - user password
+     */
+    @Transactional
+    @Modifying
+    @Query(value = "UPDATE User u set u.password = :password WHERE u.id = :id")
+    public void updateUserPassword(@Param("id") Integer id, @Param("password") String password);
+
 }

@@ -57,4 +57,23 @@ public interface UserService {
      * @throws BusinessException - in cases of any errors or invalid operations
      */
     public UserDTO activateUser(String email, String activationCode) throws BusinessException;
+
+    /**
+     * Update information about the user
+     *
+     * @param id       - user id
+     * @param name     - name of user
+     * @param lastName - last name
+     * @throws BusinessException - in cases of any errors or invalid operations
+     */
+    public void updateUser(Integer id, String name, String lastName) throws BusinessException;
+
+    /**
+     * Update information about the user
+     *
+     * @param id       - user id
+     * @param password - new password
+     * @throws BusinessException - in cases of any errors or invalid operations
+     */
+    public void updateUserPassword(Integer id, String password) throws BusinessException;
 }

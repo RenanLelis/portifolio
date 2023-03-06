@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class List {
+public class TaskList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

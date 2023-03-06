@@ -40,6 +40,6 @@ public class Task {
 
     @ManyToOne
     @Column(name = "ID_LIST", nullable = true)
-    private List list;
+    private TaskList list;
 
 }
