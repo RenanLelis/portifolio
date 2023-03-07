@@ -17,6 +17,9 @@ import java.util.Date;
 @AllArgsConstructor
 public class Task {
 
+    public static final Integer STATUS_INCOMPLETE = 0;
+    public static final Integer STATUS_COMPLETE = 1;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID")
@@ -36,7 +39,7 @@ public class Task {
     private Integer taskStatus;
 
     @ManyToOne
-    @Column(name = "ID_USER", nullable = true)
+    @Column(name = "ID_USER", nullable = false)
     private User user;
 
     @ManyToOne
