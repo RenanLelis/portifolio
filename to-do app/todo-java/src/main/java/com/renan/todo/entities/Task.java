@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.sql.Date;
+import java.util.Date;
 
 /**
  * Task Entity class
@@ -29,6 +29,7 @@ public class Task {
     private String taskDescription;
 
     @Column(name = "DEADLINE", nullable = true)
+    @Temporal(TemporalType.DATE)
     private Date deadline;
 
     @Column(name = "TASK_STATUS", nullable = false)

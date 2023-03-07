@@ -21,6 +21,9 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private MailService mailService;
 
+    @Autowired
+    private UserDTOMapper userDTOMapper;
+
     /**
      * Makes user authentication
      *
@@ -38,7 +41,7 @@ public class UserServiceImpl implements UserService {
         if (user == null || !user.getPassword().equals(hashPassword)) {
             throw new BusinessException(MessageUtil.getErrorMessageLogin(), BusinessException.BUSINESS_MESSAGE, AppErrorType.INVALID_INPUT);
         }
-        return UserDTOMapper.convertToDTO(user);
+        return userDTOMapper.apply(user);
     }
 
     /**
@@ -83,7 +86,7 @@ public class UserServiceImpl implements UserService {
         repository.resetUserPasswordByCode(email, hashPassword, newPasswordCode);
         user.setNewPasswordCode(null);
 
-        return UserDTOMapper.convertToDTO(user);
+        return userDTOMapper.apply(user);
     }
 
     /**
@@ -109,7 +112,7 @@ public class UserServiceImpl implements UserService {
         user = new User(null, name, lastName, email, hashPassword, activationCode, null, User.STATUS_INACTIVE);
         User newUser = repository.save(user);
         mailService.sendActivationEmail(newUser.getEmail(), newUser.getActivationCode());
-        return UserDTOMapper.convertToDTO(newUser);
+        return userDTOMapper.apply(user);
     }
 
     /**
@@ -133,7 +136,7 @@ public class UserServiceImpl implements UserService {
         user.setUserStatus(User.STATUS_ACTIVE);
         user.setActivationCode(null);
 
-        return UserDTOMapper.convertToDTO(user);
+        return userDTOMapper.apply(user);
     }
 
     /**
