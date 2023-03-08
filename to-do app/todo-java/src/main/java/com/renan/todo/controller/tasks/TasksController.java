@@ -300,7 +300,7 @@ public class TasksController {
      * @return OK
      */
     @CrossOrigin
-    @PutMapping(path = "/api/task/{id}/complete")
+    @PutMapping(path = "/api/task/complete/{id}")
     public ResponseEntity completeTask(@RequestParam("id") Integer id, @RequestHeader(AutenticationFilter.AUTH) String jwt) {
         try {
             Integer idUser = JwtUtil.getIdUser(jwt);
@@ -321,7 +321,7 @@ public class TasksController {
      * @return OK
      */
     @CrossOrigin
-    @PutMapping(path = "/api/task/{id}/uncomplete")
+    @PutMapping(path = "/api/task/uncomplete/{id}")
     public ResponseEntity uncompleteTask(@RequestParam("id") Integer id, @RequestHeader(AutenticationFilter.AUTH) String jwt) {
         try {
             Integer idUser = JwtUtil.getIdUser(jwt);
