@@ -9,7 +9,7 @@ export interface User {
 }
 
 export const STATUS_ACTIVE = 1;
-export const STATUS_INACTIVE = 1;
+export const STATUS_INACTIVE = 0;
 
 export interface UserData {
     email: string;

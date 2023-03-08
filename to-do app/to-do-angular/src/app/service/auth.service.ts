@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, tap } from 'rxjs';
 import { User, UserData } from '../model/user';
-import { BASE_URL } from './consts';
+import { BASE_URL, USER_DATA } from './consts';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +10,10 @@ import { BASE_URL } from './consts';
 export class AuthService {
 
   URL_LOGIN: string = BASE_URL + "/api/auth/login";
-  URL_FORGOT_PASSWORD: string = BASE_URL + "/api/auth/forgotPassword";
-  URL_NEW_PASSWORD: string = BASE_URL + "/api/auth/newPassword";
-  URL_REGISTER_USER: string = BASE_URL + "/api/auth/registerUser";
-  URL_ACTIVATE_USER: string = BASE_URL + "/api/auth/activateUser";
+  URL_FORGOT_PASSWORD: string = BASE_URL + "/api/auth/recoverpassword";
+  URL_NEW_PASSWORD: string = BASE_URL + "/api/auth/passwordreset";
+  URL_REGISTER_USER: string = BASE_URL + "/api/auth/userregistration";
+  URL_ACTIVATE_USER: string = BASE_URL + "/api/auth/useractivation";
 
   user = new BehaviorSubject<User | null>(null);
 
@@ -67,16 +67,27 @@ export class AuthService {
   }
 
   isUserLoggedIn() {
+    let user: User | null = this.getUserData();
+    return (user && user.jwt && user.jwt.length > 0 && user.tokenExpirationDate && user.tokenExpirationDate > new Date().getTime());
+  }
+
+  getUserData() {
     let user: User | null = this.user.value;
-    if (!user) {
+    if (!user || user === null) {
       user = this.getUserInMemory();
     }
     if (user && user.jwt && user.jwt.length > 0 && user.tokenExpirationDate && user.tokenExpirationDate > new Date().getTime()) {
       this.user.next(user);
-      return true;
+    } else {
+      this.logout();
+      return null;
     }
-    this.logout();
-    return false;
+    return user;
+  }
+
+  getUserId() {
+    let user: User | null = this.getUserData();
+    return user !== null ? user.id : null;
   }
 
   handleAuthentication(userData: UserData) {
@@ -91,7 +102,7 @@ export class AuthService {
       lastName: userData.lastName,
       tokenExpirationDate: expirationDate
     };
-    localStorage.setItem("USER_DATA", JSON.stringify(user));
+    sessionStorage.setItem(USER_DATA, JSON.stringify(user));
     this.loadUserInMemory();
   }
 
@@ -103,7 +114,7 @@ export class AuthService {
   }
 
   getUserInMemory() {
-    let data = localStorage.getItem("USER_DATA")
+    let data = sessionStorage.getItem(USER_DATA)
     if (data === null) {
       return null
     }
@@ -112,9 +123,11 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.removeItem("USER_DATA");
+    sessionStorage.removeItem(USER_DATA);
     this.user.next(null);
   }
+
+
 
 
 }
