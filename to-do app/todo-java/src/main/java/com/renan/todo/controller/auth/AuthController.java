@@ -37,7 +37,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDTO(MessageUtil.getErrorMessageInputValues()));
         }
         try {
-            UserDTO user = userService.login(form.getEmail().trim(), form.getPassword().trim());
+            UserDTO user = userService.login(form.getEmail().trim().toLowerCase(), form.getPassword().trim());
             return ResponseEntity.ok(user);
         } catch (BusinessException e) {
             return e.getResponseEntity();
@@ -57,7 +57,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDTO(MessageUtil.getErrorMessageInputValues()));
         }
         try {
-            userService.recoverPassword(form.getEmail().trim());
+            userService.recoverPassword(form.getEmail().trim().toLowerCase());
             return ResponseEntity.ok().build();
         } catch (BusinessException e) {
             return e.getResponseEntity();
@@ -77,7 +77,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDTO(MessageUtil.getErrorMessageInputValues()));
         }
         try {
-            UserDTO user = userService.resetPasswordByCode(form.getEmail().trim(), form.getPassword().trim(), form.getNewPasswordCode().trim());
+            UserDTO user = userService.resetPasswordByCode(form.getEmail().trim().toLowerCase(), form.getPassword().trim(), form.getNewPasswordCode().trim());
             return ResponseEntity.ok(user);
         } catch (BusinessException e) {
             return e.getResponseEntity();
@@ -97,7 +97,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDTO(MessageUtil.getErrorMessageInputValues()));
         }
         try {
-            UserDTO user = userService.registerUser(form.getEmail().trim(), form.getPassword().trim(), form.getUserName(), form.getLastName());
+            UserDTO user = userService.registerUser(form.getEmail().trim().toLowerCase(), form.getPassword().trim(), form.getUserName().trim(), form.getLastName() != null ? form.getLastName().trim() : null);
             return ResponseEntity.ok(user);
         } catch (BusinessException e) {
             return e.getResponseEntity();
@@ -117,7 +117,7 @@ public class AuthController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDTO(MessageUtil.getErrorMessageInputValues()));
         }
         try {
-            UserDTO user = userService.activateUser(form.getEmail().trim(), form.getActivationCode().trim());
+            UserDTO user = userService.activateUser(form.getEmail().trim().toLowerCase(), form.getActivationCode().trim());
             return ResponseEntity.ok(user);
         } catch (BusinessException e) {
             return e.getResponseEntity();

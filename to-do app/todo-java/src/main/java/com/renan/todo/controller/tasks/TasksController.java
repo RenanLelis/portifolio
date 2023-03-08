@@ -115,7 +115,12 @@ public class TasksController {
     public ResponseEntity createTaskList(@RequestHeader(AutenticationFilter.AUTH) String jwt, @RequestBody TaskListForm form) {
         try {
             Integer idUser = JwtUtil.getIdUser(jwt);
-            return ResponseEntity.status(HttpStatus.CREATED).body(taskService.createTaskList(form.getListName(), form.getListDescription(), idUser));
+            return ResponseEntity.status(HttpStatus.CREATED).body(
+                    taskService.createTaskList(
+                            form.getListName() != null ? form.getListName().trim() : null,
+                            form.getListDescription() != null ? form.getListDescription().trim() : null,
+                            idUser)
+            );
         } catch (UtilException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDTO(MessageUtil.getErrorMessage()));
         } catch (BusinessException be) {
@@ -136,7 +141,12 @@ public class TasksController {
     public ResponseEntity updateTaskList(@RequestHeader(AutenticationFilter.AUTH) String jwt, @RequestBody TaskListForm form, @RequestParam("idList") Integer idList) {
         try {
             Integer idUser = JwtUtil.getIdUser(jwt);
-            taskService.updateTaskList(form.getListName(), form.getListDescription(), idList, idUser);
+            taskService.updateTaskList(
+                    form.getListName() != null ? form.getListName().trim() : null,
+                    form.getListDescription() != null ? form.getListDescription().trim() : null,
+                    idList,
+                    idUser
+            );
             return ResponseEntity.ok().build();
         } catch (UtilException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDTO(MessageUtil.getErrorMessage()));
@@ -220,7 +230,15 @@ public class TasksController {
     public ResponseEntity createTask(@RequestHeader(AutenticationFilter.AUTH) String jwt, @RequestBody TaskForm form) {
         try {
             Integer idUser = JwtUtil.getIdUser(jwt);
-            return ResponseEntity.status(HttpStatus.CREATED).body(taskService.createTask(form.getTaskName(), form.getTaskDescription(), form.getDeadline(), form.getIdList(), idUser));
+            return ResponseEntity.status(HttpStatus.CREATED).body(
+                    taskService.createTask(
+                            form.getTaskName() != null ? form.getTaskName().trim() : null,
+                            form.getTaskDescription() != null ? form.getTaskDescription().trim() : null,
+                            form.getDeadline(),
+                            form.getIdList(),
+                            idUser
+                    )
+            );
         } catch (UtilException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDTO(MessageUtil.getErrorMessage()));
         } catch (BusinessException be) {
@@ -241,7 +259,13 @@ public class TasksController {
     public ResponseEntity updateTask(@RequestParam("id") Integer id, @RequestHeader(AutenticationFilter.AUTH) String jwt, @RequestBody TaskForm form) {
         try {
             Integer idUser = JwtUtil.getIdUser(jwt);
-            taskService.updateTask(id, form.getTaskName(), form.getTaskDescription(), form.getDeadline(), idUser);
+            taskService.updateTask(
+                    id,
+                    form.getTaskName() != null ? form.getTaskName().trim() : null,
+                    form.getTaskDescription() != null ? form.getTaskDescription().trim() : null,
+                    form.getDeadline(),
+                    idUser
+            );
             return ResponseEntity.ok().build();
         } catch (UtilException e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDTO(MessageUtil.getErrorMessage()));

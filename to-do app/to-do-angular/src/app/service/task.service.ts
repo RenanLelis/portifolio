@@ -1,5 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, tap } from 'rxjs';
+import { TaskList } from '../model/taskList';
 import { AuthService } from './auth.service';
 import { BASE_URL } from './consts';
 
@@ -18,7 +20,20 @@ export class TaskService {
   URL_TASK_COMPLETE = BASE_URL + "/api/task/complete/";
   URL_TASK_UNCOMPLETE = BASE_URL + "/api/task/uncomplete/";
 
+  taskLists = new BehaviorSubject<TaskList[]>([]); 
+
   constructor(private http: HttpClient, private authService: AuthService) { this.authService.user.getValue()?.id }
+
+  fetchTasksAndLists() {
+    let headers: HttpHeaders = new HttpHeaders({
+      "Content-Type": "application/json",
+    });
+    return this.http.get(this.URL_TASK_LIST, { headers })
+      .pipe(tap(resData => {
+        console.log(resData);
+        this.taskLists.next(resData as TaskList[]);
+      }));
+  }
 
   // GET /api/taskList/ - getTasksAndLists
   // GET /api/taskList/{idList} - getTasksByList
