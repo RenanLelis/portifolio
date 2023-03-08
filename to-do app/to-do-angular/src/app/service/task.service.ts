@@ -18,7 +18,7 @@ export class TaskService {
   URL_TASK_COMPLETE = BASE_URL + "/api/task/complete/";
   URL_TASK_UNCOMPLETE = BASE_URL + "/api/task/uncomplete/";
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService) { this.authService.user.getValue()?.id }
 
   // GET /api/taskList/ - getTasksAndLists
   // GET /api/taskList/{idList} - getTasksByList
