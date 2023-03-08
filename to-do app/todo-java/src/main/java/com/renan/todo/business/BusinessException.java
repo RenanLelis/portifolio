@@ -1,9 +1,13 @@
 package com.renan.todo.business;
 
+import com.renan.todo.dto.ErrorDTO;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 public class BusinessException extends Exception {
-    private Boolean             businessMessage  = Boolean.FALSE;
+    private Boolean businessMessage = Boolean.FALSE;
     public static final Boolean BUSINESS_MESSAGE = true;
-    private AppErrorType            errorType;
+    private AppErrorType errorType;
 
     public AppErrorType getErrorType() {
         return errorType;
@@ -33,5 +37,20 @@ public class BusinessException extends Exception {
 
     public Boolean isBusinessMessage() {
         return businessMessage;
+    }
+
+    /**
+     * Simplify the response for the request controller
+     *
+     * @return - the ResponseEntity
+     */
+    public ResponseEntity getResponseEntity() {
+        if (this.getErrorType().equals(AppErrorType.INVALID_INPUT)) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDTO(this.getMessage()));
+        } else if (this.getErrorType().equals(AppErrorType.NOT_ALLOWED)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorDTO(this.getMessage()));
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDTO(this.getMessage()));
+        }
     }
 }
