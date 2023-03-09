@@ -25,24 +25,6 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     public List<Task> findTaskByUser(@Param("idUser") Integer idUser);
 
     /**
-     * Get the tasks from user without a list
-     *
-     * @param idUser - user identifier
-     * @return - tasks from the user without list
-     */
-    @Query(value = "SELECT t.id, t.taskName, t.taskDescription, t.deadline, t.taskStatus FROM Task t where t.list = null AND t.user.id = :idUser")
-    public List<Task> findTaskWithouListByUser(@Param("idUser") Integer idUser);
-
-    /**
-     * Get the tasks from a list
-     *
-     * @param idList - list identifier
-     * @return - tasks from the list
-     */
-    @Query(value = "SELECT t.id, t.taskName, t.taskDescription, t.deadline, t.taskStatus FROM Task t where t.list.id = :idList AND t.list.user.id = :idUser")
-    public List<Task> findByListAndUser(@Param("idList") Integer idList, @Param("idUser") Integer idUser);
-
-    /**
      * Delete all the tasks whitout a list
      *
      * @param idUser - user id

@@ -21,34 +21,6 @@ public interface ListsTasksService {
     public List<TaskListDTO> getTasksAndLists(Integer idUser) throws BusinessException;
 
     /**
-     * Fetch the tasks for the user and list informed, validating if the list is from that user
-     *
-     * @param idList - list id
-     * @param idUser - user id
-     * @return - the list and tasks for the list
-     * @throws BusinessException - in cases of any errors or invalid operations
-     */
-    public TaskListDTO getTasksByList(Integer idList, Integer idUser) throws BusinessException;
-
-    /**
-     * Fetch the tasks for the user that do not have a list
-     *
-     * @param idUser - user id
-     * @return - the tasks for the user
-     * @throws BusinessException - in cases of any errors or invalid operations
-     */
-    public List<TaskDTO> getTasksUserWithoutList(Integer idUser) throws BusinessException;
-
-    /**
-     * Fetch the lists for the user, not the tasks
-     *
-     * @param idUser - user id
-     * @return - the lists for the user
-     * @throws BusinessException - in cases of any errors or invalid operations
-     */
-    public List<TaskListDTO> getLists(Integer idUser) throws BusinessException;
-
-    /**
      * Create a new List for the user
      *
      * @param listName        - the name of the list

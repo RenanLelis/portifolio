@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Service for operations on tasks and tasks lists
@@ -47,52 +46,6 @@ public class ListsTasksServiceImpl implements ListsTasksService {
     public List<TaskListDTO> getTasksAndLists(Integer idUser) throws BusinessException {
         List<Task> tasks = taskRepository.findTaskByUser(idUser);
         return taskListDTOMapper.convertMultipleListsAndTasks(tasks);
-    }
-
-    /**
-     * Fetch the tasks for the user and list informed, validating if the list is from that user
-     *
-     * @param idList - list id
-     * @param idUser - user id
-     * @return - the list and tasks for the list
-     * @throws BusinessException - in cases of any errors or invalid operations
-     */
-    public TaskListDTO getTasksByList(Integer idList, Integer idUser) throws BusinessException {
-        List<Task> tasks = taskRepository.findByListAndUser(idList, idUser);
-        if (tasks != null && tasks.size() > 0) {
-            return taskDTOMapper.convertToListDTO(tasks);
-        }
-        return null;
-    }
-
-    /**
-     * Fetch the tasks for the user that do not have a list
-     *
-     * @param idUser - user id
-     * @return - the tasks for the user
-     * @throws BusinessException - in cases of any errors or invalid operations
-     */
-    public List<TaskDTO> getTasksUserWithoutList(Integer idUser) throws BusinessException {
-        List<Task> tasks = taskRepository.findTaskWithouListByUser(idUser);
-        if (tasks != null && tasks.size() > 0) {
-            return tasks.stream().map(taskDTOMapper).collect(Collectors.toList());
-        }
-        return null;
-    }
-
-    /**
-     * Fetch the lists for the user, not the tasks
-     *
-     * @param idUser - user id
-     * @return - the lists for the user
-     * @throws BusinessException - in cases of any errors or invalid operations
-     */
-    public List<TaskListDTO> getLists(Integer idUser) throws BusinessException {
-        List<TaskList> taskLists = taskListRepository.findByUser(idUser);
-        if (taskLists != null && taskLists.size() > 0) {
-            return taskLists.stream().map(taskListDTOMapper).collect(Collectors.toList());
-        }
-        return null;
     }
 
     /**
@@ -154,10 +107,14 @@ public class ListsTasksServiceImpl implements ListsTasksService {
      * @throws BusinessException - in cases of any errors or invalid operations
      */
     public void deleteTasksFromList(Integer idList, Integer idUser) throws BusinessException {
-        if (idList == null || idList <= 0 || idUser == null || idUser <= 0) {
+        if (idUser == null || idUser <= 0) {
             throw new BusinessException(MessageUtil.getErrorMessageInputValues(), BusinessException.BUSINESS_MESSAGE, AppErrorType.INVALID_INPUT);
         }
-        taskRepository.deleteTasksFromList(idList, idUser);
+        if (idList == null || idList <= 0) {
+            taskRepository.deleteTasksWithoutList(idUser);
+        } else {
+            taskRepository.deleteTasksFromList(idList, idUser);
+        }
     }
 
     /**

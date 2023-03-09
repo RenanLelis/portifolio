@@ -47,63 +47,6 @@ public class TasksController {
     }
 
     /**
-     * Get Tasks in a TaskLists for the user
-     *
-     * @param jwt - the auth token of the user, to get user data
-     * @return - tasks from that list
-     */
-    @CrossOrigin
-    @GetMapping(path = "/api/taskList/{idList}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getTasksByList(@RequestHeader(AutenticationFilter.AUTH) String jwt, @RequestParam("idList") Integer idList) {
-        try {
-            Integer idUser = JwtUtil.getIdUser(jwt);
-            return ResponseEntity.ok(taskService.getTasksByList(idList, idUser));
-        } catch (UtilException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDTO(MessageUtil.getErrorMessage()));
-        } catch (BusinessException be) {
-            return be.getResponseEntity();
-        }
-    }
-
-    /**
-     * Get tasks without list
-     *
-     * @param jwt - the auth token of the user, to get user data
-     * @return - tasks without list
-     */
-    @CrossOrigin
-    @GetMapping(path = "/api/taskList/nolist", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getTasksUserWithoutList(@RequestHeader(AutenticationFilter.AUTH) String jwt) {
-        try {
-            Integer idUser = JwtUtil.getIdUser(jwt);
-            return ResponseEntity.ok(taskService.getTasksUserWithoutList(idUser));
-        } catch (UtilException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDTO(MessageUtil.getErrorMessage()));
-        } catch (BusinessException be) {
-            return be.getResponseEntity();
-        }
-    }
-
-    /**
-     * Get lists from the user
-     *
-     * @param jwt - the auth token of the user, to get user data
-     * @return - lists from the user
-     */
-    @CrossOrigin
-    @GetMapping(path = "/api/taskList/lists", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity getLists(@RequestHeader(AutenticationFilter.AUTH) String jwt) {
-        try {
-            Integer idUser = JwtUtil.getIdUser(jwt);
-            return ResponseEntity.ok(taskService.getLists(idUser));
-        } catch (UtilException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new ErrorDTO(MessageUtil.getErrorMessage()));
-        } catch (BusinessException be) {
-            return be.getResponseEntity();
-        }
-    }
-
-    /**
      * Create a new TaskList
      *
      * @param form - the input from the user
@@ -205,7 +148,7 @@ public class TasksController {
      * @return - Response Entity
      */
     @CrossOrigin
-    @PostMapping(path = "/api/taskList/tasks/move")
+    @PostMapping(path = "/api/taskList/tasks/move/")
     public ResponseEntity moveTasksForList(@RequestHeader(AutenticationFilter.AUTH) String jwt, @RequestBody TaskListMoveForm form) {
         try {
             Integer idUser = JwtUtil.getIdUser(jwt);
