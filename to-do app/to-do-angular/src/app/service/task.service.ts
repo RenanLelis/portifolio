@@ -23,7 +23,7 @@ export class TaskService {
 
   taskLists = new BehaviorSubject<TaskList[]>([]);
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient) { }
 
   fetchTasksAndLists() {
     let headers: HttpHeaders = new HttpHeaders({ "Content-Type": "application/json", });
