@@ -81,7 +81,7 @@ public class TasksController {
      */
     @CrossOrigin
     @PutMapping(path = "/api/taskList/{idList}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity updateTaskList(@RequestHeader(AutenticationFilter.AUTH) String jwt, @RequestBody TaskListForm form, @RequestParam("idList") Integer idList) {
+    public ResponseEntity updateTaskList(@RequestHeader(AutenticationFilter.AUTH) String jwt, @RequestBody TaskListForm form, @PathVariable("idList") Integer idList) {
         try {
             Integer idUser = JwtUtil.getIdUser(jwt);
             taskService.updateTaskList(
@@ -107,7 +107,7 @@ public class TasksController {
      */
     @CrossOrigin
     @DeleteMapping(path = "/api/taskList/{idList}")
-    public ResponseEntity deleteTaskList(@RequestHeader(AutenticationFilter.AUTH) String jwt, @RequestParam("idList") Integer idList) {
+    public ResponseEntity deleteTaskList(@RequestHeader(AutenticationFilter.AUTH) String jwt, @PathVariable("idList") Integer idList) {
         try {
             Integer idUser = JwtUtil.getIdUser(jwt);
             taskService.deleteTaskList(idList, idUser);
@@ -128,7 +128,7 @@ public class TasksController {
      */
     @CrossOrigin
     @DeleteMapping(path = "/api/taskList/tasks/{idList}")
-    public ResponseEntity deleteTasksFromList(@RequestHeader(AutenticationFilter.AUTH) String jwt, @RequestParam("idList") Integer idList) {
+    public ResponseEntity deleteTasksFromList(@RequestHeader(AutenticationFilter.AUTH) String jwt, @PathVariable("idList") Integer idList) {
         try {
             Integer idUser = JwtUtil.getIdUser(jwt);
             taskService.deleteTasksFromList(idList, idUser);
@@ -199,7 +199,7 @@ public class TasksController {
      */
     @CrossOrigin
     @PutMapping(path = "/api/task/{id}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity updateTask(@RequestParam("id") Integer id, @RequestHeader(AutenticationFilter.AUTH) String jwt, @RequestBody TaskForm form) {
+    public ResponseEntity updateTask(@PathVariable("id") Integer id, @RequestHeader(AutenticationFilter.AUTH) String jwt, @RequestBody TaskForm form) {
         try {
             Integer idUser = JwtUtil.getIdUser(jwt);
             taskService.updateTask(
@@ -226,7 +226,7 @@ public class TasksController {
      */
     @CrossOrigin
     @DeleteMapping(path = "/api/task/{id}")
-    public ResponseEntity deleteTask(@RequestParam("id") Integer id, @RequestHeader(AutenticationFilter.AUTH) String jwt) {
+    public ResponseEntity deleteTask(@PathVariable("id") Integer id, @RequestHeader(AutenticationFilter.AUTH) String jwt) {
         try {
             Integer idUser = JwtUtil.getIdUser(jwt);
             taskService.deleteTask(id, idUser);
@@ -268,7 +268,7 @@ public class TasksController {
      */
     @CrossOrigin
     @PutMapping(path = "/api/task/complete/{id}")
-    public ResponseEntity completeTask(@RequestParam("id") Integer id, @RequestHeader(AutenticationFilter.AUTH) String jwt) {
+    public ResponseEntity completeTask(@PathVariable("id") Integer id, @RequestHeader(AutenticationFilter.AUTH) String jwt) {
         try {
             Integer idUser = JwtUtil.getIdUser(jwt);
             taskService.completeTask(id, idUser);
@@ -289,7 +289,7 @@ public class TasksController {
      */
     @CrossOrigin
     @PutMapping(path = "/api/task/uncomplete/{id}")
-    public ResponseEntity uncompleteTask(@RequestParam("id") Integer id, @RequestHeader(AutenticationFilter.AUTH) String jwt) {
+    public ResponseEntity uncompleteTask(@PathVariable("id") Integer id, @RequestHeader(AutenticationFilter.AUTH) String jwt) {
         try {
             Integer idUser = JwtUtil.getIdUser(jwt);
             taskService.unCompleteTask(id, idUser);

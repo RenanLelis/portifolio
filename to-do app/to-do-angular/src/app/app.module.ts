@@ -13,6 +13,8 @@ import { UserregisterComponent } from './view/auth/userregister/userregister.com
 import { UseractivationComponent } from './view/auth/useractivation/useractivation.component';
 import { HeaderComponent } from './view/components/header/header.component';
 import { FooterComponent } from './view/components/footer/footer.component';
+import { HomeComponent } from './view/tasks/home/home.component';
+import { NotFoundComponent } from './view/not-found/not-found.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +25,9 @@ import { FooterComponent } from './view/components/footer/footer.component';
     UserregisterComponent,
     UseractivationComponent,
     HeaderComponent,
-    FooterComponent
+    FooterComponent,
+    HomeComponent,
+    NotFoundComponent
   ],
   imports: [
     BrowserModule,
