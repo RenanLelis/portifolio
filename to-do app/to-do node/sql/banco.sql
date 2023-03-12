@@ -1,12 +1,12 @@
 CREATE DATABASE IF NOT EXISTS todo;
 USE todo;
 
-CREATE USER 'todo'@'localhost' IDENTIFIED BY 'todo#123';
+CREATE USER 'todo'@'localhost' IDENTIFIED BY 'Todo#123';
 GRANT INSERT, UPDATE, DELETE, SELECT, REFERENCES, RELOAD on *.* TO 'todo'@'localhost' WITH GRANT OPTION;
 
 CREATE TABLE IF NOT EXISTS USER(
     ID int auto_increment primary key,
-    USER_NAME varchar(50) not null,
+    FIRST_NAME varchar(50) not null,
     LAST_NAME varchar(50) not null,
     EMAIL varchar(50) not null unique,
     USER_PASSWORD varchar(100) not null,

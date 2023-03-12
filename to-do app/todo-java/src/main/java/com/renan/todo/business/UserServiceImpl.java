@@ -94,7 +94,7 @@ public class UserServiceImpl implements UserService {
      *
      * @param email    - user email
      * @param password - user password
-     * @param name     - name of the user
+     * @param name     - user first name
      * @param lastName - user last name
      * @return - the user created and logged-in but with status inactive
      * @throws BusinessException - in cases of any errors or invalid operations
@@ -143,7 +143,7 @@ public class UserServiceImpl implements UserService {
      * Update information about the user
      *
      * @param id       - user id
-     * @param name     - name of user
+     * @param name     - user first name
      * @param lastName - last name
      * @throws BusinessException - in cases of any errors or invalid operations
      */
@@ -185,7 +185,7 @@ public class UserServiceImpl implements UserService {
      *
      * @param email    - user email
      * @param password - user password
-     * @param name     - name of the user
+     * @param name     - user first name
      * @return - true if is valid
      */
     private boolean validateNewUserData(String email, String password, String name) {

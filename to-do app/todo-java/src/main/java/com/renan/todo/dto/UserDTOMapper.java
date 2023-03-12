@@ -23,7 +23,7 @@ public class UserDTOMapper implements Function<User, UserDTO> {
                 user.getId(),
                 user.getUserStatus(),
                 JwtUtil.TIMEOUT,
-                user.getUserName(),
+                user.getFirstName(),
                 user.getLastName()
         );
     }

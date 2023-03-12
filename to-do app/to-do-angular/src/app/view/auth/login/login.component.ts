@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { getErrorMessage, getErrorMessageInputValues, getMessage } from 'src/app/message/message';
 import { AuthService } from 'src/app/service/auth.service';
 
 @Component({
@@ -26,7 +27,25 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  login() {}
+  login() {
+    this.errorMessage = "";
+    if (this.formLogin.invalid) {
+      this.errorMessage = getErrorMessageInputValues();
+    } else {
+      this.loading = true;
+      this.authService.login(this.formLogin.get('email')!.value.trim(), this.formLogin.get('password')!.value.trim()).subscribe({
+        next: (data) => {
+          this.loading = false;
+          this.router.navigate(['/']);
+        },
+        error: (e) => {
+          this.loading = false;
+          if (e.error && e.error.erro) { this.errorMessage = getMessage(e.error.erro); }
+          else { this.errorMessage = getErrorMessage(); }
+        }
+      });
+    }
+  }
 
   closeErrorMessage() {
     this.errorMessage = "";

@@ -64,7 +64,7 @@ public interface UserRepository extends JpaRepository<User, Integer> {
      */
     @Transactional
     @Modifying
-    @Query(value = "UPDATE User u set u.userName = :name, u.lastName = lastName WHERE u.id = :id")
+    @Query(value = "UPDATE User u set u.firstName = :name, u.lastName = lastName WHERE u.id = :id")
     public void updateUserInfo(@Param("id") Integer id, @Param("name") String name, @Param("lastName") String lastName);
 
     /**

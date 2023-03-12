@@ -24,7 +24,7 @@ public class AutenticationFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         String jwt = httpRequest.getHeader(AUTH);
-        Claims claims = validaToken(jwt);
+        Claims claims = validateToken(jwt);
         if (claims != null) {
             try {
                 Gson gson = new Gson();
@@ -50,7 +50,7 @@ public class AutenticationFilter implements Filter {
      * @param jwt - the jwt token
      * @return - true if is valid
      */
-    private Claims validaToken(String jwt) {
+    private Claims validateToken(String jwt) {
         Claims claims;
         try {
             claims = JwtUtil.validateJWT(jwt);

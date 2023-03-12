@@ -93,11 +93,11 @@ public class AuthController {
     @CrossOrigin
     @PostMapping(path = "/api/auth/userregistration", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity registerNewUser(@RequestBody NewUserForm form) {
-        if (form.getEmail() == null || form.getPassword() == null || form.getUserName() == null) {
+        if (form.getEmail() == null || form.getPassword() == null || form.getFirstName() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDTO(MessageUtil.getErrorMessageInputValues()));
         }
         try {
-            UserDTO user = userService.registerUser(form.getEmail().trim().toLowerCase(), form.getPassword().trim(), form.getUserName().trim(), form.getLastName() != null ? form.getLastName().trim() : null);
+            UserDTO user = userService.registerUser(form.getEmail().trim().toLowerCase(), form.getPassword().trim(), form.getFirstName().trim(), form.getLastName() != null ? form.getLastName().trim() : null);
             return ResponseEntity.ok(user);
         } catch (BusinessException e) {
             return e.getResponseEntity();
