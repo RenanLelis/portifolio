@@ -1,1 +1,7 @@
-<p>login works!</p>
+<app-header/>
+<div></div>
+<app-footer/>
+<div *ngIf="loading">
+    <app-loading></app-loading>
+</div>
+<app-error-message [errorMessage]="errorMessage" (onClose)="closeErrorMessage()" />

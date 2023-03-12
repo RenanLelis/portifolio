@@ -15,6 +15,8 @@ import { HeaderComponent } from './view/components/header/header.component';
 import { FooterComponent } from './view/components/footer/footer.component';
 import { HomeComponent } from './view/tasks/home/home.component';
 import { NotFoundComponent } from './view/not-found/not-found.component';
+import { LoadingComponent } from './view/components/loading/loading.component';
+import { ErrorMessageComponent } from './view/components/error-message/error-message.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,9 @@ import { NotFoundComponent } from './view/not-found/not-found.component';
     HeaderComponent,
     FooterComponent,
     HomeComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    LoadingComponent,
+    ErrorMessageComponent
   ],
   imports: [
     BrowserModule,
