@@ -22,4 +22,5 @@ p {
 
 body {
     background-color: #EAEAEA;
+    min-height: 100vh;
 }

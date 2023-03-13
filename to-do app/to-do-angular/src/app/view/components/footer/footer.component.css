@@ -1,5 +1,9 @@
 footer {
-    background-color: #353535
+    background-color: #353535;
+    margin-top: auto;
+    /* position:fixed;
+    bottom:0;
+    width: 100%; */
 }
 
 p {
