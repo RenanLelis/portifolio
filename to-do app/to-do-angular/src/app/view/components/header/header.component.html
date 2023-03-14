@@ -1,1 +1,31 @@
-<p>header works!</p>
+<header>
+    <div class="logo">
+      <a routerLink="/"><img src="../../../../assets/logo.png"><span>My Task List</span></a>
+    </div>
+    <div class="user-menu">
+      <div class="dropdown">
+        <i class="fa fa-user-circle"></i>
+        <div class="dropdown-content">
+          <div *ngIf="isUserLoggedIn">
+            <span>Hello {{ user!.name }}</span>
+            <hr class="solid">
+            <a routerLink="/profile">My Profile</a>
+            <a routerLink="/mypassword">Change My Password</a>
+            <hr class="solid">
+            <a routerLink="/logout">Logout</a>
+          </div>
+          <div *ngIf="!isUserLoggedIn">
+            <a routerLink="/login">Login</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+</header>
+
+<!-- <ul v-if="!userStore.isUserLoggedIn" class="dropdown-menu">
+    <li><router-link to="/login" class="dropdown-item">Login</router-link></li>
+  </ul>
+  <ul v-if="userStore.isUserLoggedIn" class="dropdown-menu">
+    <li><router-link to="/logout" class="dropdown-item">Sair</router-link></li>
+  </ul> -->

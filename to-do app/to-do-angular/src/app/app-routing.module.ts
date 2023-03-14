@@ -8,10 +8,17 @@ import { UseractivationComponent } from './view/auth/useractivation/useractivati
 import { UserregisterComponent } from './view/auth/userregister/userregister.component';
 import { NotFoundComponent } from './view/not-found/not-found.component';
 import { HomeComponent } from './view/tasks/home/home.component';
+import { LogoutComponent } from './view/auth/logout/logout.component';
+import { ChangePasswordComponent } from './view/user/change-password/change-password.component';
+import { ProfileComponent } from './view/user/profile/profile.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuardService] },
+  { path: 'mypassword', component: ChangePasswordComponent, canActivate: [AuthGuardService] },
+  { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
+  
   { path: 'login', component: LoginComponent },
+  { path: 'logout', component: LogoutComponent },
   { path: 'recoverpassword', component: ForgetpasswordComponent },
   { path: 'passwordreset', component: NewpasswordComponent },
   { path: 'userregistration', component: UserregisterComponent },

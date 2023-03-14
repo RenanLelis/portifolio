@@ -1,0 +1,54 @@
+header {
+    background-color: #103881;
+    padding: 10px;
+    color: #F1F1F1;
+    margin: 0;
+    padding: 3px 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+header .logo {
+    padding: 0 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+header .logo a {
+    color: #FFF;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: row;
+    font-family: sans-serif;
+    font-weight: bold;
+}
+
+header .logo:hover {
+    color: #FFF;
+}
+
+header .logo img {
+    width: 30px;
+    margin: 0 1em 0 0;
+}
+
+header .logo span {
+    font-size: 1.5 em;
+}
+
+header .user-menu {
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #FFF;
+    margin: 10px;
+}
+
+header .user-menu i {
+    color: #FFF;
+}

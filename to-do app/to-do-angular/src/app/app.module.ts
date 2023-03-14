@@ -17,6 +17,9 @@ import { HomeComponent } from './view/tasks/home/home.component';
 import { NotFoundComponent } from './view/not-found/not-found.component';
 import { LoadingComponent } from './view/components/loading/loading.component';
 import { ErrorMessageComponent } from './view/components/error-message/error-message.component';
+import { LogoutComponent } from './view/auth/logout/logout.component';
+import { ChangePasswordComponent } from './view/user/change-password/change-password.component';
+import { ProfileComponent } from './view/user/profile/profile.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +34,10 @@ import { ErrorMessageComponent } from './view/components/error-message/error-mes
     HomeComponent,
     NotFoundComponent,
     LoadingComponent,
-    ErrorMessageComponent
+    ErrorMessageComponent,
+    LogoutComponent,
+    ChangePasswordComponent,
+    ProfileComponent
   ],
   imports: [
     BrowserModule,

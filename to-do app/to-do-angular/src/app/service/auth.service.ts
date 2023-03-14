@@ -68,7 +68,11 @@ export class AuthService {
 
   isUserLoggedIn() {
     let user: User | null = this.getUserData();
-    return (user && user.jwt && user.jwt.length > 0 && user.tokenExpirationDate && user.tokenExpirationDate > new Date().getTime());
+    return this.isUserParamLoggedIn(user);
+  }
+
+  isUserParamLoggedIn(user: User | null): boolean {
+     return (user != null && user.jwt != null && user.jwt.length > 0 && user.tokenExpirationDate && user.tokenExpirationDate > new Date().getTime()) as boolean;
   }
 
   getUserData() {
