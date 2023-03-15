@@ -1,0 +1,6 @@
+.div-submit-button {
+    margin-top: 15px;
+    padding: 6px;
+    display: flex;
+    justify-content: space-between;
+}

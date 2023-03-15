@@ -14,7 +14,7 @@ import java.io.IOException;
 /**
  * Filter some endpoints checking if the user is authenticated
  */
-@WebFilter(urlPatterns = {"/api/taskList/*", "/api/task/*"})
+@WebFilter(urlPatterns = {"/api/taskList/*", "/api/task/*", "/api/user/*"})
 public class AutenticationFilter implements Filter {
 
     public static final String AUTH = "AUTH";
@@ -23,24 +23,28 @@ public class AutenticationFilter implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
-        String jwt = httpRequest.getHeader(AUTH);
-        Claims claims = validateToken(jwt);
-        if (claims != null) {
-            try {
-                Gson gson = new Gson();
-                UserDTO userDTO = new UserDTO();
-                userDTO.setId((Integer) claims.get(JwtUtil.CLAIMS_ID_USER));
-                userDTO.setEmail((String) claims.get(JwtUtil.CLAIMS_EMAIL));
-                userDTO.setStatus((Integer) claims.get(JwtUtil.CLAIMS_ID_STATUS));
-                userDTO.setExpiresIn(JwtUtil.TIMEOUT);
-                userDTO.setJwt(JwtUtil.refreshJWT(jwt));
-                httpResponse.setHeader(AUTH, gson.toJson(userDTO));
-            } catch (Exception e) {
-                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
-            }
+        if (httpRequest.getMethod().equals("OPTIONS")) {
             chain.doFilter(httpRequest, httpResponse);
         } else {
-            httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            String jwt = httpRequest.getHeader(AUTH);
+            Claims claims = validateToken(jwt);
+            if (claims != null) {
+                try {
+                    Gson gson = new Gson();
+                    UserDTO userDTO = new UserDTO();
+                    userDTO.setId((Integer) claims.get(JwtUtil.CLAIMS_ID_USER));
+                    userDTO.setEmail((String) claims.get(JwtUtil.CLAIMS_EMAIL));
+                    userDTO.setStatus((Integer) claims.get(JwtUtil.CLAIMS_ID_STATUS));
+                    userDTO.setExpiresIn(JwtUtil.TIMEOUT);
+                    userDTO.setJwt(JwtUtil.refreshJWT(jwt));
+                    httpResponse.setHeader(AUTH, gson.toJson(userDTO));
+                } catch (Exception e) {
+                    httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getMessage());
+                }
+                chain.doFilter(httpRequest, httpResponse);
+            } else {
+                httpResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED);
+            }
         }
     }
 

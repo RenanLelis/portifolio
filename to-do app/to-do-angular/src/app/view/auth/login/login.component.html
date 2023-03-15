@@ -1,4 +1,36 @@
-<p>login works</p>
+<div class="container">
+    <div class="card-form">
+        <h2>Login</h2>
+        <form [formGroup]="formLogin" (submit)="login()">
+            <div class="label-field">
+                <label class="label">E-mail: </label>
+                <input formControlName="email" type="email" required class="text-field">
+                <p *ngIf="formLogin.get('email')!.invalid && formLogin.get('email')!.touched"
+                    class="error-field-message">
+                    Error on e-mail input.
+                </p>
+            </div>
+            <div class="label-field">
+                <label class="label">Password: </label>
+                <input formControlName="password" type="password" required class="text-field">
+                <p *ngIf="formLogin.get('password')!.invalid && formLogin.get('password')!.touched"
+                    class="error-field-message">
+                    Error on password input.
+                </p>
+            </div>
+            <div>
+                <div class="div-submit-button">
+                    <button [disabled]="formLogin.invalid" type="submit" class="send-button">Send</button>
+                </div>
+                <div class="div-submit-button">
+                    <a class="side-link" routerLink="/recoverpassword">Forgot password?</a>
+                    <a class="side-link" routerLink="/userregistration">New user?, Register here</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
 <div *ngIf="loading">
     <app-loading></app-loading>
 </div>

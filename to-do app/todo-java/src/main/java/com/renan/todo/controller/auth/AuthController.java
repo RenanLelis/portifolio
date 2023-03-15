@@ -10,14 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * The controller for authentication, forget password and register operations
  */
+
 @RestController
 public class AuthController {
 
@@ -30,7 +28,6 @@ public class AuthController {
      * @param form - form with email and password
      * @return - the response entity (http response)
      */
-    @CrossOrigin
     @PostMapping(path = "/api/auth/login", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity login(@RequestBody LoginForm form) {
         if (form.getEmail() == null || form.getPassword() == null) {
@@ -50,8 +47,8 @@ public class AuthController {
      * @param form - form with the input data
      * @return - the ResponseEntity
      */
-    @CrossOrigin
     @PostMapping(path = "/api/auth/recoverpassword", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @CrossOrigin
     public ResponseEntity recoverPassword(@RequestBody ForgotPasswordForm form) {
         if (form.getEmail() == null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new ErrorDTO(MessageUtil.getErrorMessageInputValues()));
