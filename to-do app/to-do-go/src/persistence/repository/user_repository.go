@@ -21,17 +21,17 @@ func CreateUserRepository(db *sql.DB) *UserRepository {
 
 // GetUserByEmail fetch a user from the database by the email
 func (repo UserRepository) GetUserByEmail(email string) (model.User, error) {
-	linhas, err := repo.db.Query(`SELECT 
+	queryResult, err := repo.db.Query(`SELECT 
 	ID, EMAIL, USER_PASSWORD, FIRST_NAME, LAST_NAME, USER_STATUS 
 	FROM USER WHERE EMAIL = ?`, email)
 	if err != nil {
 		return model.User{}, errors.New(messages.GetErrorMessageUserNotFound())
 	}
-	defer linhas.Close()
+	defer queryResult.Close()
 
 	var user model.User
-	if linhas.Next() {
-		if err = linhas.Scan(
+	if queryResult.Next() {
+		if err = queryResult.Scan(
 			&user.ID,
 			&user.Email,
 			&user.Password,
