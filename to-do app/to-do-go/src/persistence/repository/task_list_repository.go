@@ -97,16 +97,16 @@ func (repo TaskListRepository) CreateNewList(listName, listDescription string, u
 }
 
 // UpdateList update list name and description on database
-func (repo TaskListRepository) UpdateList(id uint64, listName, listDescription string) error {
+func (repo TaskListRepository) UpdateList(id, userID uint64, listName, listDescription string) error {
 	statement, erro := repo.db.Prepare(
-		"UPDATE LIST SET LIST_NAME = ?, LIST_DESCRIPTION = ? WHERE ID = ?",
+		"UPDATE LIST SET LIST_NAME = ?, LIST_DESCRIPTION = ? WHERE ID = ? AND ID_USER = ?",
 	)
 	if erro != nil {
 		return erro
 	}
 	defer statement.Close()
 
-	if _, erro = statement.Exec(listName, listDescription, id); erro != nil {
+	if _, erro = statement.Exec(listName, listDescription, id, userID); erro != nil {
 		return erro
 	}
 	return nil
@@ -150,12 +150,12 @@ func (repo TaskListRepository) DeleteList(listID, userID uint64) error {
 }
 
 // CompleteTasksFromList update the status from the tasks to Complete on the list for the user
-func (repo TaskListRepository) CompleteTasksFromList(listID, userID, taskStatus uint64) error {
+func (repo TaskListRepository) CompleteTasksFromList(listID, userID uint64) error {
 	return repo.UpdateTaskStatusFromList(listID, userID, model.STATUS_TASK_COMPLETE)
 }
 
 // UncompleteTasksFromList update the status from the tasks to Incomplete on the list for the user
-func (repo TaskListRepository) UncompleteTasksFromList(listID, userID, taskStatus uint64) error {
+func (repo TaskListRepository) UncompleteTasksFromList(listID, userID uint64) error {
 	return repo.UpdateTaskStatusFromList(listID, userID, model.STATUS_TASK_INCOMPLETE)
 }
 
@@ -268,7 +268,7 @@ func (repo TaskListRepository) CreateTask(taskName, taskDescription, deadline st
 	return uint64(newID), nil
 }
 
-// CreateTask create a new task for the user
+// UpdateTask update the task data for the user
 func (repo TaskListRepository) UpdateTask(taskName, taskDescription, deadline string, userID, id uint64) error {
 	statement, err := repo.db.Prepare(
 		`UPDATE TASK SET TASK_NAME = ?, TASK_DESCRIPTION = ?, DEADLINE = ? WHERE ID_USER = ? AND ID = ?`,
@@ -282,50 +282,116 @@ func (repo TaskListRepository) UpdateTask(taskName, taskDescription, deadline st
 		return err
 	}
 	return nil
-
 }
 
-// CREATE TABLE IF NOT EXISTS LIST(
-//     ID int auto_increment primary key,
-//     LIST_NAME varchar(50) not null,
-//     LIST_DESCRIPTION TEXT,
-//     ID_USER int not null,
-//     FOREIGN KEY (ID_USER)
-//     REFERENCES USER(ID)
-//     ON DELETE CASCADE
-// ) ENGINE=INNODB;
+// DeleteTask delete a task from the database
+func (repo TaskListRepository) DeleteTask(taskID, userID uint64) error {
+	statement, erro := repo.db.Prepare(
+		"DELETE FROM TASK WHERE ID = ? AND ID_USER = ?",
+	)
+	if erro != nil {
+		return erro
+	}
+	defer statement.Close()
 
-// CREATE TABLE IF NOT EXISTS TASK(
-//     ID int auto_increment primary key,
-//     TASK_NAME varchar(50) not null,
-//     TASK_DESCRIPTION TEXT,
-//     DEADLINE DATE,
-//     TASK_STATUS INT NOT NULL,
-//     ID_USER int not null,
-//     FOREIGN KEY (ID_USER)
-//     REFERENCES USER(ID)
-//     ON DELETE CASCADE,
-//     ID_LIST int,
-//     FOREIGN KEY (ID_LIST)
-//     REFERENCES LIST(ID)
-//     ON DELETE CASCADE
-// ) ENGINE=INNODB;
+	if _, erro = statement.Exec(taskID, userID); erro != nil {
+		return erro
+	}
+	return nil
+}
 
-// get tasks and lists - OK
-// create list - OK
-// update list - OK
-// delete list and all tasks on that list - ok
-// complete tasks from list - update status - ok
-// uncomplete tasks from list - update status - ok
-// move tasks to list - ok
-// move tasks from list a to b - ok
+// DeleteTasks delete the tasks from the database
+func (repo TaskListRepository) DeleteTasks(tasksIDs []uint64, userID uint64) error {
+	clauses := []string{"DELETE FROM TASK WHERE ID_USER = ?"}
+	params := make([]interface{}, 0)
 
-// create task - ok
-// update task - ok
-// delete task -
-// delete tasks -
-// complete task - update status -
-// uncomplete task - update status -
-// complete tasks - update status -
-// uncomplete tasks - update status -
-// move task to another list -
+	if len(tasksIDs) > 0 {
+		clauses = append(clauses,
+			fmt.Sprintf(
+				"AND ID IN (%s)",
+				strings.Join(strings.Split(strings.Repeat("?", len(tasksIDs)), ""), ", "),
+			),
+		)
+		for _, taskID := range tasksIDs {
+			params = append(params, taskID)
+		}
+	}
+	statement, err := repo.db.Prepare(
+		strings.Join(clauses, " "),
+	)
+	if err != nil {
+		return err
+	}
+	defer statement.Close()
+
+	if _, err = statement.Exec(userID, params); err != nil {
+		return err
+	}
+	return nil
+}
+
+// CompleteTask update a task status to complete
+func (repo TaskListRepository) CompleteTask(userID, id uint64) error {
+	return repo.SetStatusTask(userID, id, model.STATUS_TASK_COMPLETE)
+}
+
+// UncompleteTask update a task status to incomplete
+func (repo TaskListRepository) UncompleteTask(userID, id uint64) error {
+	return repo.SetStatusTask(userID, id, model.STATUS_TASK_INCOMPLETE)
+}
+
+// SetStatusTask update a task status
+func (repo TaskListRepository) SetStatusTask(userID, id, taskStatus uint64) error {
+	statement, err := repo.db.Prepare(
+		`UPDATE TASK SET TASK_STATUS = ? WHERE ID_USER = ? AND ID = ?`,
+	)
+	if err != nil {
+		return err
+	}
+	defer statement.Close()
+
+	if _, err = statement.Exec(taskStatus, userID, id); err != nil {
+		return err
+	}
+	return nil
+}
+
+// CompleteTasks Update the status to complete for the tasks
+func (repo TaskListRepository) CompleteTasks(tasksIDs []uint64, userID uint64) error {
+	return repo.UpdateTasksStatus(tasksIDs, userID, model.STATUS_TASK_COMPLETE)
+}
+
+// UncompleteTasks Update the status to incomplete for the tasks
+func (repo TaskListRepository) UncompleteTasks(tasksIDs []uint64, userID uint64) error {
+	return repo.UpdateTasksStatus(tasksIDs, userID, model.STATUS_TASK_INCOMPLETE)
+}
+
+// UpdateTasksStatus Update the status for the tasks
+func (repo TaskListRepository) UpdateTasksStatus(tasksIDs []uint64, userID, taskStatus uint64) error {
+	clauses := []string{"UPDATE TASK SET TASK_STATUS = ? WHERE ID_USER = ?"}
+	params := make([]interface{}, 0)
+
+	if len(tasksIDs) > 0 {
+		clauses = append(clauses,
+			fmt.Sprintf(
+				"AND ID IN (%s)",
+				strings.Join(strings.Split(strings.Repeat("?", len(tasksIDs)), ""), ", "),
+			),
+		)
+		for _, taskID := range tasksIDs {
+			params = append(params, taskID)
+		}
+	}
+	statement, err := repo.db.Prepare(
+		strings.Join(clauses, " "),
+	)
+	if err != nil {
+		return err
+	}
+	defer statement.Close()
+
+	if _, err = statement.Exec(taskStatus, userID, params); err != nil {
+		return err
+	}
+	return nil
+}

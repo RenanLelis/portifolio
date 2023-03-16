@@ -65,32 +65,32 @@ func (repo UserRepository) ActivateUser(email string, activationCode string) err
 
 // UpdatePasswordByCode update user password on database by the code sent
 func (repo UserRepository) UpdatePasswordByCode(email string, newPasswordCode string, hashPassword string) error {
-	statement, erro := repo.db.Prepare(
+	statement, err := repo.db.Prepare(
 		"UPDATE USER SET USER_PASSWORD = ?, NEW_PASSWORD_CODE = null WHERE EMAIL = ? AND NEW_PASSWORD_CODE = ?",
 	)
-	if erro != nil {
-		return erro
+	if err != nil {
+		return err
 	}
 	defer statement.Close()
 
-	if _, erro = statement.Exec(hashPassword, email, newPasswordCode); erro != nil {
-		return erro
+	if _, err = statement.Exec(hashPassword, email, newPasswordCode); err != nil {
+		return err
 	}
 	return nil
 }
 
 // UpdateUserNewPasswordCode set a new password code for the user to reset his password
 func (repo UserRepository) UpdateUserNewPasswordCode(email string, newPasswordCode string) error {
-	statement, erro := repo.db.Prepare(
+	statement, err := repo.db.Prepare(
 		"UPDATE USER SET NEW_PASSWORD_CODE = ? WHERE EMAIL = ?",
 	)
-	if erro != nil {
-		return erro
+	if err != nil {
+		return err
 	}
 	defer statement.Close()
 
-	if _, erro = statement.Exec(newPasswordCode, email); erro != nil {
-		return erro
+	if _, err = statement.Exec(newPasswordCode, email); err != nil {
+		return err
 	}
 	return nil
 }
@@ -121,32 +121,32 @@ func (repo UserRepository) CreateNewUser(email, password, firstName, lastName, a
 
 // UpdatePasswordById update user password on database by the user id
 func (repo UserRepository) UpdatePasswordById(id uint64, hashPassword string) error {
-	statement, erro := repo.db.Prepare(
+	statement, err := repo.db.Prepare(
 		"UPDATE USER SET USER_PASSWORD = ? WHERE ID = ?",
 	)
-	if erro != nil {
-		return erro
+	if err != nil {
+		return err
 	}
 	defer statement.Close()
 
-	if _, erro = statement.Exec(hashPassword, id); erro != nil {
-		return erro
+	if _, err = statement.Exec(hashPassword, id); err != nil {
+		return err
 	}
 	return nil
 }
 
 // UpdateUser update user info (first name and last name) on the database
 func (repo UserRepository) UpdateUser(id uint64, firstName, lastName string) error {
-	statement, erro := repo.db.Prepare(
+	statement, err := repo.db.Prepare(
 		"UPDATE USER SET FIRST_NAME = ?, LAST_NAME = ? WHERE ID = ?",
 	)
-	if erro != nil {
-		return erro
+	if err != nil {
+		return err
 	}
 	defer statement.Close()
 
-	if _, erro = statement.Exec(firstName, lastName, id); erro != nil {
-		return erro
+	if _, err = statement.Exec(firstName, lastName, id); err != nil {
+		return err
 	}
 	return nil
 }
