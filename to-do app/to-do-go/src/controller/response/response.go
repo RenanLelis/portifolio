@@ -7,7 +7,7 @@ import (
 )
 
 // JSON send a json formated response
-func JSON(w http.ResponseWriter, statusCode int, data interface{}) {
+func JSON(w http.ResponseWriter, statusCode int, data interface{}, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(statusCode)
 	if data != nil {
@@ -18,10 +18,10 @@ func JSON(w http.ResponseWriter, statusCode int, data interface{}) {
 }
 
 // Err send a formated error response
-func Err(w http.ResponseWriter, statusCode int, err error) {
+func Err(w http.ResponseWriter, statusCode int, err error, r *http.Request) {
 	JSON(w, statusCode, errorMessage{
 		ErrrorMessage: err.Error(),
-	})
+	}, r)
 }
 
 type errorMessage struct {

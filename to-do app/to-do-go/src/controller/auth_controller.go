@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
+	"renan.com/todo/src/controller/form"
 	"renan.com/todo/src/controller/response"
 )
 
@@ -12,13 +13,13 @@ import (
 func Login(w http.ResponseWriter, r *http.Request) {
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		response.Err(w, http.StatusUnprocessableEntity, err)
+		response.Err(w, http.StatusUnprocessableEntity, err, r)
 		return
 	}
 
-	var form response.LoginForm
+	var form form.LoginForm
 	if err = json.Unmarshal(reqBody, &form); err != nil {
-		response.Err(w, http.StatusBadRequest, err)
+		response.Err(w, http.StatusBadRequest, err, r)
 		return
 	}
 	//TODO
@@ -28,13 +29,13 @@ func Login(w http.ResponseWriter, r *http.Request) {
 func RecoverPassword(w http.ResponseWriter, r *http.Request) {
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		response.Err(w, http.StatusUnprocessableEntity, err)
+		response.Err(w, http.StatusUnprocessableEntity, err, r)
 		return
 	}
 
-	var form response.RecoverPasswordForm
+	var form form.RecoverPasswordForm
 	if err = json.Unmarshal(reqBody, &form); err != nil {
-		response.Err(w, http.StatusBadRequest, err)
+		response.Err(w, http.StatusBadRequest, err, r)
 		return
 	}
 	//TODO
@@ -44,13 +45,13 @@ func RecoverPassword(w http.ResponseWriter, r *http.Request) {
 func ResetPassword(w http.ResponseWriter, r *http.Request) {
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		response.Err(w, http.StatusUnprocessableEntity, err)
+		response.Err(w, http.StatusUnprocessableEntity, err, r)
 		return
 	}
 
-	var form response.ResetPasswordForm
+	var form form.ResetPasswordForm
 	if err = json.Unmarshal(reqBody, &form); err != nil {
-		response.Err(w, http.StatusBadRequest, err)
+		response.Err(w, http.StatusBadRequest, err, r)
 		return
 	}
 	//TODO
@@ -60,13 +61,13 @@ func ResetPassword(w http.ResponseWriter, r *http.Request) {
 func RegisterNewUser(w http.ResponseWriter, r *http.Request) {
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		response.Err(w, http.StatusUnprocessableEntity, err)
+		response.Err(w, http.StatusUnprocessableEntity, err, r)
 		return
 	}
 
-	var form response.NewUserForm
+	var form form.NewUserForm
 	if err = json.Unmarshal(reqBody, &form); err != nil {
-		response.Err(w, http.StatusBadRequest, err)
+		response.Err(w, http.StatusBadRequest, err, r)
 		return
 	}
 	//TODO
@@ -76,13 +77,13 @@ func RegisterNewUser(w http.ResponseWriter, r *http.Request) {
 func ActivateUser(w http.ResponseWriter, r *http.Request) {
 	reqBody, err := ioutil.ReadAll(r.Body)
 	if err != nil {
-		response.Err(w, http.StatusUnprocessableEntity, err)
+		response.Err(w, http.StatusUnprocessableEntity, err, r)
 		return
 	}
 
-	var form response.UserActivationForm
+	var form form.UserActivationForm
 	if err = json.Unmarshal(reqBody, &form); err != nil {
-		response.Err(w, http.StatusBadRequest, err)
+		response.Err(w, http.StatusBadRequest, err, r)
 		return
 	}
 	//TODO
