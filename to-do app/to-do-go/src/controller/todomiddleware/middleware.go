@@ -20,11 +20,11 @@ func ValidateAuth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		userID, status, email, err := security.GetUserIDStatusAndEmail(r)
 		if err != nil {
-			response.Err(w, http.StatusUnauthorized, err)
+			response.Err(w, http.StatusUnauthorized, err, r)
 			return
 		}
 		if userID == 0 || status == model.STATUS_INACTIVE {
-			response.Err(w, http.StatusUnauthorized, errors.New(messages.GetErrorMessageToken()))
+			response.Err(w, http.StatusUnauthorized, errors.New(messages.GetErrorMessageToken()), r)
 			return
 		}
 		r.Header.Add(HEADER_USER_ID, strconv.FormatUint(userID, 10))
