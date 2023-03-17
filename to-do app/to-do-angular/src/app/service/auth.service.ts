@@ -46,11 +46,11 @@ export class AuthService {
     }));
   }
 
-  registerUser(email: string, password: string, userName: string, lastName: string | null) {
+  registerUser(email: string, password: string, firstName: string, lastName: string | null) {
     let headers: HttpHeaders = new HttpHeaders({
       "Content-Type": "application/json",
     });
-    return this.http.post(this.URL_REGISTER_USER, { "email": email, "password": password, "userName": userName, "lastName": lastName }, { headers })
+    return this.http.post(this.URL_REGISTER_USER, { "email": email, "password": password, "firstName": firstName, "lastName": lastName }, { headers })
     .pipe(tap(resData => {
       this.handleAuthentication(resData as UserData);
     }));
