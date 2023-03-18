@@ -1,5 +1,6 @@
 package response
 
+// UserDTO struct with data to use as response for login operations
 type UserDTO struct {
 	Email     string `json:"email"`
 	JWT       string `json:"jwt"`

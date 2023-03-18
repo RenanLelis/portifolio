@@ -42,7 +42,7 @@ func (repo UserRepository) GetUserByEmail(email string) (model.User, error) {
 			return model.User{}, err
 		}
 	} else {
-		return model.User{}, errors.New(messages.GetErrorMessageUserNotFound())
+		return model.User{}, nil
 	}
 	return user, nil
 }

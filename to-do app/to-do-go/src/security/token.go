@@ -21,7 +21,8 @@ const CLAIMS_ID_STATUS string = "STATUS"
 const CLAIMS_AUTHORIZED string = "AUTHORIZED"
 const CLAIMS_EXP_TIME string = "exp"
 
-const EXP_TIME time.Duration = time.Hour * 2
+// const EXP_TIME time.Duration = time.Hour * 2
+const EXP_TIME time.Duration = 2 * 60 * 60 * 1000
 
 // CreateToken creates a JWT Token for the user
 func CreateToken(userID uint64, userStatus uint64, userEmail string) (string, error) {

@@ -1,6 +1,9 @@
 package dao
 
 import (
+	"errors"
+
+	"renan.com/todo/src/business/messages"
 	"renan.com/todo/src/database"
 	"renan.com/todo/src/model"
 	"renan.com/todo/src/persistence/repository"
@@ -47,6 +50,13 @@ func UpdateUserNewPasswordCode(email string, newPasswordCode string) error {
 	}
 	defer db.Close()
 	rep := repository.CreateUserRepository(db)
+	user, err := rep.GetUserByEmail(email)
+	if err != nil {
+		return errors.New(messages.GetErrorMessage())
+	}
+	if user.ID != 0 {
+		return errors.New(messages.GetErrorMessageEmailAlreadyExists())
+	}
 	return rep.UpdateUserNewPasswordCode(email, newPasswordCode)
 }
 

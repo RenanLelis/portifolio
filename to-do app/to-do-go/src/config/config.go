@@ -19,20 +19,20 @@ var (
 	MailFrom     = ""
 	SystemEmail  = ""
 	MailPassword = ""
-	SmtpPort     = ""
+	SmtpPort     = 0
 	SmtpHost     = ""
 )
 
 // Load will load the path variables
 func Load() {
-	var erro error
+	var err error
 
-	if erro = godotenv.Load(); erro != nil {
-		log.Fatal(erro)
+	if err = godotenv.Load(); err != nil {
+		log.Fatal(err)
 	}
 
-	Port, erro = strconv.Atoi(os.Getenv("API_PORT"))
-	if erro != nil {
+	Port, err = strconv.Atoi(os.Getenv("API_PORT"))
+	if err != nil {
 		Port = 8081
 	}
 
@@ -47,7 +47,10 @@ func Load() {
 	MailFrom = os.Getenv("MAIL_FROM")
 	SystemEmail = os.Getenv("MAIL_FROM")
 	MailPassword = os.Getenv("MAIL_PASSWORD")
-	SmtpPort = os.Getenv("SMTP_PORT")
+	SmtpPort, err = strconv.Atoi(os.Getenv("SMTP_PORT"))
+	if err != nil {
+		SmtpPort = 465
+	}
 	SmtpHost = os.Getenv("SMTP_HOST")
 
 }
