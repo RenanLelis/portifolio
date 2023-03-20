@@ -8,7 +8,7 @@ type User struct {
 	ID             uint64
 	Email          string
 	Password       string
-	CodigoAtivacao string
+	ActivationCode string
 	FirstName      string
 	LastName       string
 	Status         uint64

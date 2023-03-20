@@ -7,8 +7,10 @@ import (
 	"strings"
 
 	"github.com/badoux/checkmail"
+	"renan.com/todo/src/business/mail"
 	"renan.com/todo/src/business/messages"
 	"renan.com/todo/src/controller/response"
+	"renan.com/todo/src/model"
 	"renan.com/todo/src/persistence/dao"
 	"renan.com/todo/src/security"
 )
@@ -53,6 +55,10 @@ func RecoverPassword(email string) Err {
 		}
 		return Err{ErrorMessage: err.Error(), Status: status}
 	}
+	err = mail.SendEmailRecoverPassword(email, newPasswordCode)
+	if err != nil {
+		return Err{ErrorMessage: messages.GetErrorMessage(), Status: http.StatusInternalServerError}
+	}
 	return Err{}
 }
 
@@ -88,18 +94,93 @@ func ResetPassword(email, password, newPasswordCode string) (response.UserDTO, E
 
 // RegisterNewUser creates a new user on the database
 func RegisterNewUser(email, password, firstName, lastName string) (response.UserDTO, Err) {
-	//TODO
-	return response.UserDTO{}, Err{}
+	emailFormatted := strings.TrimSpace(email)
+	passwordFormatted := strings.TrimSpace(password)
+	firstNameFormatted := strings.TrimSpace(firstName)
+	lastNameFormatted := strings.TrimSpace(lastName)
+	err := validateNewUserData(emailFormatted, passwordFormatted, firstNameFormatted, lastNameFormatted)
+	if err != nil {
+		return response.UserDTO{}, Err{http.StatusBadRequest, err.Error()}
+	}
+	user, err := dao.GetUserByEmail(emailFormatted)
+	if err != nil {
+		return response.UserDTO{}, Err{http.StatusInternalServerError, messages.GetErrorMessage()}
+	}
+	if user.ID > 0 {
+		return response.UserDTO{}, Err{http.StatusForbidden, messages.GetErrorMessageEmailAlreadyExists()}
+	}
+	activationCode := security.GenerateRandoStringCode()
+	newID, err := dao.CreateNewUser(emailFormatted, passwordFormatted, firstNameFormatted, lastNameFormatted, activationCode)
+	if err != nil {
+		fmt.Println(err)
+		return response.UserDTO{}, Err{http.StatusInternalServerError, messages.GetErrorMessage()}
+	}
+	err = mail.SendEmailUserActivation(email, activationCode)
+	if err != nil {
+		return response.UserDTO{}, Err{ErrorMessage: messages.GetErrorMessage(), Status: http.StatusInternalServerError}
+	}
+	userDTO, err := response.ConvertUserToUserDTO(model.User{
+		ID:             newID,
+		Email:          emailFormatted,
+		Password:       passwordFormatted,
+		ActivationCode: activationCode,
+		FirstName:      firstNameFormatted,
+		LastName:       lastNameFormatted,
+		Status:         model.STATUS_INACTIVE,
+	})
+	if err != nil {
+		return response.UserDTO{}, Err{ErrorMessage: messages.GetErrorMessage(), Status: http.StatusInternalServerError}
+	}
+	return userDTO, Err{}
 }
 
 // ActivateUser set status active for a user, validating email and code sent by email
 func ActivateUser(email, activationCode string) (response.UserDTO, Err) {
-	//TODO
-	return response.UserDTO{}, Err{}
+	emailFormatted := strings.TrimSpace(email)
+	activationCodeFormatted := strings.TrimSpace(activationCode)
+	err := validateUserActivationData(emailFormatted, activationCodeFormatted)
+	if err != nil {
+		return response.UserDTO{}, Err{http.StatusBadRequest, err.Error()}
+	}
+	user, err := dao.GetUserByEmail(emailFormatted)
+	if err != nil {
+		return response.UserDTO{}, Err{http.StatusInternalServerError, messages.GetErrorMessage()}
+	}
+	if user.ID <= 0 {
+		return response.UserDTO{}, Err{http.StatusForbidden, messages.GetErrorMessageUserNotFound()}
+	}
+	err = dao.ActivateUser(emailFormatted, activationCodeFormatted)
+	if err != nil {
+		return response.UserDTO{}, Err{http.StatusInternalServerError, messages.GetErrorMessage()}
+	}
+	user.ActivationCode = ""
+	user.Status = model.STATUS_ACTIVE
+	userDTO, err := response.ConvertUserToUserDTO(user)
+	if err != nil {
+		return response.UserDTO{}, Err{ErrorMessage: messages.GetErrorMessage(), Status: http.StatusInternalServerError}
+	}
+	return userDTO, Err{}
 }
 
+// validateLoginData validate email and password informed to login operation
 func validateLoginData(email, password string) error {
 	if !isEmailValid(email) || password == "" || len(password) < 6 {
+		return errors.New(messages.GetErrorMessageInputValues())
+	}
+	return nil
+}
+
+// validateNewUserData validate email, password, firs name and last name informed to user registration operation
+func validateNewUserData(email, password, firstName, lastName string) error {
+	if !isEmailValid(email) || password == "" || len(password) < 6 || firstName == "" || len(firstName) <= 0 {
+		return errors.New(messages.GetErrorMessageInputValues())
+	}
+	return nil
+}
+
+// validateUserActivationData validate email, and activation code informed to user activation operation
+func validateUserActivationData(email, activationCode string) error {
+	if !isEmailValid(email) || activationCode == "" || len(activationCode) != 6 {
 		return errors.New(messages.GetErrorMessageInputValues())
 	}
 	return nil
