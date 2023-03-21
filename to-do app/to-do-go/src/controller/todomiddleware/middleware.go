@@ -18,7 +18,7 @@ const HEADER_USER_EMAIL string = "userEmail"
 // ValidateAuth check if there is a valid JWT Token for a user
 func ValidateAuth(next http.HandlerFunc) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		userID, status, email, err := security.GetUserIDStatusAndEmail(r)
+		userID, status, email, _, _, err := security.GetUserData(r)
 		if err != nil {
 			response.Err(w, http.StatusUnauthorized, err, r)
 			return

@@ -10,7 +10,7 @@ import (
 
 // ConvertUserToUserDTO create a DTO with the user as param
 func ConvertUserToUserDTO(user model.User) (UserDTO, error) {
-	jwt, err := security.CreateToken(user.ID, user.Status, user.Email)
+	jwt, err := security.CreateToken(user.ID, user.Status, user.Email, user.FirstName, user.LastName)
 	if err != nil {
 		return UserDTO{}, errors.New(messages.GetErrorMessageToken())
 	}

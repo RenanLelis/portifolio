@@ -3,7 +3,7 @@ export interface Task {
     id : Number;
     taskName : string;
     taskDescription : string | null;
-    deadline : Date | null;
+    deadline : string | null;
     taskStatus : Number;
 }
 

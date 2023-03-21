@@ -13,8 +13,8 @@ export class InterceptorService implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     if (this.authService.isUserLoggedIn()) {
-      let user: User | null = this.authService.user.value
-      const modifiedReq = req.clone({ headers: new HttpHeaders({ 'AUTH': user!.jwt }) });
+      let user: User = this.authService.user.value!
+      const modifiedReq = req.clone({ headers: new HttpHeaders({ 'AUTH': user.jwt }) });
       return next.handle(modifiedReq)
         .pipe(
           tap(resData => {

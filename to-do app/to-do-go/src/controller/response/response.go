@@ -11,9 +11,15 @@ import (
 // JSON send a json formated response
 func JSON(w http.ResponseWriter, statusCode int, data interface{}, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	_, newToken, err := security.RefreshToken(r)
+	newUserToken, err := security.RefreshTokenFromRequest(r)
 	if err == nil {
-		w.Header().Set(security.AUTH, newToken)
+		userDTO := CreateUserDTOFromJWT(newUserToken)
+		if userDTO.ID > 0 {
+			jsonUserDTO, err := json.Marshal(userDTO)
+			if err == nil {
+				w.Header().Set(security.AUTH, string(jsonUserDTO))
+			}
+		}
 	}
 	w.WriteHeader(statusCode)
 	if data != nil {
