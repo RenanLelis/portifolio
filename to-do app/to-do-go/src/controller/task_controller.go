@@ -2,32 +2,38 @@ package controller
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
 	"io/ioutil"
 	"net/http"
 	"strconv"
 
 	"github.com/gorilla/mux"
+	"renan.com/todo/src/business"
 	"renan.com/todo/src/controller/form"
 	"renan.com/todo/src/controller/response"
+	"renan.com/todo/src/security"
 )
 
 // GetTasksAndLists implements the controller to get tasks and lists
 func GetTasksAndLists(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	userID, err := security.GetUserID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err, r)
+		return
+	}
+	tasksListsDTO, bErr := business.GetTasksAndLists(userID)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusOK, tasksListsDTO, r)
 }
 
 // CreateTaskList implements the controller to create a new lists
 func CreateTaskList(w http.ResponseWriter, r *http.Request) {
-	//TODO
-}
-
-// UpdateTaskList implements the controller to update a list data
-func UpdateTaskList(w http.ResponseWriter, r *http.Request) {
-	param := mux.Vars(r)
-	listID, err := strconv.ParseUint(param["id"], 10, 64)
+	userID, err := security.GetUserID(r)
 	if err != nil {
-		response.Err(w, http.StatusBadRequest, err, r)
+		response.Err(w, http.StatusUnauthorized, err, r)
 		return
 	}
 	reqBody, err := ioutil.ReadAll(r.Body)
@@ -40,120 +46,379 @@ func UpdateTaskList(w http.ResponseWriter, r *http.Request) {
 		response.Err(w, http.StatusBadRequest, err, r)
 		return
 	}
+	taskListDTO, bErr := business.CreateTaskList(form.ListName, form.ListDescription, userID)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusCreated, taskListDTO, r)
+}
 
-	fmt.Println(listID)
-	//TODO
+// UpdateTaskList implements the controller to update a list data
+func UpdateTaskList(w http.ResponseWriter, r *http.Request) {
+	param := mux.Vars(r)
+	listID, err := strconv.ParseUint(param["id"], 10, 64)
+	if err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+	userID, err := security.GetUserID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err, r)
+		return
+	}
+	reqBody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		response.Err(w, http.StatusUnprocessableEntity, err, r)
+		return
+	}
+	var form form.TaskListForm
+	if err = json.Unmarshal(reqBody, &form); err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+	bErr := business.UpdateTaskList(listID, userID, form.ListName, form.ListDescription)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusOK, nil, r)
 }
 
 // DeleteTaskList implements the controller to delete a list and it's tasks
 func DeleteTaskList(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	param := mux.Vars(r)
+	listID, err := strconv.ParseUint(param["id"], 10, 64)
+	if err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+	userID, err := security.GetUserID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err, r)
+		return
+	}
+	bErr := business.DeleteTaskList(listID, userID)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusOK, nil, r)
 }
 
 // MoveTasksForList implements the controller to change tasks to another list
 func MoveTasksForList(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	userID, err := security.GetUserID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err, r)
+		return
+	}
+	reqBody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		response.Err(w, http.StatusUnprocessableEntity, err, r)
+		return
+	}
+	var form form.MoveTasksToListForm
+	if err = json.Unmarshal(reqBody, &form); err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+	bErr := business.MoveTasksForList(form.TasksIDs, form.ListID, userID)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusOK, nil, r)
 }
 
 // MoveTasksFromList implements the controller to change tasks from one list to another
 func MoveTasksFromList(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	userID, err := security.GetUserID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err, r)
+		return
+	}
+	reqBody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		response.Err(w, http.StatusUnprocessableEntity, err, r)
+		return
+	}
+	var form form.MoveTasksFromListForm
+	if err = json.Unmarshal(reqBody, &form); err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+	bErr := business.MoveTasksFromList(userID, form.ListIDOrigin, form.ListIDDestiny)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusOK, nil, r)
 }
 
 // CompleteTasksFromList implements the controller to change an array of tasks status to complete
 func CompleteTasksFromList(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	param := mux.Vars(r)
+	listID, err := strconv.ParseUint(param["id"], 10, 64)
+	if err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+	userID, err := security.GetUserID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err, r)
+		return
+	}
+	bErr := business.CompleteTasksFromList(userID, listID)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusOK, nil, r)
 }
 
 // UncompleteTasksFromList implements the controller to change an array of tasks status to incomplete
 func UncompleteTasksFromList(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	param := mux.Vars(r)
+	listID, err := strconv.ParseUint(param["id"], 10, 64)
+	if err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+	userID, err := security.GetUserID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err, r)
+		return
+	}
+	bErr := business.UncompleteTasksFromList(userID, listID)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusOK, nil, r)
 }
 
 // CreateTask implements the controller to create a new task
 func CreateTask(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	userID, err := security.GetUserID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err, r)
+		return
+	}
+	reqBody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		response.Err(w, http.StatusUnprocessableEntity, err, r)
+		return
+	}
+	var form form.TaskForm
+	if err = json.Unmarshal(reqBody, &form); err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+	taskDTO, bErr := business.CreateTask(form.TaskName, form.TaskDescription, form.Deadline, userID, form.ListID)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusCreated, taskDTO, r)
 }
 
 // UpdateTask implements the controller to update a task
 func UpdateTask(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	param := mux.Vars(r)
+	id, err := strconv.ParseUint(param["id"], 10, 64)
+	if err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+	userID, err := security.GetUserID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err, r)
+		return
+	}
+	reqBody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		response.Err(w, http.StatusUnprocessableEntity, err, r)
+		return
+	}
+	var form form.TaskForm
+	if err = json.Unmarshal(reqBody, &form); err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+	bErr := business.UpdateTask(form.TaskName, form.TaskDescription, form.Deadline, userID, id)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusOK, nil, r)
 }
 
 // MoveTaskToList implements the controller to update a task list (move one task to other list)
 func MoveTaskToList(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	param := mux.Vars(r)
+	id, err := strconv.ParseUint(param["id"], 10, 64)
+	if err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+	userID, err := security.GetUserID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err, r)
+		return
+	}
+	reqBody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		response.Err(w, http.StatusUnprocessableEntity, err, r)
+		return
+	}
+	var form form.MoveTaskToListForm
+	if err = json.Unmarshal(reqBody, &form); err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+	bErr := business.MoveTaskToList(userID, form.ListID, id)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusOK, nil, r)
 }
 
 // DeleteTask implements the controller to delete a task
 func DeleteTask(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	param := mux.Vars(r)
+	id, err := strconv.ParseUint(param["id"], 10, 64)
+	if err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+	userID, err := security.GetUserID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err, r)
+		return
+	}
+	bErr := business.DeleteTask(userID, id)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusOK, nil, r)
 }
 
 // CompleteTask implements the controller to update a task status to complete
 func CompleteTask(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	param := mux.Vars(r)
+	id, err := strconv.ParseUint(param["id"], 10, 64)
+	if err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+	userID, err := security.GetUserID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err, r)
+		return
+	}
+	bErr := business.CompleteTask(userID, id)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusOK, nil, r)
 }
 
 // UncompleteTask implements the controller to update a task status to incomplete
 func UncompleteTask(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	param := mux.Vars(r)
+	id, err := strconv.ParseUint(param["id"], 10, 64)
+	if err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+	userID, err := security.GetUserID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err, r)
+		return
+	}
+	bErr := business.UncompleteTask(userID, id)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusOK, nil, r)
 }
 
 // DeleteTasks implements the controller to delete an array of tasks
 func DeleteTasks(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	userID, err := security.GetUserID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err, r)
+		return
+	}
+	reqBody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		response.Err(w, http.StatusUnprocessableEntity, err, r)
+		return
+	}
+	var form form.DeleteOrCompleteTasksForm
+	if err = json.Unmarshal(reqBody, &form); err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+	bErr := business.DeleteTasks(userID, form.IDs)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusOK, nil, r)
 }
 
 // CompleteTasks implements the controller to update an array of tasks, set status to complete
 func CompleteTasks(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	userID, err := security.GetUserID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err, r)
+		return
+	}
+	reqBody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		response.Err(w, http.StatusUnprocessableEntity, err, r)
+		return
+	}
+	var form form.DeleteOrCompleteTasksForm
+	if err = json.Unmarshal(reqBody, &form); err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+	bErr := business.CompleteTasks(userID, form.IDs)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusOK, nil, r)
 }
 
 // UncompleteTasks implements the controller to update an array of tasks, set status to incomplete
 func UncompleteTasks(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	userID, err := security.GetUserID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err, r)
+		return
+	}
+	reqBody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		response.Err(w, http.StatusUnprocessableEntity, err, r)
+		return
+	}
+	var form form.DeleteOrCompleteTasksForm
+	if err = json.Unmarshal(reqBody, &form); err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+	bErr := business.UncompleteTasks(userID, form.IDs)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusOK, nil, r)
 }
-
-// {
-// 	URI:       "/api/taskList/{id}",
-// 	Method:    http.MethodPut,
-// 	Function:  controller.UpdateTaskList,
-// 	NeedsAuth: true,
-// },
-// {
-// 	URI:       "/api/taskList/{id}",
-// 	Method:    http.MethodDelete,
-// 	Function:  controller.DeleteTaskList,
-// 	NeedsAuth: true,
-// },
-// {
-// 	URI:       "/api/task/{id}",
-// 	Method:    http.MethodPut,
-// 	Function:  controller.UpdateTask,
-// 	NeedsAuth: true,
-// },
-// {
-// 	URI:       "/api/task/list/{id}",
-// 	Method:    http.MethodPut,
-// 	Function:  controller.MoveTaskToList,
-// 	NeedsAuth: true,
-// },
-// {
-// 	URI:       "/api/task/{id}",
-// 	Method:    http.MethodDelete,
-// 	Function:  controller.DeleteTask,
-// 	NeedsAuth: true,
-// },
-// {
-// 	URI:       "/api/task/complete/{id}",
-// 	Method:    http.MethodPut,
-// 	Function:  controller.CompleteTask,
-// 	NeedsAuth: true,
-// },
-// {
-// 	URI:       "/api/task/uncomplete/{id}",
-// 	Method:    http.MethodPut,
-// 	Function:  controller.UncompleteTask,
-// 	NeedsAuth: true,
-// },

@@ -71,9 +71,9 @@ func GetUserID(r *http.Request) (uint64, error) {
 		return 0, err
 	}
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		userID, erro := strconv.ParseUint(fmt.Sprintf("%.0f", claims[CLAIMS_ID_USER]), 10, 64)
-		if erro != nil {
-			return 0, erro
+		userID, err := strconv.ParseUint(fmt.Sprintf("%.0f", claims[CLAIMS_ID_USER]), 10, 64)
+		if err != nil {
+			return 0, err
 		}
 		return userID, nil
 	}

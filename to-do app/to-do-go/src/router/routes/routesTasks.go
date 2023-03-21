@@ -44,13 +44,13 @@ var tasksRoutes = []Route{
 		NeedsAuth: true,
 	},
 	{
-		URI:       "/api/taskList/tasks/complete",
+		URI:       "/api/taskList/tasks/complete/{id}",
 		Method:    http.MethodPut,
 		Function:  controller.CompleteTasksFromList,
 		NeedsAuth: true,
 	},
 	{
-		URI:       "/api/taskList/tasks/uncomplete",
+		URI:       "/api/taskList/tasks/uncomplete/{id}",
 		Method:    http.MethodPut,
 		Function:  controller.UncompleteTasksFromList,
 		NeedsAuth: true,

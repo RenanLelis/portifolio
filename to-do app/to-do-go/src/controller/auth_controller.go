@@ -89,7 +89,7 @@ func RegisterNewUser(w http.ResponseWriter, r *http.Request) {
 		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
 		return
 	}
-	response.JSON(w, http.StatusOK, userDTO, r)
+	response.JSON(w, http.StatusCreated, userDTO, r)
 }
 
 // ActivateUser implements the controller for user activation
