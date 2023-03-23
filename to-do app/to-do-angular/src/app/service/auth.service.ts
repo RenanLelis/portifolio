@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { BehaviorSubject, tap } from 'rxjs';
 import { User, UserData } from '../model/user';
 import { BASE_URL, USER_DATA } from './consts';
@@ -131,7 +132,19 @@ export class AuthService {
     this.user.next(null);
   }
 
+  isPasswordParametersValid(password: string): boolean {
+    if (password === null || password === '' || !/\d/.test(password) || password.length < 6) {
+      return false;
+    }
+    return true;
+  }
 
+  passwordValidation(control: FormControl) {
+    if (control.value === null || control.value === '' || !/\d/.test(control.value) || control.value.length < 6) {
+      return { "invalidPassword": true };
+    }
+    return null;
+  }
 
 
 }

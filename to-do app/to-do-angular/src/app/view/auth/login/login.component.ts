@@ -13,7 +13,7 @@ export class LoginComponent implements OnInit {
 
   formLogin: FormGroup = new FormGroup({
     "email": new FormControl('', [Validators.email, Validators.required]),
-    "password": new FormControl('', [Validators.required, Validators.minLength(5), this.passwordValidation]),
+    "password": new FormControl('', [Validators.required, Validators.minLength(5), this.authService.passwordValidation]),
   });
 
   loading: boolean = false;
@@ -35,12 +35,14 @@ export class LoginComponent implements OnInit {
       this.loading = true;
       this.authService.login(this.formLogin.get('email')!.value.trim(), this.formLogin.get('password')!.value.trim()).subscribe({
         next: (data) => {
+          console.log(data);
           this.loading = false;
           this.router.navigate(['/']);
         },
         error: (e) => {
+          console.log(e);
           this.loading = false;
-          if (e.error && e.error.erro) { this.errorMessage = getMessage(e.error.erro); }
+          if (e.error && e.error.errorMessage) { this.errorMessage = getMessage(e.error.errorMessage); }
           else { this.errorMessage = getErrorMessage(); }
         }
       });
@@ -57,6 +59,8 @@ export class LoginComponent implements OnInit {
     }
     return null;
   }
+
+  
 
 
 }

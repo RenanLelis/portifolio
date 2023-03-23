@@ -20,9 +20,9 @@ const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },
   { path: 'recoverpassword', component: ForgetpasswordComponent },
-  { path: 'passwordreset', component: NewpasswordComponent },
+  { path: 'passwordreset/:email', component: NewpasswordComponent },
   { path: 'userregistration', component: UserregisterComponent },
-  { path: 'useractivation', component: UseractivationComponent },
+  { path: 'useractivation/:email', component: UseractivationComponent },
 
   { path: 'not-found', component: NotFoundComponent },
   { path: '**', redirectTo: '/not-found' },
