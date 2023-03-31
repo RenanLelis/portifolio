@@ -1,12 +1,28 @@
 header {
-    background-color: #103881;
+    background-color: rgba(248, 248, 248, 0.75);
     padding: 10px;
-    color: #F1F1F1;
+    color: #858585;
     margin: 0;
     padding: 3px 15px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    box-shadow: 0 0 .2em #818181;
+    min-height: 60px;
+}
+
+header .list-menu {
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #6A816A;
+    margin: auto 10px;
+    padding: 10px;
+    height: 100%;
+}
+
+i {
+    color: #6A816A;
 }
 
 header .logo {
@@ -18,7 +34,7 @@ header .logo {
 }
 
 header .logo a {
-    color: #FFF;
+    color: #6A816A;
     text-align: center;
     align-items: center;
     justify-content: center;
@@ -26,10 +42,6 @@ header .logo a {
     flex-direction: row;
     font-family: sans-serif;
     font-weight: bold;
-}
-
-header .logo:hover {
-    color: #FFF;
 }
 
 header .logo img {
@@ -45,10 +57,8 @@ header .user-menu {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: #FFF;
-    margin: 10px;
-}
-
-header .user-menu i {
-    color: #FFF;
+    color: #6A816A;
+    margin: auto 10px;
+    padding: 10px;
+    height: 100%;
 }

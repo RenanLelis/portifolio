@@ -37,4 +37,10 @@ var authRoutes = []Route{
 		Function:  controller.ActivateUser,
 		NeedsAuth: false,
 	},
+	{
+		URI:       "/api/auth/useractivationrequest",
+		Method:    http.MethodPost,
+		Function:  controller.RequestUserActivation,
+		NeedsAuth: false,
+	},
 }

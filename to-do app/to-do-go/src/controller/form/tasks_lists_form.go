@@ -6,12 +6,6 @@ type TaskListForm struct {
 	ListDescription string `json:"listDescription,omitempty"`
 }
 
-// MoveTasksToListForm form data to move tasks for other list
-type MoveTasksToListForm struct {
-	ListID   uint64   `json:"listId"`
-	TasksIDs []uint64 `json:"tasksIds"`
-}
-
 // MoveTasksFromListForm form data to move tasks from one list for other list
 type MoveTasksFromListForm struct {
 	ListIDOrigin  uint64 `json:"listIdOrigin"`
@@ -29,9 +23,4 @@ type TaskForm struct {
 // MoveTaskToListForm form data to move a task to another list
 type MoveTaskToListForm struct {
 	ListID uint64 `json:"listId,omitempty"`
-}
-
-// DeleteOrCompleteTasksForm form data to delete tasks or update status of tasks to complete or incomplete
-type DeleteOrCompleteTasksForm struct {
-	IDs []uint64 `json:"idsTasks"`
 }

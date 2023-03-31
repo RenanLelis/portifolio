@@ -1,4 +1,7 @@
 <header>
+  <div class="list-menu" *ngIf="isUserLoggedIn" (click)="onMenuClick()">
+    <i class="fa fa-bars"></i>
+  </div>
     <div class="logo">
       <a routerLink="/"><img src="../../../../assets/logo.png"><span>My Task List</span></a>
     </div>
@@ -7,7 +10,7 @@
         <i class="fa fa-user-circle"></i>
         <div class="dropdown-content">
           <div *ngIf="isUserLoggedIn">
-            <span>Hello {{ user!.name }}</span>
+            <a>Hello {{ user!.name }}</a>
             <hr class="solid">
             <a routerLink="/">Home - My Lists and Tasks</a>
             <a routerLink="/profile">My Profile</a>
@@ -23,10 +26,3 @@
     </div>
     
 </header>
-
-<!-- <ul v-if="!userStore.isUserLoggedIn" class="dropdown-menu">
-    <li><router-link to="/login" class="dropdown-item">Login</router-link></li>
-  </ul>
-  <ul v-if="userStore.isUserLoggedIn" class="dropdown-menu">
-    <li><router-link to="/logout" class="dropdown-item">Sair</router-link></li>
-  </ul> -->

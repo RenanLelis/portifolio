@@ -54,8 +54,8 @@ func UpdateUserNewPasswordCode(email string, newPasswordCode string) error {
 	if err != nil {
 		return errors.New(messages.GetErrorMessage())
 	}
-	if user.ID != 0 {
-		return errors.New(messages.GetErrorMessageEmailAlreadyExists())
+	if user.ID <= 0 {
+		return errors.New(messages.GetErrorMessageUserNotFound())
 	}
 	return rep.UpdateUserNewPasswordCode(email, newPasswordCode)
 }
@@ -69,6 +69,17 @@ func CreateNewUser(email, password, firstName, lastName, activationCode string) 
 	defer db.Close()
 	rep := repository.CreateUserRepository(db)
 	return rep.CreateNewUser(email, password, firstName, lastName, activationCode)
+}
+
+// UpdateUserActivationCode update the activation code for the user
+func UpdateUserActivationCode(email, activationCode string) error {
+	db, err := database.ConnectToDataBase()
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+	rep := repository.CreateUserRepository(db)
+	return rep.UpdateUserActivationCode(email, activationCode)
 }
 
 // UpdatePasswordById update user password on database by the user id

@@ -8,13 +8,13 @@ import (
 
 var tasksRoutes = []Route{
 	{
-		URI:       "/api/taskList/",
+		URI:       "/api/taskList",
 		Method:    http.MethodGet,
 		Function:  controller.GetTasksAndLists,
 		NeedsAuth: true,
 	},
 	{
-		URI:       "/api/taskList/",
+		URI:       "/api/taskList",
 		Method:    http.MethodPost,
 		Function:  controller.CreateTaskList,
 		NeedsAuth: true,
@@ -32,13 +32,7 @@ var tasksRoutes = []Route{
 		NeedsAuth: true,
 	},
 	{
-		URI:       "/api/taskList/tasks/move/",
-		Method:    http.MethodPut,
-		Function:  controller.MoveTasksForList,
-		NeedsAuth: true,
-	},
-	{
-		URI:       "/api/taskList/tasks/moveFromList/",
+		URI:       "/api/taskList/tasks/moveFromList",
 		Method:    http.MethodPut,
 		Function:  controller.MoveTasksFromList,
 		NeedsAuth: true,
@@ -56,7 +50,7 @@ var tasksRoutes = []Route{
 		NeedsAuth: true,
 	},
 	{
-		URI:       "/api/task/",
+		URI:       "/api/task",
 		Method:    http.MethodPost,
 		Function:  controller.CreateTask,
 		NeedsAuth: true,
@@ -89,24 +83,6 @@ var tasksRoutes = []Route{
 		URI:       "/api/task/uncomplete/{id}",
 		Method:    http.MethodPut,
 		Function:  controller.UncompleteTask,
-		NeedsAuth: true,
-	},
-	{
-		URI:       "/api/tasks/",
-		Method:    http.MethodDelete,
-		Function:  controller.DeleteTasks,
-		NeedsAuth: true,
-	},
-	{
-		URI:       "/api/tasks/complete/",
-		Method:    http.MethodPut,
-		Function:  controller.CompleteTasks,
-		NeedsAuth: true,
-	},
-	{
-		URI:       "/api/tasks/uncomplete/",
-		Method:    http.MethodPut,
-		Function:  controller.UncompleteTasks,
 		NeedsAuth: true,
 	},
 }

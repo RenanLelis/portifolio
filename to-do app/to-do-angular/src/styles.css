@@ -17,11 +17,16 @@ h6,
 p {
     text-align: center;
     font: sans-serif;
-    color: #555555;
+    color: #6A816A;
+}
+
+hr {
+    margin: 10px 30px 30px 30px;
 }
 
 body {
-    background-color: #EAEAEA;
+    background-color: #F1F1F1;
+    background-image: linear-gradient(to top right, #DAF1DA, #EFF1EF);
     min-height: 100vh;
 }
 
@@ -31,14 +36,17 @@ body {
 }
 
 .dropdown-content {
+    margin: 5px;
     right: 0;
     display: none;
     position: absolute;
-    background-color: #f9f9f9;
+    background-color: #F5F5F5;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
+    text-align: center;
 }
+
 
 .dropdown-content a {
     color: black;
@@ -59,6 +67,10 @@ body {
     display: block;
 }
 
+.user-menu:hover .dropdown-content {
+    display: block;
+}
+
 hr.solid {
     border-top: 3px solid #bbb;
     margin: 2px 0;
@@ -73,9 +85,9 @@ hr.solid {
     max-width: 750px;
     margin: 20px auto;
     padding: 25px 30px;
-    background-color: #FDFDFD;
-    border-radius: 1em;
-    box-shadow: .35em .35em .5em #353535;
+    background-color: rgba(248, 248, 248, 0.5);
+    border-radius: .5em;
+    box-shadow: .15em .15em .4em #818181;
 }
 
 .container {
@@ -116,8 +128,8 @@ hr.solid {
     font-size: 16px;
     line-height: 17px;
     background-color: #fff;
-    color: #555555;
-    border: .5px solid #818181;
+    color: #818181;
+    border: .2px solid #C1C1C1;
     border-radius: 3px;
     font-family: sans-serif;
     font-weight: 400;
@@ -139,14 +151,19 @@ hr.solid {
     font-weight: 400;
     width: 100%;
     height: 10em;
-    border: .5px solid #818181;
+    border: .2px solid #C1C1C1;
     border-radius: 1px;
 }
 
+.div-submit-button-auth {
+    margin-top: 15px;
+    padding: 6px;
+    display: flex;
+    justify-content: space-between;
+}
+
 .side-link {
-    
     line-height: 36px;
-    
     padding: 1px 10px;
     font-size: 13px;
     font-weight: 700;
@@ -159,7 +176,7 @@ hr.solid {
     font-style: normal;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #103881;
+    color: #6A816A;
 }
 
 .send-button {
@@ -180,29 +197,32 @@ hr.solid {
     text-transform: uppercase;
     letter-spacing: 1px;
     transition: background .4s;
-    border-radius: 5px;
+    border-radius: 50px;
     outline: none;
-    border: 1px solid #505050;
-    color: #E0E0E0;
-    background-color: #103881;
+    border: 1px solid #9AB19A;
+    color: #FFFFFF;
+    background-color: #9AB19A;
 }
 
 .send-button:hover {
-    background-color: #083164;
+    background-color: #6A816A;
+    border: 1px solid #6A816A;
     color: #FFFFFF;
     border: 1px solid #FFFFFF;
 }
 
 .send-button:disabled {
-    color: #E0E0E0;
+    color: #FFFFFF;
     cursor: auto;
-    background-color: #909090;
+    border: 1px solid #A0A0A0;
+    background-color: #A0A0A0;
 }
 
 .send-button:disabled:hover {
-    color: #E0E0E0;
-    background-color: #909090;
-    border: 1px solid #505050;
+    color: #FFFFFF;
+    cursor: auto;
+    border: 1px solid #A0A0A0;
+    background-color: #A0A0A0;
 }
 
 .error-field-message {

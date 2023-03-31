@@ -33,6 +33,9 @@ func Login(email, password string) (response.UserDTO, Err) {
 	if err = security.ComparePassword(user.Password, passwordFormatted); err != nil {
 		return response.UserDTO{}, Err{http.StatusForbidden, messages.GetErrorMessageUserNotFound()}
 	}
+	if user.Status == model.STATUS_INACTIVE {
+		return response.UserDTO{}, Err{http.StatusForbidden, messages.GetErrorMessageUserNotActive()}
+	}
 	userDTO, err := response.ConvertUserToUserDTO(user)
 	if err != nil {
 		return response.UserDTO{}, Err{http.StatusInternalServerError, err.Error()}
@@ -50,7 +53,7 @@ func RecoverPassword(email string) Err {
 	err := dao.UpdateUserNewPasswordCode(emailFormatted, newPasswordCode)
 	if err != nil {
 		status := http.StatusInternalServerError
-		if err.Error() == messages.GetErrorMessageEmailAlreadyExists() {
+		if err.Error() == messages.GetErrorMessageUserNotFound() {
 			status = http.StatusBadRequest
 		}
 		return Err{ErrorMessage: err.Error(), Status: status}
@@ -93,45 +96,38 @@ func ResetPassword(email, password, newPasswordCode string) (response.UserDTO, E
 }
 
 // RegisterNewUser creates a new user on the database
-func RegisterNewUser(email, password, firstName, lastName string) (response.UserDTO, Err) {
+func RegisterNewUser(email, password, firstName, lastName string) Err {
 	emailFormatted := strings.TrimSpace(email)
 	passwordFormatted := strings.TrimSpace(password)
 	firstNameFormatted := strings.TrimSpace(firstName)
 	lastNameFormatted := strings.TrimSpace(lastName)
 	err := validateNewUserData(emailFormatted, passwordFormatted, firstNameFormatted, lastNameFormatted)
 	if err != nil {
-		return response.UserDTO{}, Err{http.StatusBadRequest, err.Error()}
+		return Err{http.StatusBadRequest, err.Error()}
 	}
 	user, err := dao.GetUserByEmail(emailFormatted)
 	if err != nil {
-		return response.UserDTO{}, Err{http.StatusInternalServerError, messages.GetErrorMessage()}
+		return Err{http.StatusInternalServerError, messages.GetErrorMessage()}
 	}
 	if user.ID > 0 {
-		return response.UserDTO{}, Err{http.StatusForbidden, messages.GetErrorMessageEmailAlreadyExists()}
+		return Err{http.StatusForbidden, messages.GetErrorMessageEmailAlreadyExists()}
 	}
 	activationCode := security.GenerateRandoStringCode()
-	newID, err := dao.CreateNewUser(emailFormatted, passwordFormatted, firstNameFormatted, lastNameFormatted, activationCode)
+	hashPass, err := security.HashString(passwordFormatted)
 	if err != nil {
 		fmt.Println(err)
-		return response.UserDTO{}, Err{http.StatusInternalServerError, messages.GetErrorMessage()}
+		return Err{http.StatusInternalServerError, messages.GetErrorMessage()}
+	}
+	_, err = dao.CreateNewUser(emailFormatted, hashPass, firstNameFormatted, lastNameFormatted, activationCode)
+	if err != nil {
+		fmt.Println(err)
+		return Err{http.StatusInternalServerError, messages.GetErrorMessage()}
 	}
 	err = mail.SendEmailUserActivation(email, activationCode)
 	if err != nil {
-		return response.UserDTO{}, Err{ErrorMessage: messages.GetErrorMessage(), Status: http.StatusInternalServerError}
+		return Err{ErrorMessage: messages.GetErrorMessage(), Status: http.StatusInternalServerError}
 	}
-	userDTO, err := response.ConvertUserToUserDTO(model.User{
-		ID:             newID,
-		Email:          emailFormatted,
-		Password:       passwordFormatted,
-		ActivationCode: activationCode,
-		FirstName:      firstNameFormatted,
-		LastName:       lastNameFormatted,
-		Status:         model.STATUS_INACTIVE,
-	})
-	if err != nil {
-		return response.UserDTO{}, Err{ErrorMessage: messages.GetErrorMessage(), Status: http.StatusInternalServerError}
-	}
-	return userDTO, Err{}
+	return Err{}
 }
 
 // ActivateUser set status active for a user, validating email and code sent by email
@@ -160,6 +156,32 @@ func ActivateUser(email, activationCode string) (response.UserDTO, Err) {
 		return response.UserDTO{}, Err{ErrorMessage: messages.GetErrorMessage(), Status: http.StatusInternalServerError}
 	}
 	return userDTO, Err{}
+}
+
+// RequestUserActivation set a new activation code and send by email for the user
+func RequestUserActivation(email string) Err {
+	emailFormatted := strings.TrimSpace(email)
+	if !isEmailValid(emailFormatted) {
+		return Err{http.StatusBadRequest, messages.GetErrorMessageInputValues()}
+	}
+	user, err := dao.GetUserByEmail(emailFormatted)
+	if err != nil {
+		return Err{http.StatusInternalServerError, messages.GetErrorMessage()}
+	}
+	if user.ID <= 0 {
+		return Err{http.StatusForbidden, messages.GetErrorMessageUserNotFound()}
+	}
+	activationCode := security.GenerateRandoStringCode()
+	err = dao.UpdateUserActivationCode(emailFormatted, activationCode)
+	if err != nil {
+		fmt.Println(err)
+		return Err{http.StatusInternalServerError, messages.GetErrorMessage()}
+	}
+	err = mail.SendEmailUserActivation(email, activationCode)
+	if err != nil {
+		return Err{ErrorMessage: messages.GetErrorMessage(), Status: http.StatusInternalServerError}
+	}
+	return Err{}
 }
 
 // validateLoginData validate email and password informed to login operation

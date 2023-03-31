@@ -201,36 +201,12 @@ func CompleteTask(userID, taskID uint64) Err {
 	return Err{}
 }
 
-// CompleteTasks update a group of tasks on database, set status to complete
-func CompleteTasks(userID uint64, tasksIDs []uint64) Err {
-	if userID <= 0 || tasksIDs == nil || len(tasksIDs) <= 0 {
-		return Err{Status: http.StatusBadRequest, ErrorMessage: messages.GetErrorMessageInputValues()}
-	}
-	err := dao.CompleteTasks(tasksIDs, userID)
-	if err != nil {
-		return Err{Status: http.StatusInternalServerError, ErrorMessage: messages.GetErrorMessage()}
-	}
-	return Err{}
-}
-
 // UncompleteTask update a task on database, set status to incomplete
 func UncompleteTask(userID, taskID uint64) Err {
 	if userID <= 0 || taskID <= 0 {
 		return Err{Status: http.StatusBadRequest, ErrorMessage: messages.GetErrorMessageInputValues()}
 	}
 	err := dao.UncompleteTask(userID, taskID)
-	if err != nil {
-		return Err{Status: http.StatusInternalServerError, ErrorMessage: messages.GetErrorMessage()}
-	}
-	return Err{}
-}
-
-// UncompleteTasks update a group of tasks on database, set status to incomplete
-func UncompleteTasks(userID uint64, tasksIDs []uint64) Err {
-	if userID <= 0 || tasksIDs == nil || len(tasksIDs) <= 0 {
-		return Err{Status: http.StatusBadRequest, ErrorMessage: messages.GetErrorMessageInputValues()}
-	}
-	err := dao.UncompleteTasks(tasksIDs, userID)
 	if err != nil {
 		return Err{Status: http.StatusInternalServerError, ErrorMessage: messages.GetErrorMessage()}
 	}

@@ -31,3 +31,8 @@ type UserActivationForm struct {
 	Email          string `json:"email"`
 	ActivationCode string `json:"activationCode"`
 }
+
+//UserActivationRequestForm form data to request user activation
+type UserActivationRequestForm struct {
+	Email string `json:"email"`
+}

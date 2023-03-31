@@ -106,31 +106,6 @@ func DeleteTaskList(w http.ResponseWriter, r *http.Request) {
 	response.JSON(w, http.StatusOK, nil, r)
 }
 
-// MoveTasksForList implements the controller to change tasks to another list
-func MoveTasksForList(w http.ResponseWriter, r *http.Request) {
-	userID, err := security.GetUserID(r)
-	if err != nil {
-		response.Err(w, http.StatusUnauthorized, err, r)
-		return
-	}
-	reqBody, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		response.Err(w, http.StatusUnprocessableEntity, err, r)
-		return
-	}
-	var form form.MoveTasksToListForm
-	if err = json.Unmarshal(reqBody, &form); err != nil {
-		response.Err(w, http.StatusBadRequest, err, r)
-		return
-	}
-	bErr := business.MoveTasksForList(form.TasksIDs, form.ListID, userID)
-	if bErr.Status > 0 {
-		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
-		return
-	}
-	response.JSON(w, http.StatusOK, nil, r)
-}
-
 // MoveTasksFromList implements the controller to change tasks from one list to another
 func MoveTasksFromList(w http.ResponseWriter, r *http.Request) {
 	userID, err := security.GetUserID(r)
@@ -341,81 +316,6 @@ func UncompleteTask(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	bErr := business.UncompleteTask(userID, id)
-	if bErr.Status > 0 {
-		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
-		return
-	}
-	response.JSON(w, http.StatusOK, nil, r)
-}
-
-// DeleteTasks implements the controller to delete an array of tasks
-func DeleteTasks(w http.ResponseWriter, r *http.Request) {
-	userID, err := security.GetUserID(r)
-	if err != nil {
-		response.Err(w, http.StatusUnauthorized, err, r)
-		return
-	}
-	reqBody, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		response.Err(w, http.StatusUnprocessableEntity, err, r)
-		return
-	}
-	var form form.DeleteOrCompleteTasksForm
-	if err = json.Unmarshal(reqBody, &form); err != nil {
-		response.Err(w, http.StatusBadRequest, err, r)
-		return
-	}
-	bErr := business.DeleteTasks(userID, form.IDs)
-	if bErr.Status > 0 {
-		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
-		return
-	}
-	response.JSON(w, http.StatusOK, nil, r)
-}
-
-// CompleteTasks implements the controller to update an array of tasks, set status to complete
-func CompleteTasks(w http.ResponseWriter, r *http.Request) {
-	userID, err := security.GetUserID(r)
-	if err != nil {
-		response.Err(w, http.StatusUnauthorized, err, r)
-		return
-	}
-	reqBody, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		response.Err(w, http.StatusUnprocessableEntity, err, r)
-		return
-	}
-	var form form.DeleteOrCompleteTasksForm
-	if err = json.Unmarshal(reqBody, &form); err != nil {
-		response.Err(w, http.StatusBadRequest, err, r)
-		return
-	}
-	bErr := business.CompleteTasks(userID, form.IDs)
-	if bErr.Status > 0 {
-		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
-		return
-	}
-	response.JSON(w, http.StatusOK, nil, r)
-}
-
-// UncompleteTasks implements the controller to update an array of tasks, set status to incomplete
-func UncompleteTasks(w http.ResponseWriter, r *http.Request) {
-	userID, err := security.GetUserID(r)
-	if err != nil {
-		response.Err(w, http.StatusUnauthorized, err, r)
-		return
-	}
-	reqBody, err := ioutil.ReadAll(r.Body)
-	if err != nil {
-		response.Err(w, http.StatusUnprocessableEntity, err, r)
-		return
-	}
-	var form form.DeleteOrCompleteTasksForm
-	if err = json.Unmarshal(reqBody, &form); err != nil {
-		response.Err(w, http.StatusBadRequest, err, r)
-		return
-	}
-	bErr := business.UncompleteTasks(userID, form.IDs)
 	if bErr.Status > 0 {
 		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
 		return

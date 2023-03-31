@@ -84,12 +84,12 @@ func RegisterNewUser(w http.ResponseWriter, r *http.Request) {
 		response.Err(w, http.StatusBadRequest, err, r)
 		return
 	}
-	userDTO, bErr := business.RegisterNewUser(form.Email, form.Password, form.FirstName, form.LastName)
+	bErr := business.RegisterNewUser(form.Email, form.Password, form.FirstName, form.LastName)
 	if bErr.Status > 0 {
 		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
 		return
 	}
-	response.JSON(w, http.StatusCreated, userDTO, r)
+	response.JSON(w, http.StatusCreated, nil, r)
 }
 
 // ActivateUser implements the controller for user activation
@@ -111,4 +111,26 @@ func ActivateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	response.JSON(w, http.StatusOK, userDTO, r)
+}
+
+// RequestUserActivation request a activation for a user that didn't do it on the registration
+func RequestUserActivation(w http.ResponseWriter, r *http.Request) {
+	reqBody, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		response.Err(w, http.StatusUnprocessableEntity, err, r)
+		return
+	}
+
+	var form form.UserActivationRequestForm
+	if err = json.Unmarshal(reqBody, &form); err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+
+	bErr := business.RequestUserActivation(form.Email)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusOK, nil, r)
 }

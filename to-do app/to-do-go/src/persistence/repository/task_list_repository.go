@@ -23,7 +23,7 @@ func CreateTaskListRepository(db *sql.DB) *TaskListRepository {
 // GetTaskListsByUser fetch the lists on the database by user id
 func (repo TaskListRepository) GetTaskListsByUser(userID uint64) ([]model.TaskList, error) {
 	queryResult, err := repo.db.Query(`SELECT ID, LIST_NAME, LIST_DESCRIPTION 
-	FROM LIST WHERE ID_USER = ?`, userID)
+	FROM TASK_LIST WHERE ID_USER = ?`, userID)
 	if err != nil {
 		return nil, errors.New(messages.GetErrorMessage())
 	}
@@ -78,7 +78,7 @@ func (repo TaskListRepository) GetTasksByUser(userID uint64) ([]model.Task, erro
 // CreateNewList create a new list on the database for the user
 func (repo TaskListRepository) CreateNewList(listName, listDescription string, userID uint64) (uint64, error) {
 	statement, err := repo.db.Prepare(
-		`INSERT INTO LIST (LIST_NAME, LIST_DESCRIPTION, ID_USER)
+		`INSERT INTO TASK_LIST (LIST_NAME, LIST_DESCRIPTION, ID_USER)
 		 VALUES (?, ?, ?)`,
 	)
 	if err != nil {
@@ -99,7 +99,7 @@ func (repo TaskListRepository) CreateNewList(listName, listDescription string, u
 // UpdateList update list name and description on database
 func (repo TaskListRepository) UpdateList(id, userID uint64, listName, listDescription string) error {
 	statement, erro := repo.db.Prepare(
-		"UPDATE LIST SET LIST_NAME = ?, LIST_DESCRIPTION = ? WHERE ID = ? AND ID_USER = ?",
+		"UPDATE TASK_LIST SET LIST_NAME = ?, LIST_DESCRIPTION = ? WHERE ID = ? AND ID_USER = ?",
 	)
 	if erro != nil {
 		return erro
@@ -136,7 +136,7 @@ func (repo TaskListRepository) DeleteTasksFromList(listID, userID uint64) error 
 // DeleteList delete a list from the database for the user
 func (repo TaskListRepository) DeleteList(listID, userID uint64) error {
 	statement, erro := repo.db.Prepare(
-		"DELETE FROM LIST WHERE ID = ? AND ID_USER = ?",
+		"DELETE FROM TASK_LIST WHERE ID = ? AND ID_USER = ?",
 	)
 	if erro != nil {
 		return erro
@@ -351,46 +351,6 @@ func (repo TaskListRepository) SetStatusTask(userID, id, taskStatus uint64) erro
 	defer statement.Close()
 
 	if _, err = statement.Exec(taskStatus, userID, id); err != nil {
-		return err
-	}
-	return nil
-}
-
-// CompleteTasks Update the status to complete for the tasks
-func (repo TaskListRepository) CompleteTasks(tasksIDs []uint64, userID uint64) error {
-	return repo.UpdateTasksStatus(tasksIDs, userID, model.STATUS_TASK_COMPLETE)
-}
-
-// UncompleteTasks Update the status to incomplete for the tasks
-func (repo TaskListRepository) UncompleteTasks(tasksIDs []uint64, userID uint64) error {
-	return repo.UpdateTasksStatus(tasksIDs, userID, model.STATUS_TASK_INCOMPLETE)
-}
-
-// UpdateTasksStatus Update the status for the tasks
-func (repo TaskListRepository) UpdateTasksStatus(tasksIDs []uint64, userID, taskStatus uint64) error {
-	clauses := []string{"UPDATE TASK SET TASK_STATUS = ? WHERE ID_USER = ?"}
-	params := make([]interface{}, 0)
-
-	if len(tasksIDs) > 0 {
-		clauses = append(clauses,
-			fmt.Sprintf(
-				"AND ID IN (%s)",
-				strings.Join(strings.Split(strings.Repeat("?", len(tasksIDs)), ""), ", "),
-			),
-		)
-		for _, taskID := range tasksIDs {
-			params = append(params, taskID)
-		}
-	}
-	statement, err := repo.db.Prepare(
-		strings.Join(clauses, " "),
-	)
-	if err != nil {
-		return err
-	}
-	defer statement.Close()
-
-	if _, err = statement.Exec(taskStatus, userID, params); err != nil {
 		return err
 	}
 	return nil

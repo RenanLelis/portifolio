@@ -20,6 +20,7 @@ import { ErrorMessageComponent } from './view/components/error-message/error-mes
 import { LogoutComponent } from './view/auth/logout/logout.component';
 import { ChangePasswordComponent } from './view/user/change-password/change-password.component';
 import { ProfileComponent } from './view/user/profile/profile.component';
+import { UseractivationRequestComponent } from './view/auth/useractivation-request/useractivation-request.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { ProfileComponent } from './view/user/profile/profile.component';
     ErrorMessageComponent,
     LogoutComponent,
     ChangePasswordComponent,
-    ProfileComponent
+    ProfileComponent,
+    UseractivationRequestComponent
   ],
   imports: [
     BrowserModule,

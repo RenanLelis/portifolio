@@ -6,6 +6,7 @@ const MSE03 string = "MSE03" // Invalid Token.
 const MSE04 string = "MSE04" // Invalid User or Password.
 const MSE05 string = "MSE05" // E-mail already exists.
 const MSE06 string = "MSE06" // E-mail not found.
+const MSE07 string = "MSE07" // User not activated.
 
 // GetErrorMessage return a generic error message
 func GetErrorMessage() string {
@@ -35,4 +36,9 @@ func GetErrorMessageEmailAlreadyExists() string {
 // GetErrorMessageUserNotFound return an error message about an email not found on database
 func GetErrorMessageUserNotFound() string {
 	return MSE06
+}
+
+// GetErrorMessageUserNotFound return an error message about user not active on the system
+func GetErrorMessageUserNotActive() string {
+	return MSE07
 }

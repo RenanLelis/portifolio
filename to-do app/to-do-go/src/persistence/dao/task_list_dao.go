@@ -219,25 +219,3 @@ func UncompleteTask(userID, id uint64) error {
 	rep := repository.CreateTaskListRepository(db)
 	return rep.UncompleteTask(userID, id)
 }
-
-// CompleteTasks Update the status to complete for the tasks
-func CompleteTasks(tasksIDs []uint64, userID uint64) error {
-	db, err := database.ConnectToDataBase()
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-	rep := repository.CreateTaskListRepository(db)
-	return rep.CompleteTasks(tasksIDs, userID)
-}
-
-// UncompleteTasks Update the status to incomplete for the tasks
-func UncompleteTasks(tasksIDs []uint64, userID uint64) error {
-	db, err := database.ConnectToDataBase()
-	if err != nil {
-		return err
-	}
-	defer db.Close()
-	rep := repository.CreateTaskListRepository(db)
-	return rep.UncompleteTasks(tasksIDs, userID)
-}

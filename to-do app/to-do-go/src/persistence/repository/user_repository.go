@@ -23,7 +23,7 @@ func CreateUserRepository(db *sql.DB) *UserRepository {
 func (repo UserRepository) GetUserByEmail(email string) (model.User, error) {
 	queryResult, err := repo.db.Query(`SELECT 
 	ID, EMAIL, USER_PASSWORD, FIRST_NAME, LAST_NAME, USER_STATUS 
-	FROM USER WHERE EMAIL = ?`, email)
+	FROM USER_TODO WHERE EMAIL = ?`, email)
 	if err != nil {
 		return model.User{}, errors.New(messages.GetErrorMessageUserNotFound())
 	}
@@ -50,7 +50,7 @@ func (repo UserRepository) GetUserByEmail(email string) (model.User, error) {
 // ActivateUser Activate a user on the database
 func (repo UserRepository) ActivateUser(email string, activationCode string) error {
 	statement, err := repo.db.Prepare(
-		"UPDATE USER SET ACTIVATION_CODE = null, USER_STATUS = ? WHERE EMAIL = ? AND ACTIVATION_CODE = ?",
+		"UPDATE USER_TODO SET ACTIVATION_CODE = null, USER_STATUS = ? WHERE EMAIL = ? AND ACTIVATION_CODE = ?",
 	)
 	if err != nil {
 		return err
@@ -66,7 +66,7 @@ func (repo UserRepository) ActivateUser(email string, activationCode string) err
 // UpdatePasswordByCode update user password on database by the code sent
 func (repo UserRepository) UpdatePasswordByCode(email string, newPasswordCode string, hashPassword string) error {
 	statement, err := repo.db.Prepare(
-		"UPDATE USER SET USER_PASSWORD = ?, NEW_PASSWORD_CODE = null WHERE EMAIL = ? AND NEW_PASSWORD_CODE = ?",
+		"UPDATE USER_TODO SET USER_PASSWORD = ?, NEW_PASSWORD_CODE = null WHERE EMAIL = ? AND NEW_PASSWORD_CODE = ?",
 	)
 	if err != nil {
 		return err
@@ -82,7 +82,7 @@ func (repo UserRepository) UpdatePasswordByCode(email string, newPasswordCode st
 // UpdateUserNewPasswordCode set a new password code for the user to reset his password
 func (repo UserRepository) UpdateUserNewPasswordCode(email string, newPasswordCode string) error {
 	statement, err := repo.db.Prepare(
-		"UPDATE USER SET NEW_PASSWORD_CODE = ? WHERE EMAIL = ?",
+		"UPDATE USER_TODO SET NEW_PASSWORD_CODE = ? WHERE EMAIL = ?",
 	)
 	if err != nil {
 		return err
@@ -98,14 +98,14 @@ func (repo UserRepository) UpdateUserNewPasswordCode(email string, newPasswordCo
 // CreateNewUser create a new user on the database
 func (repo UserRepository) CreateNewUser(email, password, firstName, lastName, activationCode string) (uint64, error) {
 	statement, err := repo.db.Prepare(
-		`INSERT INTO USER (EMAIL, PASSWORD, FIRST_NAME, LAST_NAME, ACTIVATION_CODE, USER_STATUS)
+		`INSERT INTO USER_TODO (EMAIL, USER_PASSWORD, FIRST_NAME, LAST_NAME, ACTIVATION_CODE, USER_STATUS)
 		 VALUES (?, ?, ?, ?, ?, ?)`,
 	)
 	if err != nil {
 		return 0, err
 	}
 	defer statement.Close()
-	result, err := statement.Exec(email, password, firstName, lastName, activationCode, model.STATUS_ACTIVE)
+	result, err := statement.Exec(email, password, firstName, lastName, activationCode, model.STATUS_INACTIVE)
 	if err != nil {
 		if strings.Contains(err.Error(), "Duplicate entry") {
 			return 0, errors.New(messages.GetErrorMessageEmailAlreadyExists())
@@ -119,10 +119,26 @@ func (repo UserRepository) CreateNewUser(email, password, firstName, lastName, a
 	return uint64(newID), nil
 }
 
+// UpdateUserActivationCode update the activation code for the user
+func (repo UserRepository) UpdateUserActivationCode(email, activationCode string) error {
+	statement, err := repo.db.Prepare(
+		"UPDATE USER_TODO SET ACTIVATION_CODE = ? WHERE EMAIL = ?",
+	)
+	if err != nil {
+		return err
+	}
+	defer statement.Close()
+
+	if _, err = statement.Exec(activationCode, email); err != nil {
+		return err
+	}
+	return nil
+}
+
 // UpdatePasswordById update user password on database by the user id
 func (repo UserRepository) UpdatePasswordById(id uint64, hashPassword string) error {
 	statement, err := repo.db.Prepare(
-		"UPDATE USER SET USER_PASSWORD = ? WHERE ID = ?",
+		"UPDATE USER_TODO SET USER_PASSWORD = ? WHERE ID = ?",
 	)
 	if err != nil {
 		return err
@@ -138,7 +154,7 @@ func (repo UserRepository) UpdatePasswordById(id uint64, hashPassword string) er
 // UpdateUser update user info (first name and last name) on the database
 func (repo UserRepository) UpdateUser(id uint64, firstName, lastName string) error {
 	statement, err := repo.db.Prepare(
-		"UPDATE USER SET FIRST_NAME = ?, LAST_NAME = ? WHERE ID = ?",
+		"UPDATE USER_TODO SET FIRST_NAME = ?, LAST_NAME = ? WHERE ID = ?",
 	)
 	if err != nil {
 		return err

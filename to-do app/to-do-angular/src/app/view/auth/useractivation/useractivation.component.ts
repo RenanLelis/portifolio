@@ -15,7 +15,7 @@ export class UseractivationComponent implements OnInit {
   loading: boolean = false;
   errorMessage: string = "";
   formUserActivation: FormGroup = new FormGroup({
-    "email": new FormControl('', [Validators.required, Validators.email]),
+    "email": new FormControl(this.email, [Validators.required, Validators.email]),
     "activationCode": new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]),
   });
 
@@ -24,12 +24,14 @@ export class UseractivationComponent implements OnInit {
   ngOnInit(): void {
     if (this.email === "" || this.authService.isUserLoggedIn()) {
       this.router.navigate(['/']);
+    } else {
+      this.formUserActivation.value.email = this.email
     }
   }
 
   activateUser() {
     this.formUserActivation.value.email = this.email
-    if (this.email || this.formUserActivation.invalid) {
+    if (!this.email || this.formUserActivation.invalid) {
       this.errorMessage = getErrorMessageInputValues();
       return;
     }

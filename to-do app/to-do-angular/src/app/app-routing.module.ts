@@ -11,6 +11,7 @@ import { HomeComponent } from './view/tasks/home/home.component';
 import { LogoutComponent } from './view/auth/logout/logout.component';
 import { ChangePasswordComponent } from './view/user/change-password/change-password.component';
 import { ProfileComponent } from './view/user/profile/profile.component';
+import { UseractivationRequestComponent } from './view/auth/useractivation-request/useractivation-request.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuardService] },
@@ -23,6 +24,7 @@ const routes: Routes = [
   { path: 'passwordreset/:email', component: NewpasswordComponent },
   { path: 'userregistration', component: UserregisterComponent },
   { path: 'useractivation/:email', component: UseractivationComponent },
+  { path: 'useractivationrequest/:email', component: UseractivationRequestComponent },
 
   { path: 'not-found', component: NotFoundComponent },
   { path: '**', redirectTo: '/not-found' },

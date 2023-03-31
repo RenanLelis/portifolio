@@ -33,7 +33,7 @@ func Load() {
 
 	Port, err = strconv.Atoi(os.Getenv("API_PORT"))
 	if err != nil {
-		Port = 8081
+		Port = 8080
 	}
 
 	StringDataBaseConnection = fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local",
@@ -47,10 +47,10 @@ func Load() {
 	MailFrom = os.Getenv("MAIL_FROM")
 	SystemEmail = os.Getenv("MAIL_FROM")
 	MailPassword = os.Getenv("MAIL_PASSWORD")
-	SmtpPort, err = strconv.Atoi(os.Getenv("SMTP_PORT"))
+	SmtpPort, err = strconv.Atoi(os.Getenv("MAIL_SMTP_PORT"))
 	if err != nil {
 		SmtpPort = 465
 	}
-	SmtpHost = os.Getenv("SMTP_HOST")
+	SmtpHost = os.Getenv("MAIL_SMTP_HOST")
 
 }

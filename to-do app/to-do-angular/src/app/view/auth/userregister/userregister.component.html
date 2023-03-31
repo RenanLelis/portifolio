@@ -1,1 +1,49 @@
-<p>userregister works!</p>
+<div class="container">
+    <div class="card-form">
+        <h2>User Registration</h2>
+        <form [formGroup]="formUserRegistration" (submit)="registerUser()">
+            <div class="label-field">
+                <label class="label">E-mail: </label>
+                <input formControlName="email" type="email" required class="text-field">
+                <p *ngIf="formUserRegistration.get('email')!.invalid && formUserRegistration.get('email')!.touched"
+                    class="error-field-message">
+                    Error on e-mail input.
+                </p>
+            </div>
+            <div class="label-field">
+                <label class="label">Password: </label>
+                <input formControlName="password" type="password" required class="text-field">
+                <p *ngIf="formUserRegistration.get('password')!.invalid && formUserRegistration.get('password')!.touched"
+                    class="error-field-message">
+                    Error on password input.
+                </p>
+            </div>
+            <div class="label-field">
+                <label class="label">Name: </label>
+                <input formControlName="name" type="text" required class="text-field">
+                <p *ngIf="formUserRegistration.get('name')!.invalid && formUserRegistration.get('name')!.touched"
+                    class="error-field-message">
+                    Error on name input.
+                </p>
+            </div>
+            <div class="label-field">
+                <label class="label">Last Name: </label>
+                <input formControlName="lastName" type="text" required class="text-field">
+            </div>
+            <div>
+                <div class="div-submit-button">
+                    <button [disabled]="formUserRegistration.get('email')!.invalid || formUserRegistration.get('password')!.invalid || formUserRegistration.get('name')!.invalid" type="submit" class="send-button">Send</button>
+                </div>
+                <div class="div-submit-button-auth">
+                    <a class="side-link" routerLink="/recoverpassword">Forgot password?</a>
+                    <a class="side-link" routerLink="/login">Make Login</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div *ngIf="loading">
+    <app-loading></app-loading>
+</div>
+<app-error-message [errorMessage]="errorMessage" (onClose)="closeErrorMessage()" />

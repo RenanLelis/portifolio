@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { BehaviorSubject, tap } from 'rxjs';
-import { User, UserData } from '../model/user';
+import { STATUS_ACTIVE, User, UserData } from '../model/user';
 import { BASE_URL, USER_DATA } from './consts';
 
 @Injectable({
@@ -15,6 +15,7 @@ export class AuthService {
   URL_NEW_PASSWORD: string = BASE_URL + "/api/auth/passwordreset";
   URL_REGISTER_USER: string = BASE_URL + "/api/auth/userregistration";
   URL_ACTIVATE_USER: string = BASE_URL + "/api/auth/useractivation";
+  URL_REQUEST_USER_ACTIVATION: string = BASE_URL + "/api/auth/useractivationrequest";
 
   user = new BehaviorSubject<User | null>(null);
 
@@ -43,7 +44,7 @@ export class AuthService {
     });
     return this.http.post(this.URL_NEW_PASSWORD, { "email": email, "password": password, "newPasswordCode": newPasswordCode }, { headers })
     .pipe(tap(resData => {
-      this.login(email, password).subscribe();
+      this.handleAuthentication(resData as UserData);
     }));
   }
 
@@ -51,10 +52,14 @@ export class AuthService {
     let headers: HttpHeaders = new HttpHeaders({
       "Content-Type": "application/json",
     });
-    return this.http.post(this.URL_REGISTER_USER, { "email": email, "password": password, "firstName": firstName, "lastName": lastName }, { headers })
-    .pipe(tap(resData => {
-      this.handleAuthentication(resData as UserData);
-    }));
+    return this.http.post(this.URL_REGISTER_USER, { "email": email, "password": password, "firstName": firstName, "lastName": lastName }, { headers });
+  }
+
+  requestUserActivation(email: string) {
+    let headers: HttpHeaders = new HttpHeaders({
+      "Content-Type": "application/json",
+    });
+    return this.http.post(this.URL_REQUEST_USER_ACTIVATION, { "email": email }, { headers });
   }
 
   activateUser(email: string, activationCode: string) {
@@ -107,8 +112,10 @@ export class AuthService {
       lastName: userData.lastName,
       tokenExpirationDate: expirationDate
     };
-    sessionStorage.setItem(USER_DATA, JSON.stringify(user));
-    this.loadUserInMemory();
+    if (user.status === STATUS_ACTIVE) {
+      sessionStorage.setItem(USER_DATA, JSON.stringify(user));
+      this.loadUserInMemory();
+    }
   }
 
   loadUserInMemory() {

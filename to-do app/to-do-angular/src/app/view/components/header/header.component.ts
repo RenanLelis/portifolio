@@ -22,6 +22,7 @@ export class HeaderComponent {
 
   onMenuClick() {
     this.showMenu = !this.showMenu;
+    //TODO show menu with lists or send a 
   }
 
 }
