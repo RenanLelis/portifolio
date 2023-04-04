@@ -1,4 +1,37 @@
 <header>
+  <div class="list-menu" (click)="onMenuClick()">
+    <i class="fa fa-bars"></i>
+  </div>
+  <div class="logo">
+    <a routerLink="/"><img src="../../../../assets/logo.png"><span>My Task List</span></a>
+  </div>
+</header>
+
+<div class="sidenav" [ngClass]="{'sidenav-open': showMenu}">
+  <div class="close-button">
+      <i class="fa fa-close" (click)="closeMenu()"></i>
+  </div>
+  <a></a>
+  <div *ngIf="!isUserLoggedIn">
+    <a routerLink="/login"><i class="fa fa-user-circle">Login</i></a>
+  </div>
+  <div *ngIf="isUserLoggedIn">
+    <a><i class="fa fa-user-circle">  Hello {{ user!.name }}</i></a>
+    <a></a>
+    <hr class="solid">
+    <a></a>
+    <a routerLink="/profile">My Profile</a>
+    <a routerLink="/mypassword">Change My Password</a>
+    <a></a>
+    <a routerLink="/">My Lists and Tasks</a>
+    <a></a>
+    <hr class="solid">
+    <a routerLink="/logout">Logout</a>
+  </div>
+
+</div>
+
+<!-- <header>
   <div class="list-menu" *ngIf="isUserLoggedIn" (click)="onMenuClickEventHandler()">
     <i class="fa fa-bars"></i>
   </div>
@@ -25,4 +58,4 @@
       </div>
     </div>
     
-</header>
+</header> -->

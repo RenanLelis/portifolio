@@ -11,17 +11,22 @@ export class HeaderComponent {
 
   isUserLoggedIn: boolean = false
   user: User | null= null;
-  @Output() onMenuClick: EventEmitter<boolean> = new EventEmitter();
+
+  showMenu:boolean = false;
+
+  onMenuClick() {
+    this.showMenu = !this.showMenu;
+  }
+
+  closeMenu() {
+    this.onMenuClick();
+  }
 
   constructor(private authService: AuthService) {
     this.authService.user.subscribe(value => {
       this.user = value;
       this.isUserLoggedIn = this.authService.isUserParamLoggedIn(this.user)
     })
-  }
-
-  onMenuClickEventHandler() {
-    this.onMenuClick.emit();
   }
 
 }
