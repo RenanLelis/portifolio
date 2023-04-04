@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
-	"strings"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -22,15 +21,13 @@ const CLAIMS_EMAIL string = "EMAIL"
 const CLAIMS_ID_STATUS string = "STATUS"
 const CLAIMS_AUTHORIZED string = "AUTHORIZED"
 const CLAIMS_EXP_TIME string = "exp"
-
-// const EXP_TIME time.Duration = time.Hour * 2
-const EXP_TIME time.Duration = 2 * 60 * 60 * 1000
+const EXP_TIME int64 = 2 * 60 * 60 * 1000
 
 // CreateToken creates a JWT Token for the user
 func CreateToken(userID uint64, userStatus uint64, userEmail, firstName, lastName string) (string, error) {
 	claims := jwt.MapClaims{}
 	claims[CLAIMS_AUTHORIZED] = true
-	claims[CLAIMS_EXP_TIME] = time.Now().Add(EXP_TIME).Unix()
+	claims[CLAIMS_EXP_TIME] = time.Now().Unix() + EXP_TIME
 	claims[CLAIMS_ID_USER] = userID
 	claims[CLAIMS_EMAIL] = userEmail
 	claims[CLAIMS_FIRST_NAME] = firstName
@@ -127,10 +124,7 @@ func GetUserData(r *http.Request) (uint64, uint64, string, string, string, error
 // extractToken gets the token from the request fi exsists, else return empty string
 func extractToken(r *http.Request) string {
 	token := r.Header.Get(AUTH)
-	if len(strings.Split(token, " ")) == 2 {
-		return strings.Split(token, " ")[1]
-	}
-	return ""
+	return token
 }
 
 // getValidationKey returns the key used to sign the token

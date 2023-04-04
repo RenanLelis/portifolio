@@ -1,4 +1,5 @@
 <div class="container">
+    <app-header />
     <div class="card-form">
         <h2>Login</h2>
         <form [formGroup]="formLogin" (submit)="login()">
@@ -29,7 +30,9 @@
             </div>
         </form>
     </div>
+    <app-footer />
 </div>
+
 
 <div *ngIf="loading">
     <app-loading></app-loading>

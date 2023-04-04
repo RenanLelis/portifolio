@@ -2,6 +2,7 @@ package business
 
 import (
 	"errors"
+	"fmt"
 	"net/http"
 	"strings"
 
@@ -32,7 +33,12 @@ func UpdateUserPassword(userID uint64, password string) Err {
 	if err != nil {
 		return Err{http.StatusBadRequest, err.Error()}
 	}
-	err = dao.UpdatePasswordById(userID, passwordFormatted)
+	hashPassword, err := security.HashString(passwordFormatted)
+	if err != nil {
+		fmt.Println(err)
+		return Err{http.StatusInternalServerError, messages.GetErrorMessage()}
+	}
+	err = dao.UpdatePasswordById(userID, hashPassword)
 	if err != nil {
 		return Err{http.StatusInternalServerError, messages.GetErrorMessage()}
 	}

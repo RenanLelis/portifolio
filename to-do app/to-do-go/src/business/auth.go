@@ -28,10 +28,10 @@ func Login(email, password string) (response.UserDTO, Err) {
 		return response.UserDTO{}, Err{http.StatusInternalServerError, messages.GetErrorMessage()}
 	}
 	if user.ID <= 0 {
-		return response.UserDTO{}, Err{http.StatusForbidden, messages.GetErrorMessageUserNotFound()}
+		return response.UserDTO{}, Err{http.StatusForbidden, messages.GetErrorMessageLogin()}
 	}
 	if err = security.ComparePassword(user.Password, passwordFormatted); err != nil {
-		return response.UserDTO{}, Err{http.StatusForbidden, messages.GetErrorMessageUserNotFound()}
+		return response.UserDTO{}, Err{http.StatusForbidden, messages.GetErrorMessageLogin()}
 	}
 	if user.Status == model.STATUS_INACTIVE {
 		return response.UserDTO{}, Err{http.StatusForbidden, messages.GetErrorMessageUserNotActive()}

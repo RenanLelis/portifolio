@@ -7,4 +7,14 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent {
 
+  showMenu:boolean = false;
+
+  onMenuClick() {
+    this.showMenu = !this.showMenu;
+  }
+
+  closeMenu() {
+    this.onMenuClick();
+  }
+
 }

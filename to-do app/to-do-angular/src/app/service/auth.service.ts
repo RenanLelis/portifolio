@@ -153,5 +153,19 @@ export class AuthService {
     return null;
   }
 
+  updateUserInfo(firstName: string, lastName: string) {
+    let user: User | null = this.user.value;
+    if (!user || user === null) {
+      user = this.getUserInMemory();
+    }
+    if (user && user.jwt && user.jwt.length > 0 && user.tokenExpirationDate && user.tokenExpirationDate > new Date().getTime()) {
+      this.user.value!.name = firstName;
+      this.user.value!.lastName = lastName;
+      this.user.next(user);
+    } else {
+      this.logout();
+    }
+  }
+
 
 }

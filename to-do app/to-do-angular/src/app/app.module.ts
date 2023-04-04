@@ -21,6 +21,7 @@ import { LogoutComponent } from './view/auth/logout/logout.component';
 import { ChangePasswordComponent } from './view/user/change-password/change-password.component';
 import { ProfileComponent } from './view/user/profile/profile.component';
 import { UseractivationRequestComponent } from './view/auth/useractivation-request/useractivation-request.component';
+import { SuccessMessageComponent } from './view/components/success-message/success-message.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { UseractivationRequestComponent } from './view/auth/useractivation-reque
     LogoutComponent,
     ChangePasswordComponent,
     ProfileComponent,
-    UseractivationRequestComponent
+    UseractivationRequestComponent,
+    SuccessMessageComponent
   ],
   imports: [
     BrowserModule,

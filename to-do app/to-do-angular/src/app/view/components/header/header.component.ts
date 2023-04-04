@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { User } from 'src/app/model/user';
 import { AuthService } from 'src/app/service/auth.service';
 
@@ -9,9 +9,9 @@ import { AuthService } from 'src/app/service/auth.service';
 })
 export class HeaderComponent {
 
-  showMenu: boolean = false
   isUserLoggedIn: boolean = false
   user: User | null= null;
+  @Output() onMenuClick: EventEmitter<boolean> = new EventEmitter();
 
   constructor(private authService: AuthService) {
     this.authService.user.subscribe(value => {
@@ -20,9 +20,8 @@ export class HeaderComponent {
     })
   }
 
-  onMenuClick() {
-    this.showMenu = !this.showMenu;
-    //TODO show menu with lists or send a 
+  onMenuClickEventHandler() {
+    this.onMenuClick.emit();
   }
 
 }

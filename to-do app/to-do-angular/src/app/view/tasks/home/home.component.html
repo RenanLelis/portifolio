@@ -1,1 +1,16 @@
-<p>home works!</p>
+<div class="container">
+    <app-header (onMenuClick)="onMenuClick()" />
+    <div>
+        <p>home works!</p>
+    </div>
+    <div class="sidenav" [ngClass]="{'sidenav-open': showMenu}">
+        <div class="close-button">
+            <i class="fa fa-close" (click)="closeMenu()"></i>
+        </div>
+        <a>About</a>
+        <a>Services</a>
+        <a>Clients</a>
+        <a>Contact</a>
+    </div>
+    <app-footer />
+</div>

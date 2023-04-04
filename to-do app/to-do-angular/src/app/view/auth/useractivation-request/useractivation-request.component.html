@@ -1,4 +1,5 @@
 <div class="container">
+    <app-header />
     <div class="card-form">
         <h2>User Activation</h2>
         <form [formGroup]="formUserActivationRequest" (submit)="requestUserActivation()">
@@ -23,6 +24,7 @@
             </div>
         </form>
     </div>
+    <app-footer />
 </div>
 
 <div *ngIf="loading">

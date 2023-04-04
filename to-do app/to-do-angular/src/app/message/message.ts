@@ -30,6 +30,10 @@ export function getErrorMessageEmailNotFound(): string {
     return messages.get("MSE06")!;
 }
 
+export function getMessageOperationSucceded(): string {
+    return messages.get("MS01")!;
+}
+
 export const messages: Map<string, string> = new Map<string, string>([
     ["MSE01", "An error ocurred on the operation."],
     ["MSE02", "Error on input values."],
@@ -37,4 +41,6 @@ export const messages: Map<string, string> = new Map<string, string>([
     ["MSE04", "Invalid User or Password."],
     ["MSE05", "E-mail already exists."],
     ["MSE06", "E-mail not found."],
+    ["MSE07", "User not activated."],
+    ["MS01", "Operation Succeded."]
 ]);
