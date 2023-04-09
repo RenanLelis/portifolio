@@ -1,8 +1,27 @@
 <div class="container">
-    
-    <div>
-        <p>home works!</p>
+
+    <div class="lists">
+        <div class="label-field">
+            <label class="label">
+                <p>My Lists</p>
+            </label>
+            <select class="select" [(ngModel)]="selectedTaskList">
+                <option class="select-option" *ngFor="let list of taskLists" [ngValue]="list">
+                    <span class="select-option">{{list.listName}}</span>
+                </option>
+            </select>
+            <div class="list-info" *ngIf="selectedTaskList">
+                <span>{{selectedTaskList!.listName}}</span>
+                <div class="list-actions">
+                    <button class="send-button">New Task List</button>
+                </div>
+            </div>
+        </div>
     </div>
-    
-    
+
+    <div class="tasks">
+
+    </div>
+
+
 </div>

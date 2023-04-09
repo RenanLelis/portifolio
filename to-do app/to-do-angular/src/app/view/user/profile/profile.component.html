@@ -11,7 +11,7 @@
         <div class="profile-form">
             <form [formGroup]="formProfile" (submit)="updateProfile()">
                 <div class="label-field">
-                    <label class="label">First Name: </label>
+                    <label class="label">First Name</label>
                     <input formControlName="firstName" type="text" required class="text-field">
                     <p *ngIf="formProfile.get('firstName')!.invalid && formProfile.get('firstName')!.touched"
                         class="error-field-message">
@@ -19,7 +19,7 @@
                     </p>
                 </div>
                 <div class="label-field">
-                    <label class="label">Last Name: </label>
+                    <label class="label">Last Name</label>
                     <input formControlName="lastName" type="text" class="text-field">
                 </div>
                 <div>

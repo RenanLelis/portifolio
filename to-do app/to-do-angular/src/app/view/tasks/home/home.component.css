@@ -1,0 +1,13 @@
+.lists {
+    margin: 10px auto;
+    width: 95%;
+    max-width: 700px;
+}
+
+.list-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 3px 15px 10px;
+}

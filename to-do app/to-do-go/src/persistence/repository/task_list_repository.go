@@ -41,7 +41,7 @@ func (repo TaskListRepository) GetTaskListsByUser(userID uint64) ([]model.TaskLi
 		}
 		lists = append(lists, list)
 	} else {
-		return nil, errors.New(messages.GetErrorMessageUserNotFound())
+		return nil, nil
 	}
 	return lists, nil
 }
@@ -70,7 +70,7 @@ func (repo TaskListRepository) GetTasksByUser(userID uint64) ([]model.Task, erro
 		}
 		tasks = append(tasks, task)
 	} else {
-		return nil, errors.New(messages.GetErrorMessageUserNotFound())
+		return nil, nil
 	}
 	return tasks, nil
 }

@@ -7,7 +7,7 @@
                 <label class="label">E-mail:   {{ formUserActivation.get('email')!.value }} </label>
             </div>
             <div class="label-field">
-                <label class="label">Activation Code: </label>
+                <label class="label">Activation Code</label>
                 <input formControlName="activationCode" type="text" required class="text-field">
                 <p *ngIf="formUserActivation.get('activationCode')!.invalid && formUserActivation.get('activationCode')!.touched"
                     class="error-field-message">
@@ -19,7 +19,7 @@
                 <div class="div-submit-button">
                     <button [disabled]="formUserActivation.invalid" type="submit" class="send-button">Send</button>
                 </div>
-                <div class="div-submit-button-auth">
+                <div class="action-links">
                     <a class="side-link" routerLink="/recoverpassword">Forgot password?</a>
                     <a class="side-link" routerLink="/login">Make Login</a>
                 </div>

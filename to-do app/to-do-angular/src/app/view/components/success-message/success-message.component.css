@@ -21,20 +21,15 @@
 }
 
 .success-message {
-    background-color: #a7ffeb;
+    background-color: rgba(250, 250, 250, 1);
     padding: 15px 5px;
     text-align: center;
     border-radius: 7px;
-    border: 1px solid #a7ffeb;
-}
-
-.success-message h2 {
-    color: #009688;
+    border: 1px solid rgba(250, 250, 250, 1);
 }
 
 .success-message p {
     padding: 30px;
-    color: #009688;
     font-size: 16px;
     font-family: sans-serif;
     letter-spacing: 1px;
@@ -44,5 +39,4 @@
 .success-message .close-button i {
     padding-right: 10px;
     cursor: pointer;
-    color: #009688;
 }

@@ -15,14 +15,14 @@ header .list-menu {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: #6A816A;
+    color: #589fa1;
     margin: auto 10px;
     padding: 10px;
     height: 100%;
 }
 
 i {
-    color: #6A816A;
+    color: #589fa1;
 }
 
 header .logo {
@@ -34,7 +34,7 @@ header .logo {
 }
 
 header .logo a {
-    color: #6A816A;
+    color: #589fa1;
     text-align: center;
     align-items: center;
     justify-content: center;
@@ -57,7 +57,7 @@ header .user-menu {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: #6A816A;
+    color: #589fa1;
     margin: auto 10px;
     padding: 10px;
     height: 100%;
@@ -90,7 +90,7 @@ header .user-menu {
 }
 
 .sidenav a:hover {
-    color: #6A816A;
+    color: #387f81;
 }
 
 .sidenav .close-button {
@@ -103,7 +103,7 @@ header .user-menu {
 .sidenav .close-button i {
     padding: 10px;
     cursor: pointer;
-    color: #6A816A;
+    color: #589fa1;
 }
 
 @media screen and (max-height: 450px) {

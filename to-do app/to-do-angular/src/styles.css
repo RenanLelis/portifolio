@@ -1,5 +1,3 @@
-/* You can add global styles to this file, and also import other style files */
-
 * {
     margin: 0;
     padding: 0;
@@ -17,7 +15,7 @@ h6,
 p {
     text-align: center;
     font: sans-serif;
-    color: #6A816A;
+    color: #6A6A6A;
 }
 
 hr {
@@ -25,50 +23,9 @@ hr {
 }
 
 body {
-    background-color: #F1F1F1;
-    background-image: linear-gradient(to top right, #DAF1DA, #EFF1EF);
+    background-color: #F6F6F6;
+    background-image: linear-gradient(to top right, #F0F0F0, #FAFAFA);
     min-height: 100vh;
-}
-
-.dropdown {
-    position: relative;
-    display: inline-block;
-}
-
-.dropdown-content {
-    margin: 5px;
-    right: 0;
-    display: none;
-    position: absolute;
-    background-color: #F5F5F5;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 1;
-    text-align: center;
-}
-
-
-.dropdown-content a {
-    color: black;
-    padding: 13px 16px;
-    text-decoration: none;
-    display: block;
-}
-
-.dropdown-content a:hover { 
-    background-color: #f1f1f1;
-}
-
-.dropdown-content:hover {
-    display: block;
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
-}
-
-.user-menu:hover .dropdown-content {
-    display: block;
 }
 
 hr.solid {
@@ -76,27 +33,23 @@ hr.solid {
     margin: 2px 0;
 }
 
-/*----------------------------------*/
-/*       Container and forms        */
-/*----------------------------------*/
-
 .card-form {
     width: 100%;
     max-width: 750px;
     margin: 20px auto;
     padding: 25px 30px;
-    background-color: rgba(248, 248, 248, 0.5);
+    background-color: rgba(251, 251, 251, 0.95);
     border-radius: .5em;
-    box-shadow: .15em .15em .4em #818181;
+    box-shadow: .15em .15em .4em #A1A1A1;
 }
 
 .card-personal-info {
     width: 90%;
     margin: 20px auto;
     padding: 25px 30px;
-    background-color: rgba(248, 248, 248, 0.5);
+    background-color: rgba(251, 251, 251, 0.95);
     border-radius: .5em;
-    box-shadow: .15em .15em .4em #818181;
+    box-shadow: .15em .15em .4em #A1A1A1;
 }
 
 .container {
@@ -106,9 +59,7 @@ hr.solid {
 }
 
 .label-field {
-    padding: 3px 6px;
-    display: flex;
-    flex-direction: column;
+    padding: 3px 10px;
 }
 
 .select-field {
@@ -129,6 +80,29 @@ hr.solid {
     width: 100%;
 }
 
+.select {
+    margin: 15px auto 0 auto;
+    padding: 10px;
+    width: 100%;
+    outline: 0;
+    resize: none;
+    font-size: 16px;
+    line-height: 17px;
+    background-color: #fff;
+    color: #818181;
+    border: .2px solid #C1C1C1;
+    border-radius: 9px;
+    font-family: sans-serif;
+    font-weight: 400;
+}
+
+.select-option {
+    
+    color: #818181;
+    height: 100px;
+    padding: 300px;
+}
+
 .text-field {
     margin: 5px 0 0;
     padding: 10px;
@@ -139,7 +113,7 @@ hr.solid {
     background-color: #fff;
     color: #818181;
     border: .2px solid #C1C1C1;
-    border-radius: 3px;
+    border-radius: 9px;
     font-family: sans-serif;
     font-weight: 400;
     width: 100%;
@@ -156,15 +130,16 @@ hr.solid {
     line-height: 17px;
     background-color: #fff;
     color: #818181;
-    font-family: 'Ubuntu', sans-serif;
+    font-family: sans-serif;
     font-weight: 400;
     width: 100%;
     height: 10em;
     border: .2px solid #C1C1C1;
-    border-radius: 1px;
+    /* border-radius: 1px; */
+    border-radius: 9px;
 }
 
-.div-submit-button-auth {
+.action-links {
     margin-top: 15px;
     padding: 6px;
     display: flex;
@@ -185,7 +160,7 @@ hr.solid {
     font-style: normal;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #6A816A;
+    color: #589fa1;
 }
 
 .send-button {
@@ -208,14 +183,14 @@ hr.solid {
     transition: background .4s;
     border-radius: 50px;
     outline: none;
-    border: 1px solid #9AB19A;
+    border: 1px solid #589fa1;
     color: #FFFFFF;
-    background-color: #9AB19A;
+    background-color: #589fa1;
 }
 
 .send-button:hover {
-    background-color: #6A816A;
-    border: 1px solid #6A816A;
+    background-color: #387f81;
+    border: 1px solid #387f81;
     color: #FFFFFF;
     border: 1px solid #FFFFFF;
 }
@@ -280,8 +255,15 @@ hr.solid {
         align-items: center;
         width: 100%;
     }
+
     .div-submit-button * {
         width: 100%;
         margin: 5px;
+    }
+
+    .action-links {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
     }
 }

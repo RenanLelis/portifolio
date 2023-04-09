@@ -1,10 +1,10 @@
 export interface Task {
 
-    id : Number;
+    id : number;
     taskName : string;
     taskDescription : string | null;
     deadline : string | null;
-    taskStatus : Number;
+    taskStatus : number;
 }
 
 export const STATUS_INCOMPLETE = 0;

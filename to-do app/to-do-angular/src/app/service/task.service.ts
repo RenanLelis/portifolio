@@ -9,19 +9,19 @@ import { BASE_URL } from './consts';
 })
 export class TaskService {
 
-  URL_TASK_LIST = BASE_URL + "/api/taskList/";
-  URL_TASK_LISTS_MOVE = BASE_URL + "/api/taskList/tasks/move/";
-  URL_TASK_LISTS_MOVE_FROM_LIST = BASE_URL + "/api/taskList/tasks/moveFromList/";
-  URL_TASK_LISTS_COMPLETE_TASKS = BASE_URL + "/api/taskList/tasks/complete/";
-  URL_TASK_LISTS_UNCOMPLETE_TASKS = BASE_URL + "/api/taskList/tasks/uncomplete/";  
+  URL_TASK_LIST = BASE_URL + "/api/taskList";
+  URL_TASK_LISTS_MOVE = BASE_URL + "/api/taskList/tasks/move";
+  URL_TASK_LISTS_MOVE_FROM_LIST = BASE_URL + "/api/taskList/tasks/moveFromList";
+  URL_TASK_LISTS_COMPLETE_TASKS = BASE_URL + "/api/taskList/tasks/complete";
+  URL_TASK_LISTS_UNCOMPLETE_TASKS = BASE_URL + "/api/taskList/tasks/uncomplete";  
 
-  URL_TASK = BASE_URL + "/api/task/";
-  URL_TASK_MOVE = BASE_URL + "/api/task/list/";
-  URL_TASK_COMPLETE = BASE_URL + "/api/task/complete/";
-  URL_TASK_UNCOMPLETE = BASE_URL + "/api/task/uncomplete/";
-  URL_TASKS_DELETE = BASE_URL + "/api/tasks/";
-  URL_TASKS_COMPLETE = BASE_URL + "/api/tasks/complete/";
-  URL_TASKS_UNCOMPLETE = BASE_URL + "/api/tasks/uncomplete/";
+  URL_TASK = BASE_URL + "/api/task";
+  URL_TASK_MOVE = BASE_URL + "/api/task/list";
+  URL_TASK_COMPLETE = BASE_URL + "/api/task/complete";
+  URL_TASK_UNCOMPLETE = BASE_URL + "/api/task/uncomplete";
+  URL_TASKS_DELETE = BASE_URL + "/api/tasks";
+  URL_TASKS_COMPLETE = BASE_URL + "/api/tasks/complete";
+  URL_TASKS_UNCOMPLETE = BASE_URL + "/api/tasks/uncomplete";
 
   taskLists = new BehaviorSubject<TaskList[]>([]);
 
@@ -44,12 +44,12 @@ export class TaskService {
 
   updateTaskList(listName: string, listDescription: string, idList: Number) {
     let headers: HttpHeaders = new HttpHeaders({ "Content-Type": "application/json", });
-    return this.http.put(this.URL_TASK_LIST.concat(`${idList}`), { listName: listName, listDescription: listDescription }, { headers })
+    return this.http.put(this.URL_TASK_LIST.concat(`/${idList}`), { listName: listName, listDescription: listDescription }, { headers })
   }
 
   deleteTaskList(idList: Number) {
     let headers: HttpHeaders = new HttpHeaders({ "Content-Type": "application/json", });
-    return this.http.delete(this.URL_TASK_LIST.concat(`${idList}`), { headers })
+    return this.http.delete(this.URL_TASK_LIST.concat(`/${idList}`), { headers })
   }
 
   moveTasksForList(listId: Number, tasksIds: Number[]) {
@@ -64,12 +64,12 @@ export class TaskService {
 
   completeTasksFromList(listId: number) {
     let headers: HttpHeaders = new HttpHeaders({ "Content-Type": "application/json", });
-    return this.http.put(this.URL_TASK_LISTS_COMPLETE_TASKS.concat(`${listId}`), null, { headers })
+    return this.http.put(this.URL_TASK_LISTS_COMPLETE_TASKS.concat(`/${listId}`), null, { headers })
   }
 
   uncompleteTasksFromList(listId: number) {
     let headers: HttpHeaders = new HttpHeaders({ "Content-Type": "application/json", });
-    return this.http.put(this.URL_TASK_LISTS_UNCOMPLETE_TASKS.concat(`${listId}`), null, { headers })
+    return this.http.put(this.URL_TASK_LISTS_UNCOMPLETE_TASKS.concat(`/${listId}`), null, { headers })
   }
 
   createTask(taskName: string, taskDescription: string, deadline: string | null, listId: Number | null) {
@@ -79,17 +79,17 @@ export class TaskService {
 
   updateTask(id: Number, taskName: string, taskDescription: string, deadline: string | null) {
     let headers: HttpHeaders = new HttpHeaders({ "Content-Type": "application/json", });
-    return this.http.put(this.URL_TASK.concat(`${id}`), { taskName: taskName, taskDescription: taskDescription, deadline: deadline }, { headers })
+    return this.http.put(this.URL_TASK.concat(`/${id}`), { taskName: taskName, taskDescription: taskDescription, deadline: deadline }, { headers })
   }
 
   moveTaskToList(id: number, listId: number){
     let headers: HttpHeaders = new HttpHeaders({ "Content-Type": "application/json", });
-    return this.http.put(this.URL_TASK_MOVE.concat(`${id}`), { listId: listId }, { headers })
+    return this.http.put(this.URL_TASK_MOVE.concat(`/${id}`), { listId: listId }, { headers })
   }
 
   deleteTask(id: Number) {
     let headers: HttpHeaders = new HttpHeaders({ "Content-Type": "application/json", });
-    return this.http.delete(this.URL_TASK.concat(`${id}`), { headers })
+    return this.http.delete(this.URL_TASK.concat(`/${id}`), { headers })
   }
 
   deleteTasks(idsTasks: Number[]) {
@@ -100,7 +100,7 @@ export class TaskService {
 
   completeTask(id: Number) {
     let headers: HttpHeaders = new HttpHeaders({ "Content-Type": "application/json", });
-    return this.http.put(this.URL_TASK_COMPLETE.concat(`${id}`), null, { headers })
+    return this.http.put(this.URL_TASK_COMPLETE.concat(`/${id}`), null, { headers })
   }
 
   completeTasks(idsTasks: Number[]) {
@@ -111,7 +111,7 @@ export class TaskService {
 
   uncompleteTask(id: Number) {
     let headers: HttpHeaders = new HttpHeaders({ "Content-Type": "application/json", });
-    return this.http.put(this.URL_TASK_UNCOMPLETE.concat(`${id}`), null, { headers })
+    return this.http.put(this.URL_TASK_UNCOMPLETE.concat(`/${id}`), null, { headers })
   }
 
   uncompleteTasks(idsTasks: Number[]) {
