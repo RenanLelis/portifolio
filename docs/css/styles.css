@@ -1,0 +1,196 @@
+/* Google Font CDN Link */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Ubuntu:wght@400;500;700&display=swap');
+
+/* ------------------------------------------ */
+
+/* Estilos gerais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration: none;
+    scroll-behavior: smooth;
+}
+
+.title {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 40px;
+}
+
+.title span {
+    color: #0E2431;
+    font-size: 30px;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 8px;
+}
+
+.title span::before,
+.title span::after {
+    content: '';
+    position: absolute;
+    height: 3px;
+    width: 100%;
+    background: #0672A4;
+    left: 0;
+    bottom: 0;
+}
+
+.subtitle {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.subtitle span {
+    color: #0E2431;
+    font-size: 20px;
+    font-weight: 300;
+    position: relative;
+    padding-bottom: 8px;
+}
+
+/* ------------------------------------------ */
+
+/* Scroll Bar CSS */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background-image: linear-gradient(to bottom right, #0672A4, #0D9FB2);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-image: linear-gradient(to bottom right, #0672A4, #0D9FB2);
+}
+
+/* ------------------------------------------ */
+
+/* Menu de navegacao */
+
+nav {
+    position: fixed;
+    width: 100%;
+    padding: 10px 0;
+    z-index: 998;
+    transition: all 0.3s ease;
+    font-family: sans-serif;
+    background-image: linear-gradient(to bottom right, #0672A4, #0D9FB2);
+}
+
+nav .navbar {
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: auto;
+}
+
+.logo {
+    max-width: 80px;
+}
+
+nav .navbar .menu {
+    display: flex;
+    position: relative;
+}
+
+nav .navbar .menu li {
+    list-style: none;
+    margin: 0 8px;
+}
+
+.navbar .menu a {
+    font-size: 18px;
+    font-weight: 500;
+    color: #FFF;
+    padding: 6px 0;
+    transition: all 0.4s ease;
+}
+
+.navbar .menu a:hover {
+    color: #0E2431;
+}
+
+.navbar .icones_media_branco a {
+    color: #FFF;
+    font-size: 18px;
+    margin: 0 6px;
+}
+
+/* Menu de navegação lateral CSS */
+nav .menu-btn,
+.navbar .menu .cancel-btn {
+    position: absolute;
+    color: #fff;
+    right: 30px;
+    top: 20px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: none;
+}
+
+nav .menu-btn {
+    color: #FFF;
+}
+
+.navbar .menu .menu-btn {
+    color: #fff;
+}
+
+/* ------------------------------------------ */
+
+/* ------------------------------------------ */
+
+@media (max-width: 750px) {
+    nav .navbar {
+        width: 90%;
+    }
+
+    nav .navbar .menu {
+        position: fixed;
+        left: -100%;
+        top: 0;
+        background: #0E2431;
+        height: 100vh;
+        max-width: 400px;
+        width: 100%;
+        padding-top: 60px;
+        flex-direction: column;
+        align-items: center;
+        transition: all 0.5s ease;
+    }
+
+    .navbar.active .menu {
+        left: 0;
+    }
+
+    nav .navbar .menu a {
+        font-size: 23px;
+        display: block;
+        color: #fff;
+        margin: 10px 0;
+    }
+
+    nav .navbar .menu a:hover {
+        color: #0672A4;
+    }
+
+    nav .navbar .icones_media_branco {
+        display: none;
+    }
+
+    nav .menu-btn,
+    .navbar .menu .cancel-btn {
+        display: block;
+    }
+}
