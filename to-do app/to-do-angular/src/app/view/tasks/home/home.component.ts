@@ -59,19 +59,23 @@ export class HomeComponent implements OnInit {
     if (this.selectedTaskList === null) { this.selectedTaskList = defaultTaskList; }
   }
 
+  newTask() {
+    //TODO
+  }
+
+  showAllMyTasks() {
+    //TODO
+  }
+
   selectTaskList(idList: number | null) {
     //TODO
   }
 
-  openEditTaskListScreen() {
-    //TODO - use selected list
-  }
-
-  openCreateNewTaskListScreen() {
+  openEditTaskListScreen(idList: number) {
     //TODO
   }
 
-  deleteTaskList() {
+  deleteTaskList(idList: number) {
     //TODO - Confirm first
   }
 
@@ -79,7 +83,7 @@ export class HomeComponent implements OnInit {
     //TODO
   }
 
-  completeTaskList() {
+  completeTaskList(idList: number) {
     //TODO - Confirm first
   }
 
@@ -87,7 +91,7 @@ export class HomeComponent implements OnInit {
     //TODO
   }
 
-  uncompleteTaskList() {
+  uncompleteTaskList(idList: number) {
     //TODO - Confirm first
   }
 

@@ -98,9 +98,21 @@ nav .navbar {
     max-width: 80px;
 }
 
+nav .navbar .separator {
+    display: none;
+}
+
+nav .navbar .page-title .title {
+    margin: 20px;
+    text-align: center;
+    color: #fff;
+}
+
 nav .navbar .menu {
     display: flex;
     position: relative;
+    text-align: center;
+    justify-content: center;
 }
 
 nav .navbar .menu li {
@@ -156,6 +168,10 @@ nav .menu-btn {
         width: 90%;
     }
 
+    nav .navbar .separator {
+        display: block;
+    }
+
     nav .navbar .menu {
         position: fixed;
         left: -100%;
@@ -172,6 +188,7 @@ nav .menu-btn {
 
     .navbar.active .menu {
         left: 0;
+        justify-content: flex-start;
     }
 
     nav .navbar .menu a {

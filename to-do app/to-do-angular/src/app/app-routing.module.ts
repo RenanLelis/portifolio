@@ -12,9 +12,13 @@ import { LogoutComponent } from './view/auth/logout/logout.component';
 import { ChangePasswordComponent } from './view/user/change-password/change-password.component';
 import { ProfileComponent } from './view/user/profile/profile.component';
 import { UseractivationRequestComponent } from './view/auth/useractivation-request/useractivation-request.component';
+import { ListCreationComponent } from './view/tasks/list-creation/list-creation.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuardService] },
+  { path: 'listedit', component: ListCreationComponent, canActivate: [AuthGuardService] },
+  { path: 'listedit/:id', component: ListCreationComponent, canActivate: [AuthGuardService] },
+
   { path: 'mypassword', component: ChangePasswordComponent, canActivate: [AuthGuardService] },
   { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
   

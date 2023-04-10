@@ -6,13 +6,7 @@
     scroll-behavior: smooth;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-p {
+h1, h2, h3, h4, h5, h6, p {
     text-align: center;
     font: sans-serif;
     color: #6A6A6A;
@@ -135,7 +129,6 @@ hr.solid {
     width: 100%;
     height: 10em;
     border: .2px solid #C1C1C1;
-    /* border-radius: 1px; */
     border-radius: 9px;
 }
 
@@ -187,6 +180,8 @@ hr.solid {
     color: #FFFFFF;
     background-color: #589fa1;
 }
+
+
 
 .send-button:hover {
     background-color: #387f81;

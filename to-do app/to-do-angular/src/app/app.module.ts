@@ -22,6 +22,7 @@ import { ChangePasswordComponent } from './view/user/change-password/change-pass
 import { ProfileComponent } from './view/user/profile/profile.component';
 import { UseractivationRequestComponent } from './view/auth/useractivation-request/useractivation-request.component';
 import { SuccessMessageComponent } from './view/components/success-message/success-message.component';
+import { ListCreationComponent } from './view/tasks/list-creation/list-creation.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +42,8 @@ import { SuccessMessageComponent } from './view/components/success-message/succe
     ChangePasswordComponent,
     ProfileComponent,
     UseractivationRequestComponent,
-    SuccessMessageComponent
+    SuccessMessageComponent,
+    ListCreationComponent
   ],
   imports: [
     BrowserModule,

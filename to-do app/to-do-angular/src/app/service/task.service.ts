@@ -24,6 +24,7 @@ export class TaskService {
   URL_TASKS_UNCOMPLETE = BASE_URL + "/api/tasks/uncomplete";
 
   taskLists = new BehaviorSubject<TaskList[]>([]);
+  selectedTaskList: TaskList | null = null;
 
   constructor(private http: HttpClient) { }
 
@@ -118,6 +119,14 @@ export class TaskService {
     let headers: HttpHeaders = new HttpHeaders({ "Content-Type": "application/json", });
     const options = { headers: headers, body: { idsTasks: idsTasks }, };
     return this.http.put(this.URL_TASKS_UNCOMPLETE, options)
+  }
+
+  getTaskListById(id: number): TaskList | null {
+    for (let i = 0; i < this.taskLists.value.length; i++) {
+      const taskList = this.taskLists.value[i];
+      if (taskList.id === id) { return taskList }
+    }
+    return null;
   }
 
 }
