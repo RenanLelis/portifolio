@@ -35,6 +35,18 @@ func ConvertTaskListToDTO(taskList model.TaskList) TaskListDTO {
 	}
 }
 
+// ConvertTasksToDTO convert tasks to DTO
+func ConvertTasksToDTO(tasks []model.Task) []TaskDTO {
+	if tasks == nil || len(tasks) <= 0 {
+		return make([]TaskDTO, 0)
+	}
+	var result []TaskDTO = make([]TaskDTO, 0)
+	for _, task := range tasks {
+		result = append(result, ConvertTaskToDTO(task))
+	}
+	return result
+}
+
 // ConvertTaskToDTO convert a task to DTO
 func ConvertTaskToDTO(task model.Task) TaskDTO {
 	return TaskDTO{

@@ -29,6 +29,42 @@ func GetTasksAndLists(w http.ResponseWriter, r *http.Request) {
 	response.JSON(w, http.StatusOK, tasksListsDTO, r)
 }
 
+// GetTasksByList implements the controller to get tasks by a selected list
+func GetTasksByList(w http.ResponseWriter, r *http.Request) {
+	param := mux.Vars(r)
+	listID, err := strconv.ParseUint(param["id"], 10, 64)
+	if err != nil {
+		response.Err(w, http.StatusBadRequest, err, r)
+		return
+	}
+	userID, err := security.GetUserID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err, r)
+		return
+	}
+	taskDTOs, bErr := business.GetTasksByList(userID, listID)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusOK, taskDTOs, r)
+}
+
+// GetTasksOnDefaultList implements the controller to get tasks not related to a list
+func GetTasksOnDefaultList(w http.ResponseWriter, r *http.Request) {
+	userID, err := security.GetUserID(r)
+	if err != nil {
+		response.Err(w, http.StatusUnauthorized, err, r)
+		return
+	}
+	taskDTOs, bErr := business.GetTasksByList(userID, 0)
+	if bErr.Status > 0 {
+		response.Err(w, bErr.Status, errors.New(bErr.ErrorMessage), r)
+		return
+	}
+	response.JSON(w, http.StatusOK, taskDTOs, r)
+}
+
 // CreateTaskList implements the controller to create a new lists
 func CreateTaskList(w http.ResponseWriter, r *http.Request) {
 	userID, err := security.GetUserID(r)

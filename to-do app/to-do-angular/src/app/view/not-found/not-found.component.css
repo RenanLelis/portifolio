@@ -8,10 +8,10 @@
 
 .container-not-found {
     text-align: center;
-    border-radius: 10px;
-    background-color: #FFF;
+    background-color: #FDFDFD;
     padding: 80px;
     box-shadow: #C0C0C0 10px 10px 20px;
+    margin: 75px auto 10px auto;
 }
 
 .container-not-found h2 {
@@ -25,6 +25,6 @@
 @media (max-width: 750px) {
     .container-not-found {
         max-width: 90%;
-        margin: 180px auto 10px auto;
+        margin: 75px auto 10px auto;
     }
 }

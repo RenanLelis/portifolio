@@ -10,7 +10,7 @@ export interface TaskList {
 export function createDefaultTaskList(): TaskList {
     const defaultTaskList: TaskList = {
         id: null,
-        listName: "My Tasks",
+        listName: "Tasks - Default List",
         listDescription: "Default List for the user, cannot be changed",
         tasks: []
     };

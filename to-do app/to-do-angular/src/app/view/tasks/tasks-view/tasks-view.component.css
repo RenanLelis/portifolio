@@ -1,0 +1,36 @@
+.list-info {
+    margin-bottom: 5px;
+}
+
+.list-actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+}
+
+.list-actions .action-item {
+    margin: 0 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 30px;
+    transition: .3s;
+}
+
+.edit {
+    background-color: #589fa1;
+}
+
+.edit:hover {
+    background-color: #387f81;
+}
+
+.list-actions .action-item i {
+    color: #F0F0F0;
+}
+
+.list-actions .action-item:hover i {
+    color: #FFFFFF;
+}

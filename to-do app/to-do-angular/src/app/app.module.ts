@@ -23,6 +23,9 @@ import { ProfileComponent } from './view/user/profile/profile.component';
 import { UseractivationRequestComponent } from './view/auth/useractivation-request/useractivation-request.component';
 import { SuccessMessageComponent } from './view/components/success-message/success-message.component';
 import { ListCreationComponent } from './view/tasks/list-creation/list-creation.component';
+import { TasksViewComponent } from './view/tasks/tasks-view/tasks-view.component';
+import { ListsViewComponent } from './view/tasks/lists-view/lists-view.component';
+import { TaskEditComponent } from './view/tasks/task-edit/task-edit.component';
 
 @NgModule({
   declarations: [
@@ -43,7 +46,10 @@ import { ListCreationComponent } from './view/tasks/list-creation/list-creation.
     ProfileComponent,
     UseractivationRequestComponent,
     SuccessMessageComponent,
-    ListCreationComponent
+    ListCreationComponent,
+    TasksViewComponent,
+    ListsViewComponent,
+    TaskEditComponent
   ],
   imports: [
     BrowserModule,

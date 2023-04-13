@@ -1,0 +1,12 @@
+.card-form {
+    max-width: 900px;
+}
+
+.div-submit-button {
+    display: flex;
+    justify-content: space-between;
+}
+
+.div-submit-button button {
+    max-width: 200px;
+}

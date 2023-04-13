@@ -23,6 +23,19 @@ func GetTasksAndLists(userID uint64) ([]response.TaskListDTO, Err) {
 	return taskListDTO, Err{}
 }
 
+// GetTasksByList return the tasks for a specific list
+func GetTasksByList(userID, listID uint64) ([]response.TaskDTO, Err) {
+	if userID <= 0 {
+		return nil, Err{http.StatusBadRequest, messages.GetErrorMessageInputValues()}
+	}
+	tasks, err := dao.GetTasksByList(userID, listID)
+	if err != nil {
+		return nil, Err{http.StatusInternalServerError, messages.GetErrorMessage()}
+	}
+	tasksDTOs := response.ConvertTasksToDTO(tasks)
+	return tasksDTOs, Err{}
+}
+
 // CreateTaskList Create a new list for the user
 func CreateTaskList(listName, listDescription string, userID uint64) (response.TaskListDTO, Err) {
 	listNameFormatted := strings.TrimSpace(listName)

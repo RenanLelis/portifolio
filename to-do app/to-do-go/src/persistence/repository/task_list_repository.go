@@ -30,8 +30,9 @@ func (repo TaskListRepository) GetTaskListsByUser(userID uint64) ([]model.TaskLi
 	defer queryResult.Close()
 
 	lists := []model.TaskList{}
-	if queryResult.Next() {
+	for queryResult.Next() {
 		list := model.TaskList{UserID: userID}
+
 		if err = queryResult.Scan(
 			&list.ID,
 			&list.ListName,
@@ -40,8 +41,6 @@ func (repo TaskListRepository) GetTaskListsByUser(userID uint64) ([]model.TaskLi
 			return nil, err
 		}
 		lists = append(lists, list)
-	} else {
-		return nil, nil
 	}
 	return lists, nil
 }
@@ -56,7 +55,7 @@ func (repo TaskListRepository) GetTasksByUser(userID uint64) ([]model.Task, erro
 	}
 	defer queryResult.Close()
 	tasks := []model.Task{}
-	if queryResult.Next() {
+	for queryResult.Next() {
 		task := model.Task{UserID: userID}
 		if err = queryResult.Scan(
 			&task.ID,
@@ -69,8 +68,37 @@ func (repo TaskListRepository) GetTasksByUser(userID uint64) ([]model.Task, erro
 			return nil, err
 		}
 		tasks = append(tasks, task)
-	} else {
-		return nil, nil
+	}
+	return tasks, nil
+}
+
+// GetTasksByList fetch the tasks for a specific list
+func (repo TaskListRepository) GetTasksByList(userID, listID uint64) ([]model.Task, error) {
+	var lId interface{} = nil
+	if listID > 0 {
+		lId = listID
+	}
+	queryResult, err := repo.db.Query(`SELECT 
+	ID, TASK_NAME, TASK_DESCRIPTION, DEADLINE, TASK_STATUS, ID_LIST 
+	FROM TASK WHERE ID_USER = ? AND ID_LIST = ?`, userID, lId)
+	if err != nil {
+		return nil, errors.New(messages.GetErrorMessage())
+	}
+	defer queryResult.Close()
+	tasks := []model.Task{}
+	for queryResult.Next() {
+		task := model.Task{UserID: userID}
+		if err = queryResult.Scan(
+			&task.ID,
+			&task.TaskName,
+			&task.TaskDescription,
+			&task.Deadline,
+			&task.TaskStatus,
+			&task.ListID,
+		); err != nil {
+			return nil, err
+		}
+		tasks = append(tasks, task)
 	}
 	return tasks, nil
 }

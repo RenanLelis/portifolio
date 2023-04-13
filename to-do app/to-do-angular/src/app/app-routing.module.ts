@@ -13,6 +13,7 @@ import { ChangePasswordComponent } from './view/user/change-password/change-pass
 import { ProfileComponent } from './view/user/profile/profile.component';
 import { UseractivationRequestComponent } from './view/auth/useractivation-request/useractivation-request.component';
 import { ListCreationComponent } from './view/tasks/list-creation/list-creation.component';
+import { TasksViewComponent } from './view/tasks/tasks-view/tasks-view.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent, canActivate: [AuthGuardService] },

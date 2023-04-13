@@ -25,6 +25,22 @@ func GetTasksAndListsByUser(userID uint64) ([]model.TaskList, []model.Task, erro
 	return lists, tasks, nil
 }
 
+// GetTasksByList fetch the tasks for a specific list
+func GetTasksByList(userID, listID uint64) ([]model.Task, error) {
+	db, err := database.ConnectToDataBase()
+	if err != nil {
+		return nil, err
+	}
+	defer db.Close()
+	rep := repository.CreateTaskListRepository(db)
+
+	tasks, err := rep.GetTasksByList(userID, listID)
+	if err != nil {
+		return nil, err
+	}
+	return tasks, nil
+}
+
 // GetTaskListsByUser fetch the lists on the database by user id
 func GetTaskListsByUser(userID uint64) ([]model.TaskList, error) {
 	db, err := database.ConnectToDataBase()

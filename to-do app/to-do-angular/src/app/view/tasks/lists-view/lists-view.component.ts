@@ -1,21 +1,22 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { getErrorMessage, getMessage } from 'src/app/message/message';
 import { TaskList, createDefaultTaskList } from 'src/app/model/taskList';
 import { TaskService } from 'src/app/service/task.service';
 
 @Component({
-  selector: 'app-home',
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  selector: 'app-lists-view',
+  templateUrl: './lists-view.component.html',
+  styleUrls: ['./lists-view.component.css']
 })
-export class HomeComponent implements OnInit {
+export class ListsViewComponent implements OnInit {
 
   taskLists: TaskList[] | null = null;
-  selectedTaskList: TaskList | null = null;
-  isSetShowAllTasks: boolean = false;
+  selectedTaskList: TaskList | null = createDefaultTaskList();
+  @Output() onSelectTaskList: EventEmitter<TaskList> = new EventEmitter();
+  @Output() onShowAllTasks: EventEmitter<any> = new EventEmitter();
 
-  showMenu:boolean = false;
+
   loading: boolean = false;
   errorMessage: string = "";
   suscessMessage: string = "";
@@ -23,12 +24,13 @@ export class HomeComponent implements OnInit {
   constructor(private taskService: TaskService, private router: Router) { }
 
   ngOnInit(): void {
+    if ((!this.taskService.showAllTasks) && this.taskService.selectedTaskList !== null && this.taskService.selectedTaskList.id !== null && this.taskService.selectedTaskList.id > 0) {
+      this.selectedTaskList = this.taskService.selectedTaskList;
+    }
     this.taskService.taskLists.subscribe(value => {
       this.updateTasksAndLists(value);
     });
     this.getListsAndTasks();
-    this.selectedTaskList = this.taskService.selectedTaskList;
-    this.isSetShowAllTasks = this.taskService.showAllTasks;
   }
 
   getListsAndTasks() {
@@ -60,35 +62,39 @@ export class HomeComponent implements OnInit {
       taskLists.push(...newTasksLists);
     }
     this.taskLists = taskLists;
-    if (this.taskService.selectedTaskList === null) {
-      this.taskService.selectedTaskList = defaultTaskList;
+    if (this.taskService.selectedTaskList === null) { 
+      this.taskService.selectedTaskList = defaultTaskList; 
     } else {
 
     }
   }
 
-  onMenuClick() {
-    this.showMenu = !this.showMenu;
+  newTaskList() {
+    this.router.navigate(['/listedit']);
   }
 
-  closeMenu() {
-    this.showMenu = false;
+  showAllMyTasks() {
+    this.taskService.showAllTasks = true;
+    this.onShowAllTasks.emit();
   }
 
   selectTaskList(taskList: TaskList) {
-    this.isSetShowAllTasks = false;
+    this.taskService.showAllTasks = false;
+    this.taskService.selectedTaskList = taskList;
     this.selectedTaskList = taskList;
-    this.taskService.selectedTaskList = this.selectedTaskList;
-    this.taskService.showAllTasks = this.isSetShowAllTasks;
-    this.closeMenu();
+    this.onSelectTaskList.emit(taskList);
   }
 
-  showAllTasks() {
-    this.selectedTaskList = null;
-    this.isSetShowAllTasks = true;
-    this.taskService.selectedTaskList = this.selectedTaskList;
-    this.taskService.showAllTasks = this.isSetShowAllTasks;
-    this.closeMenu();
+  openEditTaskListScreen(idList: number) {
+    this.router.navigate([`/listedit/${idList}`]);
+  }
+
+  closeErrorMessage() {
+    this.errorMessage = "";
+  }
+
+  closeMessage() {
+    this.suscessMessage = "";
   }
 
 }

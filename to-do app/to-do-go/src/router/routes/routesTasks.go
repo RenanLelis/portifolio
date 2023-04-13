@@ -14,6 +14,18 @@ var tasksRoutes = []Route{
 		NeedsAuth: true,
 	},
 	{
+		URI:       "/api/taskList/tasks/{id}",
+		Method:    http.MethodGet,
+		Function:  controller.GetTasksByList,
+		NeedsAuth: true,
+	},
+	{
+		URI:       "/api/taskList/tasks",
+		Method:    http.MethodGet,
+		Function:  controller.GetTasksOnDefaultList,
+		NeedsAuth: true,
+	},
+	{
 		URI:       "/api/taskList",
 		Method:    http.MethodPost,
 		Function:  controller.CreateTaskList,

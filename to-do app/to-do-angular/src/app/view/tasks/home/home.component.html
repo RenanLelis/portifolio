@@ -1,19 +1,17 @@
-<div class="container">
+<div class="home-container">
+    <div class="sidenav-home" [ngClass]="{'sidenav-home-open': showMenu}">
+        <div class="close-button">
+            <i class="fa fa-close" (click)="closeMenu()"></i>
+        </div>
+        <app-lists-view (onShowAllTasks)="showAllTasks()" (onSelectTaskList)="selectTaskList($event)"></app-lists-view>
+        <div class="lists">
 
-    <div class="lists">
-        <div class="label-field">
-            <label class="label">
-                <p>My Lists</p>
-            </label>
-            <div class="list-info">
-                <div class="list-actions">
-                    <!-- <a routerLink="/listedit" class="send-link">New Task List</a> -->
-                    <button class="send-button" (click)="newTask()">New Task List</button>
-                    <button class="send-button" (click)="showAllMyTasks()">Show all my tasks</button>
-                </div>
-            </div>
         </div>
     </div>
-
-
+    <div class="home-content">
+        <div class="list-menu" (click)="onMenuClick()">
+            <i class="fa fa-bars"></i>
+        </div>
+        <app-tasks-view [showAllTasks]="isSetShowAllTasks" [selectedTaskList]="selectedTaskList"></app-tasks-view>
+    </div>
 </div>

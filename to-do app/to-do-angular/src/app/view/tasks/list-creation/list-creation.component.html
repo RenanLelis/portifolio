@@ -1,1 +1,23 @@
-<p>list-creation works!</p>
+<div class="card-form">
+    <h2>Task List</h2>
+    <form [formGroup]="formTaskList" (submit)="save()">
+        <div class="label-field">
+            <label class="label">List Name</label>
+            <input formControlName="listName" type="text" required class="text-field">
+            <p *ngIf="formTaskList.get('listName')!.invalid && formTaskList.get('listName')!.touched"
+                class="error-field-message">
+                Error on list name input.
+            </p>
+        </div>
+        <div class="label-field">
+            <label class="label">List Description</label>
+            <!-- <input formControlName="listDescription" type="text" class="text-field"> -->
+            <textarea formControlName="listDescription" class="textarea"></textarea>
+            
+        </div>
+        <div class="div-submit-button">
+            <button type="button" (click)="cancel()" class="send-button">Cancel</button>
+            <button [disabled]="formTaskList.invalid" type="submit" class="send-button">Send</button>
+        </div>
+    </form>
+</div>

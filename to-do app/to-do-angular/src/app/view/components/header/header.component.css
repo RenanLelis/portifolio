@@ -1,5 +1,6 @@
 header {
-    background-color: rgba(248, 248, 248, 0.75);
+    /* background-color: rgba(248, 248, 248, 0.75); */
+    background-color: #FDFDFD;
     padding: 10px;
     color: #858585;
     margin: 0;
@@ -19,10 +20,6 @@ header .list-menu {
     margin: auto 10px;
     padding: 10px;
     height: 100%;
-}
-
-i {
-    color: #589fa1;
 }
 
 header .logo {
@@ -69,11 +66,13 @@ header .user-menu {
     position: fixed;
     z-index: 1;
     top: 0;
-    left: 0;
-    background-color: rgba(248, 248, 248, 0.95);
+    right: 0;
+    /* background-color: rgba(255, 255, 255, 0.95); */
+    background-color: #FDFDFD;
     overflow-x: hidden;
     transition: 0.4s;
     padding-top: 60px;
+    box-shadow: 0 .15em .4em #818181;
 }
 
 .sidenav-open {
