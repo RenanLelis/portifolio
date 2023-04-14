@@ -26,6 +26,7 @@ import { ListCreationComponent } from './view/tasks/list-creation/list-creation.
 import { TasksViewComponent } from './view/tasks/tasks-view/tasks-view.component';
 import { ListsViewComponent } from './view/tasks/lists-view/lists-view.component';
 import { TaskEditComponent } from './view/tasks/task-edit/task-edit.component';
+import { ConfirmMessageComponent } from './view/components/confirm-message/confirm-message.component';
 
 @NgModule({
   declarations: [
@@ -49,7 +50,8 @@ import { TaskEditComponent } from './view/tasks/task-edit/task-edit.component';
     ListCreationComponent,
     TasksViewComponent,
     ListsViewComponent,
-    TaskEditComponent
+    TaskEditComponent,
+    ConfirmMessageComponent
   ],
   imports: [
     BrowserModule,

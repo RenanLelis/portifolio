@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { getErrorMessage, getMessage } from 'src/app/message/message';
 import { TaskList, createDefaultTaskList } from 'src/app/model/taskList';
@@ -11,7 +11,7 @@ import { TaskService } from 'src/app/service/task.service';
 })
 export class ListsViewComponent implements OnInit {
 
-  taskLists: TaskList[] | null = null;
+  @Input() taskLists: TaskList[] | null = null;
   selectedTaskList: TaskList | null = createDefaultTaskList();
   @Output() onSelectTaskList: EventEmitter<TaskList> = new EventEmitter();
   @Output() onShowAllTasks: EventEmitter<any> = new EventEmitter();
@@ -27,46 +27,7 @@ export class ListsViewComponent implements OnInit {
     if ((!this.taskService.showAllTasks) && this.taskService.selectedTaskList !== null && this.taskService.selectedTaskList.id !== null && this.taskService.selectedTaskList.id > 0) {
       this.selectedTaskList = this.taskService.selectedTaskList;
     }
-    this.taskService.taskLists.subscribe(value => {
-      this.updateTasksAndLists(value);
-    });
-    this.getListsAndTasks();
-  }
-
-  getListsAndTasks() {
-    this.loading = true;
-    this.taskService.fetchTasksAndLists().subscribe({
-      next: (value) => {
-        this.loading = false;
-      },
-      error: (e) => {
-        console.log(e);
-        this.loading = false;
-        if (e.error && e.error.errorMessage) {
-          this.errorMessage = getMessage(e.error.errorMessage);
-        } else {
-          this.errorMessage = getErrorMessage();
-        }
-      }
-    });
-  }
-
-  updateTasksAndLists(newTasksLists: TaskList[]) {
-    const taskLists: TaskList[] = [];
-    const defaultTaskList: TaskList = createDefaultTaskList();
-    taskLists.push(defaultTaskList);
-    if (newTasksLists !== null && newTasksLists.length > 0) {
-      newTasksLists = newTasksLists.filter(taskLists => {
-        return (taskLists.id !== null && taskLists.id > 0)
-      });
-      taskLists.push(...newTasksLists);
-    }
-    this.taskLists = taskLists;
-    if (this.taskService.selectedTaskList === null) { 
-      this.taskService.selectedTaskList = defaultTaskList; 
-    } else {
-
-    }
+    this.taskLists = this.taskService.taskLists.value;
   }
 
   newTaskList() {

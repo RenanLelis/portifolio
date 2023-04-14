@@ -3,7 +3,7 @@
         <div class="close-button">
             <i class="fa fa-close" (click)="closeMenu()"></i>
         </div>
-        <app-lists-view (onShowAllTasks)="showAllTasks()" (onSelectTaskList)="selectTaskList($event)"></app-lists-view>
+        <app-lists-view [taskLists]="taskLists" (onShowAllTasks)="showAllTasks()" (onSelectTaskList)="selectTaskList($event)"></app-lists-view>
         <div class="lists">
 
         </div>
@@ -12,6 +12,6 @@
         <div class="list-menu" (click)="onMenuClick()">
             <i class="fa fa-bars"></i>
         </div>
-        <app-tasks-view [showAllTasks]="isSetShowAllTasks" [selectedTaskList]="selectedTaskList"></app-tasks-view>
+        <app-tasks-view [showAllTasks]="isSetShowAllTasks" [selectedTaskList]="selectedTaskList" (onDelete)="updateLists()"></app-tasks-view>
     </div>
 </div>

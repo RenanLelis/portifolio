@@ -21,17 +21,19 @@
     min-height: 300px;
     margin: 0 0 100px 0;
     display: flex;
+    flex-direction: column;
+    justify-content: space-around;
 }
 
-.success-message {
+.confirm-message {
     background-color: rgba(250, 250, 250, 1);
-    padding: 15px 5px;
+    padding: 15px;
     text-align: center;
     border-radius: 2px;
     border: 1px solid rgba(250, 250, 250, 1);
 }
 
-.success-message p {
+.confirm-message p {
     padding: 30px;
     font-size: 16px;
     font-family: sans-serif;
@@ -39,7 +41,24 @@
     align-self: center;
 }
 
-.success-message .close-button i {
-    padding-right: 10px;
+.actions {
+    display: flex;
+    justify-content: space-around;
+    margin-left: 3px;
+}
+
+.actions button {
+    margin: 0 5px;
+    padding: 10px 15px;
     cursor: pointer;
+    border-radius: 30px;
+    transition: .3s;
+    border: none;
+    color: #F0F0F0;
+    background-color: #589fa1;
+}
+
+.actions button:hover {
+    color: #FFFFFF;
+    background-color: #387f81;
 }

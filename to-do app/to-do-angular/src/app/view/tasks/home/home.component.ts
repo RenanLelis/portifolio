@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
   selectedTaskList: TaskList | null = null;
   isSetShowAllTasks: boolean = false;
 
-  showMenu:boolean = false;
+  showMenu: boolean = false;
   loading: boolean = false;
   errorMessage: string = "";
   suscessMessage: string = "";
@@ -27,8 +27,6 @@ export class HomeComponent implements OnInit {
       this.updateTasksAndLists(value);
     });
     this.getListsAndTasks();
-    this.selectedTaskList = this.taskService.selectedTaskList;
-    this.isSetShowAllTasks = this.taskService.showAllTasks;
   }
 
   getListsAndTasks() {
@@ -62,9 +60,9 @@ export class HomeComponent implements OnInit {
     this.taskLists = taskLists;
     if (this.taskService.selectedTaskList === null) {
       this.taskService.selectedTaskList = defaultTaskList;
-    } else {
-
     }
+    this.selectedTaskList = this.taskService.selectedTaskList;
+    this.isSetShowAllTasks = this.taskService.showAllTasks;
   }
 
   onMenuClick() {
@@ -89,6 +87,11 @@ export class HomeComponent implements OnInit {
     this.taskService.selectedTaskList = this.selectedTaskList;
     this.taskService.showAllTasks = this.isSetShowAllTasks;
     this.closeMenu();
+  }
+
+  updateLists() {
+    this.selectTaskList(createDefaultTaskList());
+    this.getListsAndTasks();
   }
 
 }

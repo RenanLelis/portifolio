@@ -9,14 +9,17 @@
     background-color: rgb(0, 0, 0);
     background-color: rgba(0, 0, 0, 0.4);
     display: flex;
-    justify-content: space-between;
     flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 .background .message {
-    max-width: 500px;
-    min-height: 150px;
-    margin: auto;
+    max-width: 90%;
+    max-height: 90%;
+    min-width: 400px;
+    min-height: 300px;
+    margin: 0 0 100px 0;
     display: flex;
 }
 
@@ -24,7 +27,7 @@
     background-color: #F8D7DA;
     padding: 15px 5px;
     text-align: center;
-    border-radius: 7px;
+    border-radius: 2px;
     border: 1px solid #F5C2C7;
 }
 

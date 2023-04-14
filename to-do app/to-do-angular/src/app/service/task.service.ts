@@ -1,9 +1,9 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, tap } from 'rxjs';
-import { TaskList } from '../model/taskList';
+import { TaskList, createDefaultTaskList } from '../model/taskList';
 import { BASE_URL } from './consts';
-import { Task } from '../model/task';
+import { STATUS_COMPLETE, STATUS_INCOMPLETE, Task } from '../model/task';
 
 @Injectable({
   providedIn: 'root',
@@ -35,9 +35,26 @@ export class TaskService {
     });
     return this.http.get(this.URL_TASK_LIST, { headers }).pipe(
       tap((resData) => {
+        this.updateSelectedListInfo();
         this.taskLists.next(resData as TaskList[]);
       })
     );
+  }
+
+  updateSelectedListInfo() {
+    if (this.selectedTaskList !== null && this.selectedTaskList.id !== null && this.selectedTaskList.id > 0) {
+      this.taskLists.value.forEach(taskList => {
+        if ((taskList.id !== null && taskList.id.toString() === this.selectedTaskList!.id!.toString())) {
+          this.selectedTaskList!.listName = taskList.listName;
+          this.selectedTaskList!.listDescription = taskList.listDescription;
+          return;
+        }
+      });
+      //selected list is not null and is not on the taskLists, propably was deleted
+      this.selectedTaskList = createDefaultTaskList();
+    } else {
+      this.selectedTaskList = createDefaultTaskList();
+    }
   }
 
   fetchTasksByList(idList: number | null) {
@@ -59,12 +76,26 @@ export class TaskService {
       );
   }
 
+  getTasksByList(idList: number | null) {
+    if (this.taskLists === null || this.taskLists.value === null || this.taskLists.value.length <= 0) {
+      return [];
+    }
+    let result: Task[] = [];
+    for (let i = 0; i < this.taskLists.value.length; i++) {
+      const taskList = this.taskLists.value[i];
+      if (((idList === null || idList! <= 0) && (taskList.id === null || taskList.id <= 0)) //default list
+      || (taskList.id != null && idList != null && idList.toString() === taskList.id.toString())) {
+        if (taskList.tasks !== null) {
+          result.push(...taskList.tasks!);
+        }
+        return result;
+      }
+    }
+    return result;
+  }
+
   getAllTasks(): Task[] {
-    if (
-      this.taskLists === null ||
-      this.taskLists.value === null ||
-      this.taskLists.value.length <= 0
-    ) {
+    if (this.taskLists === null || this.taskLists.value === null || this.taskLists.value.length <= 0) {
       return [];
     }
     let result: Task[] = [];
@@ -95,16 +126,13 @@ export class TaskService {
       this.URL_TASK_LIST.concat(`/${idList}`),
       { listName: listName, listDescription: listDescription },
       { headers }
-    );
+    ).pipe(tap((resData) => { this.updateSelectedListInfo(); }));
   }
 
   deleteTaskList(idList: Number) {
-    let headers: HttpHeaders = new HttpHeaders({
-      'Content-Type': 'application/json',
-    });
-    return this.http.delete(this.URL_TASK_LIST.concat(`/${idList}`), {
-      headers,
-    });
+    let headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.delete(this.URL_TASK_LIST.concat(`/${idList}`), { headers }
+    ).pipe(tap((resData) => { this.updateSelectedListInfo(); }));;
   }
 
   moveTasksForList(listId: Number, tasksIds: Number[]) {
@@ -137,7 +165,9 @@ export class TaskService {
       this.URL_TASK_LISTS_COMPLETE_TASKS.concat(`/${listId}`),
       null,
       { headers }
-    );
+    ).pipe(tap((resData) => {
+      this.changeStatusTasksFromList(listId, STATUS_COMPLETE)
+    }));
   }
 
   uncompleteTasksFromList(listId: number) {
@@ -148,15 +178,29 @@ export class TaskService {
       this.URL_TASK_LISTS_UNCOMPLETE_TASKS.concat(`/${listId}`),
       null,
       { headers }
-    );
+    ).pipe(tap((resData) => {
+      this.changeStatusTasksFromList(listId, STATUS_INCOMPLETE)
+    }));
   }
 
-  createTask(
-    taskName: string,
-    taskDescription: string,
-    deadline: string | null,
-    listId: Number | null
-  ) {
+  changeStatusTasksFromList(listId: number, status: number) {
+    if (this.taskLists.value != null && this.taskLists.value.length > 0) {
+      for (let i = 0; i < this.taskLists.value.length; i++) {
+        if (
+          ((this.taskLists.value[i].id === null || this.taskLists.value[i].id! <= 0) && listId <= 0) // default list
+          || (this.taskLists.value[i].id!.toString() === listId.toString()) // not default list
+        ) {
+          if (this.taskLists.value[i].tasks != null && this.taskLists.value[i].tasks!.length > 0) {
+            this.taskLists.value[i].tasks!.forEach(task => { task.taskStatus = status });
+            this.taskLists.next(this.taskLists.value);
+          }
+          return;
+        }
+      }
+    }
+  }
+
+  createTask(taskName: string, taskDescription: string, deadline: string | null, listId: Number | null) {
     let headers: HttpHeaders = new HttpHeaders({
       'Content-Type': 'application/json',
     });

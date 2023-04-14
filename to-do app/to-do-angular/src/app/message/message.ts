@@ -34,6 +34,18 @@ export function getMessageOperationSucceded(): string {
     return messages.get("MS01")!;
 }
 
+export function getMessageConfirmDelete(): string {
+    return messages.get("MS02")!;
+}
+
+export function getMessageConfirmCompleteList(): string {
+    return messages.get("MS03")!;
+}
+
+export function getMessageConfirmUncompleteList(): string {
+    return messages.get("MS04")!;
+}
+
 export const messages: Map<string, string> = new Map<string, string>([
     ["MSE01", "An error ocurred on the operation."],
     ["MSE02", "Error on input values."],
@@ -42,5 +54,8 @@ export const messages: Map<string, string> = new Map<string, string>([
     ["MSE05", "E-mail already exists."],
     ["MSE06", "E-mail not found."],
     ["MSE07", "User not activated."],
-    ["MS01", "Operation Succeded."]
+    ["MS01", "Operation Succeded."],
+    ["MS02", "Delete the list?"],
+    ["MS03", "Complete all tasks?."],
+    ["MS04", "Mark all tasks as incomplete?."]
 ]);

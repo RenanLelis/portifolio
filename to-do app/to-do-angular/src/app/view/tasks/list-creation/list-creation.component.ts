@@ -72,8 +72,6 @@ export class ListCreationComponent implements OnInit {
       subscription.subscribe({
         next: (newTaskList) => {
           this.loading = false;
-          console.log(newTaskList);
-
           this.taskService.updateLocalTaskLists(
             this.formTaskList.value.listName,
             this.formTaskList.value.listDescription,
