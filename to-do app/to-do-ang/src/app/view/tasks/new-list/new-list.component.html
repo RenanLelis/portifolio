@@ -1,0 +1,6 @@
+<p>new-list works!</p>
+<div *ngIf="loading">
+    <app-loading></app-loading>
+</div>
+
+<app-error-message [errorMessage]="errorMessage" (onClose)="closeErrorMessage()" />

@@ -1,5 +1,10 @@
-<div class="container">
-    <div class="card-form">
+<div class="container-auth">
+    <div class="card-auth">
+        <div class="logo">
+            <a><img src="../../../assets/logo.png">
+                <h3>My Task List</h3>
+            </a>
+        </div>
         <h2>Login</h2>
         <form [formGroup]="formLogin" (submit)="login()">
             <div class="label-field">
@@ -31,8 +36,8 @@
     </div>
 </div>
 
-
 <div *ngIf="loading">
     <app-loading></app-loading>
 </div>
+
 <app-error-message [errorMessage]="errorMessage" (onClose)="closeErrorMessage()" />
