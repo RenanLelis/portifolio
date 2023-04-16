@@ -102,10 +102,18 @@ nav .navbar .separator {
     display: none;
 }
 
-nav .navbar .page-title .title {
+nav .navbar .page-title .p-title {
     margin: 20px;
     text-align: center;
     color: #fff;
+}
+
+nav .navbar .page-title .p-title span {
+    color: #fff;
+    font-size: 30px;
+    font-weight: 600;
+    position: relative;
+    padding-bottom: 8px;
 }
 
 nav .navbar .menu {
