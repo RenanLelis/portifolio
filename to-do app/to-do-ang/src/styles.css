@@ -214,8 +214,6 @@ hr.solid {
     background-color: #589fa1;
 }
 
-
-
 .send-button:hover {
     background-color: #387f81;
     border: 1px solid #387f81;
@@ -261,7 +259,64 @@ hr.solid {
     color: #589fa1;
 }
 
+/* ------------------------------------------------------- */
+/* ------------------------------------------------------- */
+/* tasks and lists */
 
+.task-form {
+    max-width: 90%;
+    width: 700px;
+    margin: 30px auto;
+    height: 100%;
+    padding: 30px;
+}
+
+.action-button {
+    width: 100%;
+    max-width: 250px;
+    height: 39px;
+    line-height: 36px;
+    margin: 0 10px;
+    padding: 1px 25px;
+    font-size: 13px;
+    font-weight: 700;
+    font-family: sans-serif;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: background .35s;
+    border-radius: 50px;
+    outline: none;
+    border: 1px solid #589fa1;
+    color: #FAFAFA;
+    background-color: #589fa1;
+}
+
+.action-button:hover {
+    background-color: #387f81;
+    border: 1px solid #387f81;
+    color: #FFFFFF;
+    border: 1px solid #FFFFFF;
+}
+
+.action-button:disabled {
+    color: #FAFAFA;
+    cursor: auto;
+    border: 1px solid #A0A0A0;
+    background-color: #A0A0A0;
+}
+
+.action-button:disabled:hover {
+    color: #FAFAFA;
+    cursor: auto;
+    border: 1px solid #A0A0A0;
+    background-color: #A0A0A0;
+}
+
+/* ------------------------------------------------------- */
 /* ------------------------------------------------------- */
 
 

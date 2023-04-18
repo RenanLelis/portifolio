@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BASE_URL } from './consts';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { TaskList } from '../model/taskList';
+import { TaskList, createDefaultTaskList } from '../model/taskList';
 import { BehaviorSubject, tap } from 'rxjs';
-import { Task } from '../model/task';
+import { STATUS_COMPLETE, STATUS_INCOMPLETE, Task } from '../model/task';
 
 @Injectable({
   providedIn: 'root'
@@ -41,6 +41,21 @@ export class TaskService {
     this.isSetShowAllTasks.next(false);
     this.selectedList.next(selectedTaskList);
     this.tasks.next(this.getTasksFromSelectedList());
+  }
+
+  getList(id: number): TaskList {
+    if (id <= 0) {
+      return createDefaultTaskList();
+    }
+    if (this.lists.value != null) {
+      for (let i = 0; i < this.lists.value.length; i++) {
+        const list = this.lists.value[i];
+        if (list.id !== null && list.id!.toString() === id.toString()) { 
+          return list; 
+        }
+      }
+    }
+    return createDefaultTaskList();
   }
 
   getAllTasks() {
@@ -169,15 +184,11 @@ export class TaskService {
         listId: listId,
       },
       { headers }
-    ).pipe(tap(value => {
-      console.log(value);
-      // TODO check selected list for null, showAllTasks - set to defaultList
-      // this.selectedList.value!.tasks!.push(value as Task)
-    }));
+    );
   }
 
   updateTask(
-    id: Number,
+    id: number,
     taskName: string,
     taskDescription: string,
     deadline: string | null
@@ -207,14 +218,14 @@ export class TaskService {
     );
   }
 
-  deleteTask(id: Number) {
+  deleteTask(id: number) {
     let headers: HttpHeaders = new HttpHeaders({
       'Content-Type': 'application/json',
     });
     return this.http.delete(this.URL_TASK.concat(`/${id}`), { headers });
   }
 
-  deleteTasks(idsTasks: Number[]) {
+  deleteTasks(idsTasks: number[]) {
     let headers: HttpHeaders = new HttpHeaders({
       'Content-Type': 'application/json',
     });
@@ -222,14 +233,16 @@ export class TaskService {
     return this.http.delete(this.URL_TASKS_DELETE, options);
   }
 
-  completeTask(id: Number) {
+  completeTask(id: number) {
     let headers: HttpHeaders = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    return this.http.put(this.URL_TASK_COMPLETE.concat(`/${id}`), null, { headers });
+    return this.http.put(this.URL_TASK_COMPLETE.concat(`/${id}`), null, { headers }).pipe(tap(value => {
+      this.updateStatusTask(id, STATUS_COMPLETE)
+    }));
   }
 
-  completeTasks(idsTasks: Number[]) {
+  completeTasks(idsTasks: number[]) {
     let headers: HttpHeaders = new HttpHeaders({
       'Content-Type': 'application/json',
     });
@@ -237,21 +250,73 @@ export class TaskService {
     return this.http.put(this.URL_TASKS_COMPLETE, options);
   }
 
-  uncompleteTask(id: Number) {
+  uncompleteTask(id: number) {
     let headers: HttpHeaders = new HttpHeaders({
       'Content-Type': 'application/json',
     });
     return this.http.put(this.URL_TASK_UNCOMPLETE.concat(`/${id}`), null, {
       headers,
-    });
+    }).pipe(tap(value => {
+      this.updateStatusTask(id, STATUS_INCOMPLETE)
+    }));
   }
 
-  uncompleteTasks(idsTasks: Number[]) {
+  uncompleteTasks(idsTasks: number[]) {
     let headers: HttpHeaders = new HttpHeaders({
       'Content-Type': 'application/json',
     });
     const options = { headers: headers, body: { idsTasks: idsTasks } };
     return this.http.put(this.URL_TASKS_UNCOMPLETE, options);
+  }
+
+  updateStatusTasks(tasksIDs: number[], status: number) {
+    let tasks: Task[] = []
+    tasks.push(...this.tasks.value)
+    for (let i = 0; i < tasks.length; i++) {
+      if (tasksIDs.indexOf(tasks[i].id) >= 0) {
+        tasks[i].taskStatus = status;
+      }
+    }
+    this.tasks.next(tasks);
+
+    let lists: TaskList[] = [];
+    lists.push(...this.lists.value);
+    for (let i = 0; i < lists.length; i++) {
+      if (lists[i].tasks !== null) {
+        for (let j = 0; j < lists[i].tasks!.length; j++) {
+          if (tasksIDs.indexOf(lists[i].tasks![j].id) >= 0) {
+            lists[i].tasks![j].taskStatus = status;
+          }
+        }
+      }
+    }
+    this.lists.next(lists);
+  }
+
+  updateStatusTask(taskID: number, status: number) {
+    let tasks: Task[] = []
+    tasks.push(...this.tasks.value)
+    for (let i = 0; i < tasks.length; i++) {
+      if (taskID.toString() === tasks[i].id.toString()) {
+        tasks[i].taskStatus = status;
+        this.tasks.next(tasks);
+        break;
+      }
+    }
+    let lists: TaskList[] = [];
+    lists.push(...this.lists.value);
+    for (let i = 0; i < lists.length; i++) {
+      if (lists[i].tasks !== null) {
+        for (let j = 0; j < lists[i].tasks!.length; j++) {
+          if (lists[i].tasks![j].id.toString() === taskID.toString()) {
+            lists[i].tasks![j].taskStatus = status;
+            this.lists.next(lists);
+            return;
+          }
+        }
+      }
+    }
+
   }
 
 }

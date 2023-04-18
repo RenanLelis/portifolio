@@ -1,0 +1,144 @@
+.container {
+    max-width: 90%;
+    width: 700px;
+    margin: 30px auto;
+    height: 100%;
+    padding: 30px;
+}
+
+.list-info {
+    margin-bottom: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.list-actions-dropdown {
+    margin: 5px;
+    padding: 5px;
+    cursor: pointer;
+    position: relative;
+    display: inline-block;
+}
+
+.list-actions-dropdown i {
+
+}
+
+.list-actions-dropdown-content {
+    display: block;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    min-width: 100px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    padding: 12px 16px;
+    z-index: 1;
+}
+
+.list-actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 20px;
+}
+
+.list-actions .action-item {
+    margin: 0 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 30px;
+    transition: .3s;
+    border: none;
+}
+
+.edit {
+    background-color: #589fa1;
+}
+
+.edit:hover {
+    background-color: #387f81;
+}
+
+.delete {
+    background-color: #A22029;
+}
+
+.delete:hover {
+    background-color: #820009;
+}
+
+.complete {
+    background-color: #589fa1;
+}
+
+.complete:hover {
+    background-color: #387f81;
+}
+
+.list-actions .action-item i {
+    color: #F0F0F0;
+}
+
+.list-actions .action-item:hover i {
+    color: #FFFFFF;
+}
+
+.list-actions .action-item:disabled {
+    background-color: #808080;
+}
+
+.list-actions .action-item:disabled:hover {
+    background-color: #808080;
+    cursor: default;
+}
+
+.list-actions .action-item:disabled:hover i {
+    color: #F0F0F0;
+}
+
+.tooltip {
+    position: relative;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+}
+
+@media (max-width: 650px) {
+    .list-actions .action-item i span {
+        display: none;
+    }
+
+    .tooltip:hover .tooltiptext {
+        visibility: visible;
+        opacity: 1;
+    }
+}

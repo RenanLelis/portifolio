@@ -17,20 +17,20 @@ import { NewTaskComponent } from './view/tasks/new-task/new-task.component';
 import { NewListComponent } from './view/tasks/new-list/new-list.component';
 
 const routes: Routes = [
-  { path: '', component: DashboardComponent, canActivate: [AuthGuardService] },
   {
     path: 'home', component: DashboardComponent, canActivate: [AuthGuardService],
     children: [
-      { path: '', component: TasksViewComponent },
-      { path: 'list', component: NewListComponent },
-      { path: 'list:id', component: NewListComponent },
-      { path: 'task', component: NewTaskComponent },
-      { path: 'task:id', component: NewTaskComponent },
-
-      { path: 'mypassword', component: ChangePasswordComponent },
-      { path: 'profile', component: ProfileComponent },
+      { path: '', component: TasksViewComponent, canActivate: [AuthGuardService] },
+      { path: 'list', component: NewListComponent, canActivate: [AuthGuardService] },
+      { path: 'list/:id', component: NewListComponent, canActivate: [AuthGuardService] },
+      { path: 'task', component: NewTaskComponent, canActivate: [AuthGuardService] },
+      { path: 'task/:id', component: NewTaskComponent, canActivate: [AuthGuardService] },
+      
+      { path: 'mypassword', component: ChangePasswordComponent, canActivate: [AuthGuardService] },
+      { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
     ]
   },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
 
   { path: 'login', component: LoginComponent },
   { path: 'logout', component: LogoutComponent },

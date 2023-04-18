@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { getErrorMessage, getErrorMessageInputValues, getMessage } from 'src/app/message/message';
+import { Task } from 'src/app/model/task';
+import { TaskList } from 'src/app/model/taskList';
 import { TaskService } from 'src/app/services/task.service';
 
 @Component({
@@ -9,7 +11,7 @@ import { TaskService } from 'src/app/services/task.service';
   templateUrl: './new-list.component.html',
   styleUrls: ['./new-list.component.css']
 })
-export class NewListComponent {
+export class NewListComponent implements OnInit {
 
   id: number | null = this.route.snapshot.params['id'];
   loading: boolean = false;
@@ -21,6 +23,20 @@ export class NewListComponent {
   });
 
   constructor(private router: Router, private route: ActivatedRoute, private taskService: TaskService) { }
+
+  ngOnInit(): void {
+      if (this.id !== null && this.id > 0) {
+        let list: TaskList = this.getList(this.id);
+        this.formTaskList.patchValue({
+          'listName': list.listName,
+          'listDescription': list.listDescription
+        });
+      }
+  }
+
+  getList(id: number): TaskList {
+    return this.taskService.getList(id);
+  }
 
   cancel() {
     this.id = null;
@@ -42,7 +58,7 @@ export class NewListComponent {
       subscription.subscribe({
         next: (newTaskList) => {
           console.log(newTaskList);
-          //TODO Select new List
+          this.taskService.selectTaskList(newTaskList as TaskList);
           this.loading = false;
           this.router.navigate(['/home/']);
 

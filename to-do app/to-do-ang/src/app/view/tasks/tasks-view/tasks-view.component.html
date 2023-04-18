@@ -1,1 +1,60 @@
-<p>tasks-view works!</p>
+<div class="container">
+    <div class="list">
+        <div class="list-info">
+            <h2 *ngIf="isSetShowAllTasks">All My Tasks</h2>
+            <h2 *ngIf="!isSetShowAllTasks && selectedTaskList">{{ selectedTaskList.listName }}</h2>
+            <div *ngIf="!isSetShowAllTasks && selectedTaskList" class="list-actions-dropdown">
+                <i class="fa fa-plus-circle" (click)="dropMenuList()"></i>
+                <div *ngIf="showMenuList" class="list-actions-dropdown-content">
+                    <ul>
+                        <li (click)="newList()"> 
+                            <i class="fa fa-plus-circle">
+                                <span> New</span>
+                            </i>
+                         </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="!isSetShowAllTasks && selectedTaskList" class="list-actions">
+            <button class="action-item edit tooltip" (click)="newList()">
+                <i class="fa fa-plus-circle">
+                    <span> New</span>
+                </i>
+                <span class="tooltiptext">New</span>
+            </button>
+            <button [disabled]="isSetShowAllTasks || selectedTaskList.id === null || selectedTaskList.id <= 0"
+                (click)="editList()" class="action-item edit tooltip">
+                <i class="fa fa-edit">
+                    <span> Edit</span>
+                </i>
+                <span class="tooltiptext">Edit</span>
+            </button>
+            <button [disabled]="isSetShowAllTasks || tasks.length <= 0" (click)="completeList()"
+                class="action-item complete tooltip">
+                <i class="fa fa-check-square">
+                    <span> Complete All tasks</span>
+                </i>
+                <span class="tooltiptext">Complete All tasks</span>
+            </button>
+            <button [disabled]="isSetShowAllTasks || tasks.length <= 0" (click)="uncompleteList()"
+                class="action-item complete tooltip">
+                <i class="fa fa-square">
+                    <span> Uncomplete all tasls</span>
+                </i>
+                <span class="tooltiptext">Uncomplete All tasks</span>
+            </button>
+            <button [disabled]="isSetShowAllTasks || selectedTaskList.id === null || selectedTaskList.id <= 0"
+                (click)="deleteList()" class="action-item delete tooltip">
+                <i class="fa fa-trash">
+                    <span> Delete</span>
+                </i>
+                <span class="tooltiptext">Delete</span>
+            </button>
+        </div>
+    </div>
+    <hr />
+
+    <!-- ------------------------------ -->
+
+</div>

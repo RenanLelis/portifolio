@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { getErrorMessage, getMessage } from 'src/app/message/message';
 import { Task } from 'src/app/model/task';
-import { TaskList } from 'src/app/model/taskList';
+import { TaskList, createDefaultTaskList } from 'src/app/model/taskList';
 import { TaskService } from 'src/app/services/task.service';
 
 @Component({
@@ -26,6 +26,9 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.getTasksLists();
+    if (this.taskService.selectedList.value === null && !this.isSetShowAllTasks) {
+      this.taskService.selectTaskList(createDefaultTaskList());
+    }
     this.taskService.lists.subscribe(value => { this.taskLists = value });
     this.taskService.selectedList.subscribe(value => { this.selectedTaskList = value });
     this.taskService.isSetShowAllTasks.subscribe(value => { this.isSetShowAllTasks = value });
@@ -53,7 +56,6 @@ export class DashboardComponent implements OnInit {
 
   onNewTaskList() {
     this.onMenuClick();
-    //TODO
     this.router.navigate(['/home/list'])
   }
 
@@ -64,11 +66,13 @@ export class DashboardComponent implements OnInit {
   showAllTasks() {
     this.taskService.showAllTasks();
     this.onMenuClick();
+    this.router.navigate(['/home'])
   }
 
   selectTaskList(selectedTaskList: TaskList) {
     this.taskService.selectTaskList(selectedTaskList);
     this.onMenuClick();
+    this.router.navigate(['/home'])
   }
 
 }
