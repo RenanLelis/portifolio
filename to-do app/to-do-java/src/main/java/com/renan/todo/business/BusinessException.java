@@ -43,8 +43,7 @@ public class BusinessException extends RuntimeException {
      *
      * @return - the ResponseEntity
      */
-    @SuppressWarnings("rawtypes")
-    public ResponseEntity getResponseEntity() {
+    public ResponseEntity<ErrorDTO> getResponseEntity() {
         if (this.getErrorType().equals(AppErrorType.INVALID_INPUT)) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)

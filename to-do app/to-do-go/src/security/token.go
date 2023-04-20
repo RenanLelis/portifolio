@@ -58,7 +58,6 @@ func RefreshToken(jwtToken string) (string, error) {
 	}
 	tokenString, err := CreateToken(userID, status, email, firstName, lastName)
 	if err != nil {
-		fmt.Println(err)
 		return "", errors.New(messages.GetErrorMessageToken())
 	}
 	return tokenString, nil
@@ -72,7 +71,6 @@ func RefreshTokenFromRequest(r *http.Request) (string, error) {
 	}
 	tokenString, err := CreateToken(userID, status, email, firstName, lastName)
 	if err != nil {
-		fmt.Println(err)
 		return "", errors.New(messages.GetErrorMessageToken())
 	}
 	return tokenString, nil

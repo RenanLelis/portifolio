@@ -2,7 +2,6 @@ package mail
 
 import (
 	"crypto/tls"
-	"fmt"
 
 	gomail "gopkg.in/mail.v2"
 	"renan.com/todo/src/config"
@@ -33,7 +32,6 @@ func sendEmail(email, message, title string) error {
 	d := gomail.NewDialer(config.SmtpHost, config.SmtpPort, config.SystemEmail, config.MailPassword)
 	d.TLSConfig = &tls.Config{InsecureSkipVerify: true}
 	if err := d.DialAndSend(m); err != nil {
-		fmt.Println(err) // TODO remove
 		return err
 	}
 	return nil

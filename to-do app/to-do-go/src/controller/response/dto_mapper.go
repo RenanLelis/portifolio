@@ -73,7 +73,7 @@ func ConvertTasksAndListsToDTO(lists []model.TaskList, tasks []model.Task) []Tas
 
 	for _, task := range tasks {
 		for i := 0; i < len(listDTO); i++ {
-			if listDTO[i].ID == task.ID {
+			if listDTO[i].ID == task.ListID {
 				listDTO[i].Tasks = append(listDTO[i].Tasks, ConvertTaskToDTO(task))
 				break
 			}

@@ -16,6 +16,7 @@ public class UserDTOMapper implements Function<User, UserDTO> {
      * Convert an user to an userDTO, generating the JWT
      *
      * @param user - object to convert to DTO
+     *
      * @return - thw dto
      */
     @Override

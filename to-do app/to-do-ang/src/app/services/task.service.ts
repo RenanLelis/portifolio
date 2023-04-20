@@ -37,25 +37,50 @@ export class TaskService {
     this.tasks.next(this.getAllTasks());
   }
 
-  selectTaskList(selectedTaskList: TaskList) {
-    this.isSetShowAllTasks.next(false);
-    this.selectedList.next(selectedTaskList);
-    this.tasks.next(this.getTasksFromSelectedList());
+  selectTaskList(selectedTaskList: TaskList | null) {
+    if (selectedTaskList !== null) {
+      this.isSetShowAllTasks.next(false);
+      this.selectedList.next(selectedTaskList);
+      this.tasks.next(this.getTasksFromSelectedList());
+    } else {
+      this.selectedList.next(null);
+    }
   }
 
   getList(id: number): TaskList {
     if (id <= 0) {
-      return createDefaultTaskList();
+      return this.getDefaultList();
     }
     if (this.lists.value != null) {
       for (let i = 0; i < this.lists.value.length; i++) {
         const list = this.lists.value[i];
-        if (list.id !== null && list.id!.toString() === id.toString()) { 
-          return list; 
+        if (list.id !== null && list.id!.toString() === id.toString()) {
+          return list;
         }
       }
     }
-    return createDefaultTaskList();
+    return this.getDefaultList();
+  }
+
+  getTask(id: number): Task | null {
+    if (id <= 0) {
+      return null;
+    }
+    if (this.lists.value != null) {
+      for (let j = 0; j < this.lists.value.length; j++) {
+        const list = this.lists.value[j];
+        console.log(list);
+        if (list.tasks !== null && list.tasks.length > 0) {
+          for (let i = 0; i < list.tasks.length; i++) {
+            const task = list.tasks[i];
+            if (task.id.toString() === id.toString()) {
+              return task
+            }
+          }
+        }
+      }
+    }
+    return null;
   }
 
   getAllTasks() {
@@ -79,16 +104,47 @@ export class TaskService {
   }
 
   isSelectedList(listId: number | null) {
-    return (this.selectedList.value !== null &&
-      (((this.selectedList.value.id === null || this.selectedList.value.id <= 0) && (listId === null || listId <= 0)) ||
-        (this.selectedList.value.id!.toString() === listId!.toString())));
+    if (this.selectedList.value === null) { return false; }
+    if ((listId === null || listId! <= 0) && (this.selectedList.value.id === null || this.selectedList.value.id <= 0)) {
+      return true; // selected list is default list
+    }
+    return (
+      (listId !== null && listId! > 0) && (this.selectedList.value.id !== null && this.selectedList.value.id > 0)
+      && listId.toString() === this.selectedList.value.id.toString())
   }
 
   fetchTasksAndLists() {
     let headers: HttpHeaders = new HttpHeaders({
       'Content-Type': 'application/json',
     });
-    return this.http.get(this.URL_TASK_LIST, { headers });
+    return this.http.get(this.URL_TASK_LIST, { headers: headers }).pipe(tap(resData => {
+      let lists = resData as TaskList[];
+      if (lists !== null && lists.length > 0) {
+        for (let i = 0; i < lists.length; i++) {
+          if (lists[i].id === null || lists[i].id! <= 0) {
+            lists[i] = this.getDefaultList();
+          }
+        }
+      }
+      this.lists.next(lists)
+    }));
+  }
+
+  getDefaultList(): TaskList {
+    const lists = this.lists.value;
+    if (lists !== null && lists.length > 0) { // lists is not empty
+      for (let i = 0; i < lists.length; i++) {
+        if (lists[i].id === null || lists[i].id! <= 0) {
+          return lists[i];
+        }
+      }
+    } else { // lists is empty
+      const defaultList = createDefaultTaskList();
+      lists.push(defaultList);
+      this.lists.next(lists);
+      return defaultList;
+    }
+    return createDefaultTaskList();
   }
 
   fetchTasksByList(idList: number | null) {
@@ -96,7 +152,9 @@ export class TaskService {
       'Content-Type': 'application/json',
     });
     let url = this.URL_TASKS_BY_LISTS.concat((idList !== null && idList! > 0) ? `/${idList}` : '');
-    return this.http.get(url, { headers });
+    return this.http.get(url, { headers }).pipe(tap(value => {
+      this.tasks.next(value as Task[]);
+    }));
   }
 
   createTaskList(listName: string, listDescription: string) {
@@ -121,10 +179,15 @@ export class TaskService {
     );
   }
 
-  deleteTaskList(idList: Number) {
+  deleteTaskList(idList: number) {
     let headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.delete(this.URL_TASK_LIST.concat(`/${idList}`), { headers }
-    );
+    return this.http.delete(this.URL_TASK_LIST.concat(`/${idList}`), { headers }).pipe(
+      tap((value) => {
+        this.selectTaskList(this.getDefaultList());
+        this.lists.next(this.lists.value.filter(list => {
+          return list.id === null || list.id!.toString() !== idList.toString()
+        }));
+      }));
   }
 
   moveTasksForList(listId: Number, tasksIds: Number[]) {
@@ -149,7 +212,10 @@ export class TaskService {
     );
   }
 
-  completeTasksFromList(listId: number) {
+  completeTasksFromList(listId: number | null) {
+    if (listId === null) {
+      listId = 0;
+    }
     let headers: HttpHeaders = new HttpHeaders({
       'Content-Type': 'application/json',
     });
@@ -157,10 +223,15 @@ export class TaskService {
       this.URL_TASK_LISTS_COMPLETE_TASKS.concat(`/${listId}`),
       null,
       { headers }
-    );
+    ).pipe(tap((value) => {
+      this.updateStatusTasks(this.getTasksFromList(listId!), STATUS_COMPLETE)
+    }));
   }
 
-  uncompleteTasksFromList(listId: number) {
+  uncompleteTasksFromList(listId: number | null) {
+    if (listId === null) {
+      listId = 0;
+    }
     let headers: HttpHeaders = new HttpHeaders({
       'Content-Type': 'application/json',
     });
@@ -168,8 +239,25 @@ export class TaskService {
       this.URL_TASK_LISTS_UNCOMPLETE_TASKS.concat(`/${listId}`),
       null,
       { headers }
-    );
+    ).pipe(tap((value) => {
+      this.updateStatusTasks(this.getTasksFromList(listId!), STATUS_INCOMPLETE)
+    }));
   }
+
+  getTasksFromList(listId: number) {
+    let tasks: number[] = []
+    for (let i = 0; i < this.lists.value.length; i++) {
+      const list = this.lists.value[i];
+      if (((listId <= 0 && (list.id === null || list.id <= 0)) || listId.toString() === list.id!.toString()) && list.tasks !== null && list.tasks.length > 0) {
+        list.tasks.forEach(task => {
+          tasks.push(task.id);
+        })
+        break;
+      }
+    }
+    return tasks;
+  }
+
 
   createTask(taskName: string, taskDescription: string, deadline: string | null, listId: Number | null) {
     let headers: HttpHeaders = new HttpHeaders({

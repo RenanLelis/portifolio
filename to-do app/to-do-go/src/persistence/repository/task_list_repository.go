@@ -57,15 +57,19 @@ func (repo TaskListRepository) GetTasksByUser(userID uint64) ([]model.Task, erro
 	tasks := []model.Task{}
 	for queryResult.Next() {
 		task := model.Task{UserID: userID}
+		var listID sql.NullInt64
 		if err = queryResult.Scan(
 			&task.ID,
 			&task.TaskName,
 			&task.TaskDescription,
 			&task.Deadline,
 			&task.TaskStatus,
-			&task.ListID,
+			&listID,
 		); err != nil {
 			return nil, err
+		}
+		if listID.Valid {
+			task.ListID = uint64(listID.Int64)
 		}
 		tasks = append(tasks, task)
 	}
@@ -74,13 +78,13 @@ func (repo TaskListRepository) GetTasksByUser(userID uint64) ([]model.Task, erro
 
 // GetTasksByList fetch the tasks for a specific list
 func (repo TaskListRepository) GetTasksByList(userID, listID uint64) ([]model.Task, error) {
-	var lId interface{} = nil
+	var queryResult *sql.Rows
+	var err error
 	if listID > 0 {
-		lId = listID
+		queryResult, err = repo.db.Query(`SELECT ID, TASK_NAME, TASK_DESCRIPTION, DEADLINE, TASK_STATUS FROM TASK WHERE ID_USER = ? AND ID_LIST = ?`, userID, listID)
+	} else {
+		queryResult, err = repo.db.Query(`SELECT ID, TASK_NAME, TASK_DESCRIPTION, DEADLINE, TASK_STATUS FROM TASK WHERE ID_USER = ? AND ID_LIST IS NULL`, userID)
 	}
-	queryResult, err := repo.db.Query(`SELECT 
-	ID, TASK_NAME, TASK_DESCRIPTION, DEADLINE, TASK_STATUS, ID_LIST 
-	FROM TASK WHERE ID_USER = ? AND ID_LIST = ?`, userID, lId)
 	if err != nil {
 		return nil, errors.New(messages.GetErrorMessage())
 	}
@@ -94,10 +98,10 @@ func (repo TaskListRepository) GetTasksByList(userID, listID uint64) ([]model.Ta
 			&task.TaskDescription,
 			&task.Deadline,
 			&task.TaskStatus,
-			&task.ListID,
 		); err != nil {
 			return nil, err
 		}
+		task.ListID = listID
 		tasks = append(tasks, task)
 	}
 	return tasks, nil
@@ -142,20 +146,23 @@ func (repo TaskListRepository) UpdateList(id, userID uint64, listName, listDescr
 
 // DeleteTasksFromList delete all the tasks from a list for the user
 func (repo TaskListRepository) DeleteTasksFromList(listID, userID uint64) error {
-	statement, erro := repo.db.Prepare(
-		"DELETE FROM TASK WHERE ID_LIST = ? AND ID_USER = ?",
-	)
+	sqlStr := "DELETE FROM TASK WHERE ID_LIST = ? AND ID_USER = ?"
+	if listID <= 0 {
+		sqlStr = "DELETE FROM TASK WHERE ID_LIST IS NULL AND ID_USER = ?"
+	}
+	statement, erro := repo.db.Prepare(sqlStr)
 	if erro != nil {
 		return erro
 	}
 	defer statement.Close()
 
-	var list interface{} = nil
-	if listID > 0 {
-		list = listID
+	if listID <= 0 {
+		_, erro = statement.Exec(userID)
+	} else {
+		_, erro = statement.Exec(listID, userID)
 	}
 
-	if _, erro = statement.Exec(list, userID); erro != nil {
+	if erro != nil {
 		return erro
 	}
 	return nil
@@ -163,9 +170,7 @@ func (repo TaskListRepository) DeleteTasksFromList(listID, userID uint64) error 
 
 // DeleteList delete a list from the database for the user
 func (repo TaskListRepository) DeleteList(listID, userID uint64) error {
-	statement, erro := repo.db.Prepare(
-		"DELETE FROM TASK_LIST WHERE ID = ? AND ID_USER = ?",
-	)
+	statement, erro := repo.db.Prepare("DELETE FROM TASK_LIST WHERE ID = ? AND ID_USER = ?")
 	if erro != nil {
 		return erro
 	}
@@ -189,48 +194,54 @@ func (repo TaskListRepository) UncompleteTasksFromList(listID, userID uint64) er
 
 // UpdateTaskStatusFromList update the status from the tasks on the list for the user
 func (repo TaskListRepository) UpdateTaskStatusFromList(listID, userID, taskStatus uint64) error {
-	statement, erro := repo.db.Prepare(
-		"UPDATE TASK SET TASK_STATUS = ? WHERE ID_LIST = ? AND ID_USER = ?",
-	)
-	if erro != nil {
-		return erro
+	sqlStr := "UPDATE TASK SET TASK_STATUS = ? WHERE ID_LIST = ? AND ID_USER = ?"
+	if listID <= 0 {
+		sqlStr = "UPDATE TASK SET TASK_STATUS = ? WHERE ID_LIST IS NULL AND ID_USER = ?"
+	}
+	statement, err := repo.db.Prepare(sqlStr)
+	if err != nil {
+		return err
 	}
 	defer statement.Close()
 
-	var list interface{} = nil
-	if listID > 0 {
-		list = listID
+	if listID <= 0 {
+		_, err = statement.Exec(taskStatus, userID)
+	} else {
+		_, err = statement.Exec(taskStatus, listID, userID)
 	}
 
-	if _, erro = statement.Exec(taskStatus, list, userID); erro != nil {
-		return erro
+	if err != nil {
+		return err
 	}
 	return nil
 }
 
 // MoveTasksFromOneListToOther move tasks from one list to another
 func (repo TaskListRepository) MoveTasksFromOneListToOther(userID, listIDOrigin, listIDDestiny uint64) error {
-	statement, erro := repo.db.Prepare(
-		"UPDATE TASK SET ID_LIST = ? WHERE ID_LIST = ? AND ID_USER = ?",
-	)
-	if erro != nil {
-		return erro
+	sqlStr := "UPDATE TASK SET ID_LIST = ? WHERE ID_LIST = ? AND ID_USER = ?"
+	if listIDOrigin <= 0 {
+		sqlStr = "UPDATE TASK SET ID_LIST = ? WHERE ID_LIST IS NULL AND ID_USER = ?"
+	}
+	statement, err := repo.db.Prepare(sqlStr)
+	if err != nil {
+		return err
 	}
 
 	defer statement.Close()
-
-	var idOrigin interface{} = nil
-	if listIDOrigin > 0 {
-		idOrigin = listIDOrigin
-	}
 
 	var idDestiny interface{} = nil
 	if listIDDestiny > 0 {
 		idDestiny = listIDDestiny
 	}
 
-	if _, erro = statement.Exec(idDestiny, idOrigin, userID); erro != nil {
-		return erro
+	if listIDOrigin <= 0 {
+		_, err = statement.Exec(idDestiny, userID)
+	} else {
+		_, err = statement.Exec(idDestiny, listIDOrigin, userID)
+	}
+
+	if err != nil {
+		return err
 	}
 	return nil
 }
@@ -330,7 +341,7 @@ func (repo TaskListRepository) DeleteTask(taskID, userID uint64) error {
 
 // DeleteTasks delete the tasks from the database
 func (repo TaskListRepository) DeleteTasks(tasksIDs []uint64, userID uint64) error {
-	clauses := []string{"DELETE FROM TASK WHERE ID_USER = ?"}
+	clauses := []string{"DELETE FROM TASK WHERE ID_USER = ? "}
 	params := make([]interface{}, 0)
 
 	if len(tasksIDs) > 0 {

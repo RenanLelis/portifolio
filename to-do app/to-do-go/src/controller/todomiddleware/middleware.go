@@ -1,6 +1,7 @@
 package todomiddleware
 
 import (
+	"encoding/json"
 	"errors"
 	"net/http"
 	"strconv"
@@ -30,6 +31,16 @@ func ValidateAuth(next http.HandlerFunc) http.HandlerFunc {
 		r.Header.Add(HEADER_USER_ID, strconv.FormatUint(userID, 10))
 		r.Header.Add(HEADER_USER_STATUS, strconv.FormatUint(status, 10))
 		r.Header.Add(HEADER_USER_EMAIL, email)
+		newUserToken, err := security.RefreshTokenFromRequest(r)
+		if err == nil {
+			userDTO := response.CreateUserDTOFromJWT(newUserToken)
+			if userDTO.ID > 0 {
+				jsonUserDTO, err := json.Marshal(userDTO)
+				if err == nil {
+					w.Header().Set(security.AUTH, string(jsonUserDTO))
+				}
+			}
+		}
 		next(w, r)
 	}
 }

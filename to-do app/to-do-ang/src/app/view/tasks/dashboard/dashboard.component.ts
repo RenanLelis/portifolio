@@ -25,7 +25,6 @@ export class DashboardComponent implements OnInit {
   constructor(private taskService: TaskService, private router: Router) { }
 
   ngOnInit(): void {
-    this.getTasksLists();
     if (this.taskService.selectedList.value === null && !this.isSetShowAllTasks) {
       this.taskService.selectTaskList(createDefaultTaskList());
     }
@@ -33,14 +32,12 @@ export class DashboardComponent implements OnInit {
     this.taskService.selectedList.subscribe(value => { this.selectedTaskList = value });
     this.taskService.isSetShowAllTasks.subscribe(value => { this.isSetShowAllTasks = value });
     this.taskService.tasks.subscribe(value => { this.tasks = value });
+    this.getTasksLists();
   }
 
   getTasksLists() {
     this.taskService.fetchTasksAndLists().subscribe({
-      next: (resData) => {
-        console.log(resData);
-        this.taskLists = resData as TaskList[];
-      },
+      next: (resData) => { },
       error: (err) => { this.handleError(err) }
     });
   }
@@ -56,7 +53,7 @@ export class DashboardComponent implements OnInit {
 
   onNewTaskList() {
     this.onMenuClick();
-    this.router.navigate(['/home/list'])
+    this.router.navigate(['/home/list']);
   }
 
   onMenuClick() {

@@ -4,13 +4,13 @@ export interface TaskList {
     id : number | null;
     listName : string;
     listDescription : string | null;
-    tasks : Task[] | null;
+    tasks : Task[];
 }
 
 export function createDefaultTaskList(): TaskList {
     const defaultTaskList: TaskList = {
         id: null,
-        listName: "Tasks - Default List",
+        listName: "My Tasks",
         listDescription: "Default List for the user, cannot be changed",
         tasks: []
     };

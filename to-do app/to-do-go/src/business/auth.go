@@ -2,7 +2,6 @@ package business
 
 import (
 	"errors"
-	"fmt"
 	"net/http"
 	"strings"
 
@@ -73,12 +72,10 @@ func ResetPassword(email, password, newPasswordCode string) (response.UserDTO, E
 	}
 	hashPassword, err := security.HashString(password)
 	if err != nil {
-		fmt.Println(err)
 		return response.UserDTO{}, Err{http.StatusInternalServerError, messages.GetErrorMessage()}
 	}
 	err = dao.UpdatePasswordByCode(email, newPasswordCode, hashPassword)
 	if err != nil {
-		fmt.Println(err)
 		return response.UserDTO{}, Err{http.StatusInternalServerError, messages.GetErrorMessage()}
 	}
 	user, err := dao.GetUserByEmail(email)
@@ -115,12 +112,10 @@ func RegisterNewUser(email, password, firstName, lastName string) Err {
 	activationCode := security.GenerateRandoStringCode()
 	hashPass, err := security.HashString(passwordFormatted)
 	if err != nil {
-		fmt.Println(err)
 		return Err{http.StatusInternalServerError, messages.GetErrorMessage()}
 	}
 	_, err = dao.CreateNewUser(emailFormatted, hashPass, firstNameFormatted, lastNameFormatted, activationCode)
 	if err != nil {
-		fmt.Println(err)
 		return Err{http.StatusInternalServerError, messages.GetErrorMessage()}
 	}
 	err = mail.SendEmailUserActivation(email, activationCode)
@@ -174,7 +169,6 @@ func RequestUserActivation(email string) Err {
 	activationCode := security.GenerateRandoStringCode()
 	err = dao.UpdateUserActivationCode(emailFormatted, activationCode)
 	if err != nil {
-		fmt.Println(err)
 		return Err{http.StatusInternalServerError, messages.GetErrorMessage()}
 	}
 	err = mail.SendEmailUserActivation(email, activationCode)

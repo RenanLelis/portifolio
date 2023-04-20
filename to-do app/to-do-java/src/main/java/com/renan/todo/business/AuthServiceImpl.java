@@ -30,11 +30,12 @@ public class AuthServiceImpl implements AuthService {
      *
      * @param email    - user email
      * @param password - password
+     *
      * @return - the user logged-in
      * @throws BusinessException - in cases of any errors or invalid operations
      */
     public UserDTO login(String email, String password) throws BusinessException {
-        if (!StringUtil.isMail(email) || password.length() < 6) {
+        if (!StringUtil.isMail(email) || password.length() < User.LENGTH_NEW_PASSWORD_CODE) {
             throw new BusinessException(
                     MessageUtil.getErrorMessageInputValues(),
                     BusinessException.BUSINESS_MESSAGE,
@@ -62,6 +63,7 @@ public class AuthServiceImpl implements AuthService {
      *
      * @param hash     - hash password stored on database
      * @param password - password passed as parameter for login operation
+     *
      * @return - true if are the same password, false if are not
      */
     private boolean comparePasswordWithHash(String hash, String password) {
@@ -72,6 +74,7 @@ public class AuthServiceImpl implements AuthService {
      * Generate a code for password reset
      *
      * @param email - user email
+     *
      * @throws BusinessException - in cases of any errors or invalid operations
      */
     public void recoverPassword(String email) throws BusinessException {
@@ -108,6 +111,7 @@ public class AuthServiceImpl implements AuthService {
      * @param email           - user email
      * @param newPassword     - the new user password
      * @param newPasswordCode - the code to validate and change the password
+     *
      * @return - the user logged-in
      * @throws BusinessException - in cases of any errors or invalid operations
      */
@@ -137,6 +141,7 @@ public class AuthServiceImpl implements AuthService {
      * @param password - user password
      * @param name     - user first name
      * @param lastName - user last name
+     *
      * @throws BusinessException - in cases of any errors or invalid operations
      */
     public void registerUser(String email, String password, String name, String lastName) throws BusinessException {
@@ -172,6 +177,7 @@ public class AuthServiceImpl implements AuthService {
      * @param email    - user email
      * @param password - user password
      * @param name     - user first name
+     *
      * @return - true if is valid
      */
     private boolean validateNewUserData(String email, String password, String name) {
@@ -188,7 +194,7 @@ public class AuthServiceImpl implements AuthService {
      * @return - the code
      */
     private String generateActivationCode() {
-        return StringUtil.generateRandomString(User.LENGTH_NEW_PASSWORD_CODE);
+        return StringUtil.generateRandomString(User.LENGTH_ACTIVATION_CODE);
     }
 
     /**
@@ -196,11 +202,12 @@ public class AuthServiceImpl implements AuthService {
      *
      * @param email          - user email
      * @param activationCode - the code to validate and activate the user
+     *
      * @return - the user logged-in
      * @throws BusinessException - in cases of any errors or invalid operations
      */
     public UserDTO activateUser(String email, String activationCode) throws BusinessException {
-        if (!StringUtil.isMail(email) || activationCode.length() != 6) {
+        if (!StringUtil.isMail(email) || activationCode.length() != User.LENGTH_ACTIVATION_CODE) {
             throw new BusinessException(
                     MessageUtil.getErrorMessageInputValues(),
                     BusinessException.BUSINESS_MESSAGE,
@@ -224,6 +231,7 @@ public class AuthServiceImpl implements AuthService {
      * Generate activation code and send by email
      *
      * @param email - user email
+     *
      * @throws BusinessException - in cases of any errors or invalid operations
      */
     public void requestUserActivation(String email) throws BusinessException {

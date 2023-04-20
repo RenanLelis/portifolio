@@ -4,6 +4,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { STATUS_ACTIVE, User, UserData } from '../model/user';
 import { BehaviorSubject, tap } from 'rxjs';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,9 @@ export class UserService {
 
   user = new BehaviorSubject<User | null>(null);
 
-  constructor(private http: HttpClient) { }
+  timer: any = null;
+
+  constructor(private http: HttpClient, private router: Router) { }
 
   updateUserProfile(firstName: string, lastName: string) {
     let headers: HttpHeaders = new HttpHeaders({
@@ -132,7 +135,13 @@ export class UserService {
     if (user.status === STATUS_ACTIVE) {
       sessionStorage.setItem(USER_DATA, JSON.stringify(user));
       this.loadUserInMemory();
+      this.autoLogout(userData.expiresIn);
     }
+  }
+
+  autoLogout(expiresIn: number) {
+    if (this.timer !== null) { clearTimeout(this.timer); }
+    this.timer = setTimeout(() => { this.logout(); }, expiresIn);
   }
 
   loadUserInMemory() {
@@ -154,6 +163,7 @@ export class UserService {
   logout() {
     sessionStorage.removeItem(USER_DATA);
     this.user.next(null);
+    this.router.navigate(['/login']);
   }
 
   isPasswordParametersValid(password: string): boolean {

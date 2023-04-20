@@ -27,6 +27,7 @@ import { NewTaskComponent } from './view/tasks/new-task/new-task.component';
 import { TasksViewComponent } from './view/tasks/tasks-view/tasks-view.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { InterceptorService } from './services/interceptor.service';
+import { TaskComponent } from './view/tasks/task/task.component';
 
 @NgModule({
   declarations: [
@@ -51,7 +52,8 @@ import { InterceptorService } from './services/interceptor.service';
     ListsComponent,
     NewListComponent,
     NewTaskComponent,
-    TasksViewComponent
+    TasksViewComponent,
+    TaskComponent
   ],
   imports: [
     BrowserModule,
