@@ -44,7 +44,11 @@ func GetLists(userID uint64) ([]model.TaskList, error) {
 	}
 	defer db.Close()
 	rep := repository.CreateTaskListRepository(db)
-	return rep.GetTaskListsByUser(userID)
+	lists, err := rep.GetTaskListsByUser(userID)
+	if err != nil {
+		return nil, err
+	}
+	return lists, nil
 }
 
 // GetTasksByList return tasks by a selected list
@@ -62,7 +66,7 @@ func GetTasksByList(listID, userID uint64) ([]model.Task, error) {
 func UpdateTaskList(listName, listDescription string, listID, userID uint64) error {
 	db, err := database.ConnectToDataBase()
 	if err != nil {
-		return nil
+		return err
 	}
 	defer db.Close()
 	rep := repository.CreateTaskListRepository(db)
@@ -73,13 +77,13 @@ func UpdateTaskList(listName, listDescription string, listID, userID uint64) err
 func DeleteTaskList(listID, userID uint64) error {
 	db, err := database.ConnectToDataBase()
 	if err != nil {
-		return nil
+		return err
 	}
 	defer db.Close()
 	rep := repository.CreateTaskListRepository(db)
 	err = rep.DeleteTasksFromList(listID, userID)
 	if err != nil {
-		return nil
+		return err
 	}
 	return rep.DeleteList(listID, userID)
 }
@@ -88,7 +92,7 @@ func DeleteTaskList(listID, userID uint64) error {
 func CompleteTasksFromList(listID, userID uint64) error {
 	db, err := database.ConnectToDataBase()
 	if err != nil {
-		return nil
+		return err
 	}
 	defer db.Close()
 	rep := repository.CreateTaskListRepository(db)
@@ -99,7 +103,7 @@ func CompleteTasksFromList(listID, userID uint64) error {
 func UncompleteTasksFromList(listID, userID uint64) error {
 	db, err := database.ConnectToDataBase()
 	if err != nil {
-		return nil
+		return err
 	}
 	defer db.Close()
 	rep := repository.CreateTaskListRepository(db)
@@ -110,7 +114,7 @@ func UncompleteTasksFromList(listID, userID uint64) error {
 func MoveTasksFromList(listIDOrigin, listIDDestiny, userID uint64) error {
 	db, err := database.ConnectToDataBase()
 	if err != nil {
-		return nil
+		return err
 	}
 	defer db.Close()
 	rep := repository.CreateTaskListRepository(db)
@@ -121,7 +125,7 @@ func MoveTasksFromList(listIDOrigin, listIDDestiny, userID uint64) error {
 func CreateTask(taskName, taskDescription, deadline string, listID, userID uint64) (uint64, error) {
 	db, err := database.ConnectToDataBase()
 	if err != nil {
-		return 0, nil
+		return 0, err
 	}
 	defer db.Close()
 	rep := repository.CreateTaskListRepository(db)
@@ -132,7 +136,7 @@ func CreateTask(taskName, taskDescription, deadline string, listID, userID uint6
 func UpdateTask(taskName, taskDescription, deadline string, taskID, userID uint64) error {
 	db, err := database.ConnectToDataBase()
 	if err != nil {
-		return nil
+		return err
 	}
 	defer db.Close()
 	rep := repository.CreateTaskListRepository(db)
@@ -143,7 +147,7 @@ func UpdateTask(taskName, taskDescription, deadline string, taskID, userID uint6
 func MoveTaskToList(taskID, listIDDestiny, userID uint64) error {
 	db, err := database.ConnectToDataBase()
 	if err != nil {
-		return nil
+		return err
 	}
 	defer db.Close()
 	rep := repository.CreateTaskListRepository(db)
@@ -154,7 +158,7 @@ func MoveTaskToList(taskID, listIDDestiny, userID uint64) error {
 func DeleteTask(taskID, userID uint64) error {
 	db, err := database.ConnectToDataBase()
 	if err != nil {
-		return nil
+		return err
 	}
 	defer db.Close()
 	rep := repository.CreateTaskListRepository(db)
@@ -165,7 +169,7 @@ func DeleteTask(taskID, userID uint64) error {
 func CompleteTask(taskID, userID uint64) error {
 	db, err := database.ConnectToDataBase()
 	if err != nil {
-		return nil
+		return err
 	}
 	defer db.Close()
 	rep := repository.CreateTaskListRepository(db)
@@ -176,7 +180,7 @@ func CompleteTask(taskID, userID uint64) error {
 func UncompleteTask(taskID, userID uint64) error {
 	db, err := database.ConnectToDataBase()
 	if err != nil {
-		return nil
+		return err
 	}
 	defer db.Close()
 	rep := repository.CreateTaskListRepository(db)

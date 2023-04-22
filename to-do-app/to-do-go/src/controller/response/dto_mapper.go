@@ -61,12 +61,6 @@ func ConvertTaskToDTO(task model.Task) TaskDTO {
 // ConvertTasksAndListsToDTO convert the model for tasks and lists to DTO
 func ConvertTasksAndListsToDTO(lists []model.TaskList, tasks []model.Task) []TaskListDTO {
 	var listDTO []TaskListDTO = make([]TaskListDTO, 0)
-	listDTO = append(listDTO, TaskListDTO{
-		ID:              0,
-		ListName:        "Default",
-		ListDescription: "Default List for tasks",
-		Tasks:           make([]TaskDTO, 0),
-	})
 	for _, tList := range lists {
 		listDTO = append(listDTO, ConvertTaskListToDTO(tList))
 	}

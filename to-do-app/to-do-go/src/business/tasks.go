@@ -112,7 +112,14 @@ func DeleteTaskList(listID, userID uint64) Err {
 	if listID <= 0 {
 		return Err{Status: http.StatusBadRequest, ErrorMessage: messages.GetErrorMessageInputValues()}
 	}
-	err := dao.DeleteTaskList(listID, userID)
+	lists, err := dao.GetLists(userID)
+	if err != nil {
+		return Err{http.StatusInternalServerError, messages.GetErrorMessage()}
+	}
+	if lists == nil || len(lists) <= 1 {
+		return Err{Status: http.StatusBadRequest, ErrorMessage: messages.GetErrorMessageCannotDeleteOnlyList()}
+	}
+	err = dao.DeleteTaskList(listID, userID)
 	if err != nil {
 		return Err{http.StatusInternalServerError, messages.GetErrorMessage()}
 	}

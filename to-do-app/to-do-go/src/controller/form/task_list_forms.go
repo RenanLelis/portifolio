@@ -17,10 +17,10 @@ type TaskForm struct {
 	TaskName        string `json:"taskName"`
 	TaskDescription string `json:"taskDescription,omitempty"`
 	Deadline        string `json:"deadline,omitempty"`
-	ListID          uint64 `json:"listId,omitempty"`
+	ListID          uint64 `json:"listId"`
 }
 
 // MoveTaskToListForm form data to move a task to another list
 type MoveTaskToListForm struct {
-	ListID uint64 `json:"listId,omitempty"`
+	ListID uint64 `json:"listId"`
 }

@@ -75,10 +75,8 @@ func (repo TaskListRepository) GetTasksByUser(userID uint64) ([]model.Task, erro
 }
 
 // GetTasksByList fetch the tasks for a specific list
-func (repo TaskListRepository) GetTasksByList(userID, listID uint64) ([]model.Task, error) {
-	var queryResult *sql.Rows
-	var err error
-	queryResult, err = repo.db.Query(`SELECT ID, TASK_NAME, TASK_DESCRIPTION, DEADLINE, TASK_STATUS 
+func (repo TaskListRepository) GetTasksByList(listID, userID uint64) ([]model.Task, error) {
+	queryResult, err := repo.db.Query(`SELECT ID, TASK_NAME, TASK_DESCRIPTION, DEADLINE, TASK_STATUS 
 	FROM TASK WHERE ID_USER = ? AND ID_LIST = ?`, userID, listID)
 	if err != nil {
 		return nil, errors.New(messages.GetErrorMessage())
@@ -177,14 +175,13 @@ func (repo TaskListRepository) UncompleteTasksFromList(listID, userID uint64) er
 
 // UpdateStatusTasksFromList mark as complete or incomplete all tasks from a list on the database
 func (repo TaskListRepository) UpdateStatusTasksFromList(listID, userID, taskStatus uint64) error {
-	statement, erro := repo.db.Prepare("UPDATE TASK SET TASK_STATUS = ? WHERE ID_LIST = ? AND ID_USER = ?")
-	if erro != nil {
-		return erro
+	statement, err := repo.db.Prepare("UPDATE TASK SET TASK_STATUS = ? WHERE ID_LIST = ? AND ID_USER = ?")
+	if err != nil {
+		return err
 	}
 	defer statement.Close()
-
-	if _, erro = statement.Exec(taskStatus, listID, userID); erro != nil {
-		return erro
+	if _, err = statement.Exec(taskStatus, listID, userID); err != nil {
+		return err
 	}
 	return nil
 }

@@ -7,6 +7,7 @@ const MSE04 string = "MSE04" // Invalid User or Password.
 const MSE05 string = "MSE05" // E-mail already exists.
 const MSE06 string = "MSE06" // E-mail not found.
 const MSE07 string = "MSE07" // User not activated.
+const MSE08 string = "MSE08" // Cannot delete only list for the user.
 
 // GetErrorMessage return a generic error message
 func GetErrorMessage() string {
@@ -41,4 +42,9 @@ func GetErrorMessageUserNotFound() string {
 // GetErrorMessageUserNotFound return an error message about user not active on the system
 func GetErrorMessageUserNotActive() string {
 	return MSE07
+}
+
+// GetErrorMessageCannotDeleteOnlyList return an error message about deletion of user's only list
+func GetErrorMessageCannotDeleteOnlyList() string {
+	return MSE08
 }
