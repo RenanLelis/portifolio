@@ -78,11 +78,8 @@ func (repo TaskListRepository) GetTasksByUser(userID uint64) ([]model.Task, erro
 func (repo TaskListRepository) GetTasksByList(userID, listID uint64) ([]model.Task, error) {
 	var queryResult *sql.Rows
 	var err error
-	if listID > 0 {
-		queryResult, err = repo.db.Query(`SELECT ID, TASK_NAME, TASK_DESCRIPTION, DEADLINE, TASK_STATUS FROM TASK WHERE ID_USER = ? AND ID_LIST = ?`, userID, listID)
-	} else {
-		queryResult, err = repo.db.Query(`SELECT ID, TASK_NAME, TASK_DESCRIPTION, DEADLINE, TASK_STATUS FROM TASK WHERE ID_USER = ? AND ID_LIST IS NULL`, userID)
-	}
+	queryResult, err = repo.db.Query(`SELECT ID, TASK_NAME, TASK_DESCRIPTION, DEADLINE, TASK_STATUS 
+	FROM TASK WHERE ID_USER = ? AND ID_LIST = ?`, userID, listID)
 	if err != nil {
 		return nil, errors.New(messages.GetErrorMessage())
 	}
@@ -144,23 +141,12 @@ func (repo TaskListRepository) UpdateList(id, userID uint64, listName, listDescr
 
 // DeleteTasksFromList delete all the tasks from a list for the user
 func (repo TaskListRepository) DeleteTasksFromList(listID, userID uint64) error {
-	sqlStr := "DELETE FROM TASK WHERE ID_LIST = ? AND ID_USER = ?"
-	if listID <= 0 {
-		sqlStr = "DELETE FROM TASK WHERE ID_LIST IS NULL AND ID_USER = ?"
-	}
-	statement, erro := repo.db.Prepare(sqlStr)
+	statement, erro := repo.db.Prepare("DELETE FROM TASK WHERE ID_LIST = ? AND ID_USER = ?")
 	if erro != nil {
 		return erro
 	}
 	defer statement.Close()
-
-	if listID <= 0 {
-		_, erro = statement.Exec(userID)
-	} else {
-		_, erro = statement.Exec(listID, userID)
-	}
-
-	if erro != nil {
+	if _, erro = statement.Exec(listID, userID); erro != nil {
 		return erro
 	}
 	return nil
@@ -173,8 +159,132 @@ func (repo TaskListRepository) DeleteList(listID, userID uint64) error {
 		return erro
 	}
 	defer statement.Close()
-
 	if _, erro = statement.Exec(listID, userID); erro != nil {
+		return erro
+	}
+	return nil
+}
+
+// CompleteTasksFromList mark as complete all tasks from a list on the database
+func (repo TaskListRepository) CompleteTasksFromList(listID, userID uint64) error {
+	return repo.UpdateStatusTasksFromList(listID, userID, model.STATUS_TASK_COMPLETE)
+}
+
+// UncompleteTasksFromList mark as incomplete all tasks from a list on the database
+func (repo TaskListRepository) UncompleteTasksFromList(listID, userID uint64) error {
+	return repo.UpdateStatusTasksFromList(listID, userID, model.STATUS_TASK_INCOMPLETE)
+}
+
+// UpdateStatusTasksFromList mark as complete or incomplete all tasks from a list on the database
+func (repo TaskListRepository) UpdateStatusTasksFromList(listID, userID, taskStatus uint64) error {
+	statement, erro := repo.db.Prepare("UPDATE TASK SET TASK_STATUS = ? WHERE ID_LIST = ? AND ID_USER = ?")
+	if erro != nil {
+		return erro
+	}
+	defer statement.Close()
+
+	if _, erro = statement.Exec(taskStatus, listID, userID); erro != nil {
+		return erro
+	}
+	return nil
+}
+
+// MoveTasksFromList move the tasks from a list to another
+func (repo TaskListRepository) MoveTasksFromList(listIDOrigin, listIDDestiny, userID uint64) error {
+	statement, erro := repo.db.Prepare("UPDATE TASK SET ID_LIST = ? WHERE ID_LIST = ? AND ID_USER = ?")
+	if erro != nil {
+		return erro
+	}
+	defer statement.Close()
+
+	if _, erro = statement.Exec(listIDDestiny, listIDOrigin, userID); erro != nil {
+		return erro
+	}
+	return nil
+}
+
+// CreateTask create a new task for the user on the database and return the id of the task created
+func (repo TaskListRepository) CreateTask(taskName, taskDescription, deadline string, listID, userID uint64) (uint64, error) {
+	statement, err := repo.db.Prepare(
+		`INSERT INTO TASK (TASK_NAME, TASK_DESCRIPTION, DEADLINE, ID_LIST, ID_USER, TASK_STATUS)
+		 VALUES (?, ?, ?, ?, ?, ?)`,
+	)
+	if err != nil {
+		return 0, err
+	}
+	defer statement.Close()
+	result, err := statement.Exec(taskName, taskDescription, deadline, listID, userID, model.STATUS_TASK_INCOMPLETE)
+	if err != nil {
+		return 0, errors.New(messages.GetErrorMessage())
+	}
+	newID, err := result.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+	return uint64(newID), nil
+}
+
+// UpdateTask update a task for the user on the database
+func (repo TaskListRepository) UpdateTask(taskName, taskDescription, deadline string, taskID, userID uint64) error {
+	statement, erro := repo.db.Prepare(
+		"UPDATE TASK SET TASK_NAME = ?, TASK_DESCRIPTION = ?, DEADLINE = ? WHERE ID = ? AND ID_USER = ?",
+	)
+	if erro != nil {
+		return erro
+	}
+	defer statement.Close()
+
+	if _, erro = statement.Exec(taskName, taskDescription, deadline, taskID, userID); erro != nil {
+		return erro
+	}
+	return nil
+}
+
+// MoveTaskToList update a task for the user on the database, changing the listID
+func (repo TaskListRepository) MoveTaskToList(taskID, listIDDestiny, userID uint64) error {
+	statement, erro := repo.db.Prepare("UPDATE TASK SET ID_LIST = ? WHERE ID = ? AND ID_USER = ?")
+	if erro != nil {
+		return erro
+	}
+	defer statement.Close()
+
+	if _, erro = statement.Exec(listIDDestiny, taskID, userID); erro != nil {
+		return erro
+	}
+	return nil
+}
+
+// DeleteTask delete a task for the user on the database
+func (repo TaskListRepository) DeleteTask(taskID, userID uint64) error {
+	statement, erro := repo.db.Prepare("DELETE FROM TASK WHERE ID = ? AND ID_USER = ?")
+	if erro != nil {
+		return erro
+	}
+	defer statement.Close()
+	if _, erro = statement.Exec(taskID, userID); erro != nil {
+		return erro
+	}
+	return nil
+}
+
+// CompleteTask mark a task as complete for the user on the database
+func (repo TaskListRepository) CompleteTask(taskID, userID uint64) error {
+	return repo.updateStatusTask(taskID, userID, model.STATUS_TASK_COMPLETE)
+}
+
+// UncompleteTask mark a task as incomplete for the user on the database
+func (repo TaskListRepository) UncompleteTask(taskID, userID uint64) error {
+	return repo.updateStatusTask(taskID, userID, model.STATUS_TASK_INCOMPLETE)
+}
+
+func (repo TaskListRepository) updateStatusTask(taskID, userID, status uint64) error {
+	statement, erro := repo.db.Prepare("UPDATE TASK SET TASK_STATUS = ? WHERE ID = ? AND ID_USER = ?")
+	if erro != nil {
+		return erro
+	}
+	defer statement.Close()
+
+	if _, erro = statement.Exec(status, taskID, userID); erro != nil {
 		return erro
 	}
 	return nil
