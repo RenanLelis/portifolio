@@ -2,9 +2,10 @@ import { ref, computed, type Ref } from 'vue'
 import { defineStore } from 'pinia'
 import type { User } from '@/model/user'
 import { URL_UPDATE_PROFILE, USER_DATA } from '@/consts/consts';
+import { sendHttpRequest } from './interceptor';
 
 export const useUserStore = defineStore('user', () => {
-   
+
 
     const user: Ref<User | null> = ref(null);
 
@@ -29,45 +30,63 @@ export const useUserStore = defineStore('user', () => {
 
     const updateUserProfile = (firstName: string, lastName: string) => {
         return new Promise((resolve, reject) => {
-            let headers = {}
-            if ( isUserLoggedIn.value ) { headers = {'Content-Type': 'application/json', 'AUTH': user.value!.jwt} }
-            else { headers = {'Content-Type': 'application/json'} }
-            fetch(URL_UPDATE_PROFILE, {
-                method: 'POST',
-                body: JSON.stringify({ "firstName": firstName, "lastName": lastName }),
-                headers: headers
-            }).then((res) => {
-                console.log(res);
-                // if (res.error) {
-                //     return reject(res.error);
-                // }
-                // res.json().then((data) => {
-                //     if (data.erro && data.erro.length > 0) {
-                //         return reject(data.erro);
-                //     } else {
-                //         this.tratarRetornoAutenticacao(data)
-                //         return resolve(data);
-                //     }
-                // })
-            }, (error => {
-                console.log(error);
-                return reject(error);
-            }))
+            sendHttpRequest(URL_UPDATE_PROFILE, 'POST', JSON.stringify({ "firstName": firstName, "lastName": lastName }))
+                .then((res) => {
+                    console.log(res.body)
+                    if (res.ok) {
+                        //TODO update user data on the store
+                        return resolve(null);
+                    }
+                    //TODO check for error on the body
+                },
+                    (error => {
+                        console.log(error);
+                        return reject(error);
+                    }))
+
         })
     }
 
-    // updateUserProfile(firstName: string, lastName: string) {
-    //     let headers: HttpHeaders = new HttpHeaders({
-    //       "Content-Type": "application/json",
-    //     });
-    //     return this.http.put(this.URL_UPDATE_PROFILE, { "firstName": firstName, "lastName": lastName }, { headers });
-    //   }
+    const updateUserPassword = (newPassword: string) => {
+        //TODO
+    }
+
+    const login = (email: string, password: string) => {
+        //TODO
+    }
+    
+    const forgotPassword = (email: string) => {
+        //TODO
+    }
+    
+    const registerNerPasswordFromCode = (email: string, password: string, newPasswordCode: string) => {
+        //TODO
+    }
+    
+    const registerUser = (email: string, password: string, firstName: string, lastName: string) => {
+        //TODO
+    }
+
+    const requestUserActivation = (email: string) => {
+        //TODO
+    }
+    
+    const activateUser = (email: string, activationCode: string) => {
+        //TODO
+    }
 
     loadUserInMemory();
 
-    return { 
-        user, 
-        isUserLoggedIn, 
+    return {
+        user,
+        isUserLoggedIn,
         updateUserProfile,
+        updateUserPassword,
+        login,
+        forgotPassword,
+        registerNerPasswordFromCode,
+        registerUser,
+        requestUserActivation,
+        activateUser
     }
 })
