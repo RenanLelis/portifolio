@@ -8,6 +8,7 @@ import jakarta.mail.Session;
 import jakarta.mail.Transport;
 import jakarta.mail.PasswordAuthentication;
 import jakarta.mail.Authenticator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import jakarta.mail.internet.AddressException;
@@ -26,12 +27,14 @@ public class MailServiceImpl implements MailService {
     public static final String NEW_PASSWORD_SUBJECT = "Change your password - TODO-APP";
     public static final String USER_ACTIVATION_SUBJECT = "Activate your user - TODO-APP";
 
-    
-
-    private final String emailFrom = System.getenv("MAIL_FROM");
-    private final String password = System.getenv("MAIL_PASSWORD");
-    private final String smtpHost = System.getenv("MAIL_SMTP_HOST");
-    private final String smtpPort = System.getenv("MAIL_SMTP_PORT");
+    @Value("${MAIL_FROM}")
+    private String emailFrom;
+    @Value("${MAIL_PASSWORD}")
+    private String password;
+    @Value("${MAIL_SMTP_HOST}")
+    private String smtpHost;
+    @Value("${MAIL_SMTP_PORT}")
+    private String smtpPort;
 
     /**
      * Send email to the user (destination)

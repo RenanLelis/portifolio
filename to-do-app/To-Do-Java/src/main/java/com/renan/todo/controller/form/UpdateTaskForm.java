@@ -5,16 +5,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Form for task operations
+ * Form for update of task
  */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TaskForm {
+public class UpdateTaskForm {
 
-    private String  taskName;
-    private String  taskDescription;
-    private String  deadline;
-    private Integer listId;
+    private String taskName;
+    private String taskDescription;
+    private String deadline;
 
 }

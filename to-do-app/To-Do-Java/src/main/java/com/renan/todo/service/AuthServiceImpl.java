@@ -21,6 +21,7 @@ public class AuthServiceImpl implements AuthService {
     private final MailService mailService;
     private final UserDTOMapper userDTOMapper;
     private final UtilService utilService;
+    private final TaskListService taskListService;
 
     /**
      * Makes user authentication
@@ -130,7 +131,29 @@ public class AuthServiceImpl implements AuthService {
      * @throws BusinessException - in cases of any errors or invalid operations
      */
     public void registerUser(String email, String password, String name, String lastName) throws BusinessException {
-        //TODO
+        if (!validateNewUserInput(email, password, name)) {
+            throw new BusinessException(MessageUtil.getErrorMessageInputValues(),
+                    BusinessException.BUSINESS_MESSAGE,
+                    AppErrorType.INVALID_INPUT);
+        }
+        Optional<User> userOptional = userRepository.findByEmail(email);
+        if (userOptional.isPresent()) {
+            throw new BusinessException(MessageUtil.getErrorMessageEmailAlreadyExists(),
+                    BusinessException.BUSINESS_MESSAGE,
+                    AppErrorType.INVALID_INPUT);
+        }
+        User user = new User(null,
+                name.trim(),
+                lastName != null ? lastName.trim() : null,
+                email.trim(),
+                utilService.generateHashString(password.trim()),
+                utilService.generateRandomString(),
+                null,
+                User.STATUS_INACTIVE
+        );
+        User newUser = userRepository.save(user);
+        taskListService.createDefaultListForNewUser(newUser.getId());
+        mailService.sendActivationEmail(newUser.getEmail(), newUser.getActivationCode());
     }
 
     /**
@@ -142,8 +165,27 @@ public class AuthServiceImpl implements AuthService {
      * @throws BusinessException - in cases of any errors or invalid operations
      */
     public UserDTO activateUser(String email, String activationCode) throws BusinessException {
-        //TODO
-        return null;
+        if (!utilService.isMail(email) || activationCode == null || activationCode.trim().length() != User.LENGTH_ACTIVATION_CODE) {
+            throw new BusinessException(MessageUtil.getErrorMessageInputValues(),
+                    BusinessException.BUSINESS_MESSAGE,
+                    AppErrorType.INVALID_INPUT);
+        }
+        Optional<User> userOptional = userRepository.findByEmail(email.trim());
+        if (userOptional.isEmpty()) {
+            throw new BusinessException(MessageUtil.getErrorMessageUserNotFound(),
+                    BusinessException.BUSINESS_MESSAGE,
+                    AppErrorType.INVALID_INPUT);
+        }
+        User user = userOptional.get();
+        if (!user.getActivationCode().equals(activationCode.trim())) {
+            throw new BusinessException(MessageUtil.getErrorMessageInputValues(),
+                    BusinessException.BUSINESS_MESSAGE,
+                    AppErrorType.INVALID_INPUT);
+        }
+        user.setActivationCode(null);
+        user.setUserStatus(User.STATUS_ACTIVE);
+        userRepository.save(user);
+        return userDTOMapper.apply(user);
     }
 
     /**
@@ -154,7 +196,21 @@ public class AuthServiceImpl implements AuthService {
      * @throws BusinessException - in cases of any errors or invalid operations
      */
     public void requestUserActivation(String email) throws BusinessException {
-        //TODO
+        if (!utilService.isMail(email)) {
+            throw new BusinessException(MessageUtil.getErrorMessageInputValues(),
+                    BusinessException.BUSINESS_MESSAGE,
+                    AppErrorType.INVALID_INPUT);
+        }
+        Optional<User> userOptional = userRepository.findByEmail(email.trim());
+        if (userOptional.isEmpty()) {
+            throw new BusinessException(MessageUtil.getErrorMessageUserNotFound(),
+                    BusinessException.BUSINESS_MESSAGE,
+                    AppErrorType.INVALID_INPUT);
+        }
+        User user = userOptional.get();
+        user.setActivationCode(utilService.generateRandomString());
+        userRepository.save(user);
+        mailService.sendActivationEmail(user.getEmail(), user.getActivationCode());
     }
 
     /**
@@ -184,6 +240,14 @@ public class AuthServiceImpl implements AuthService {
                 && newPassword != null
                 && newPasswordCode.trim().length() != User.LENGTH_NEW_PASSWORD_CODE
                 && newPassword.trim().length() >= User.MIN_LENGTH_PASSWORD;
+    }
+
+    private boolean validateNewUserInput(String email, String password, String name) {
+        return utilService.isMail(email)
+                && password != null
+                && password.trim().length() >= User.MIN_LENGTH_PASSWORD
+                && name != null
+                && name.trim().length() > 0;
     }
 
 }

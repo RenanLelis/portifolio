@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserProfileForm {
 
-    private String name;
+    private String firstName;
     private String lastName;
 
 }

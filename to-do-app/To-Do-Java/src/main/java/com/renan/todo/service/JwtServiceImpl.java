@@ -76,10 +76,13 @@ public class JwtServiceImpl implements JwtService {
      * @return - the id of the user on the token
      * @throws RuntimeException - in case of errors
      */
-    public Integer getIdUser(String jwt) throws RuntimeException {
+    public Integer getIdUser(String jwt) throws BusinessException {
         Claims claims = validateJWT(jwt);
         if (!claims.containsKey(CLAIMS_ID_USER)) {
-            throw new RuntimeException(MessageUtil.getErrorMessageToken());
+            throw new BusinessException(
+                    MessageUtil.getErrorMessageToken(),
+                    BusinessException.BUSINESS_MESSAGE,
+                    AppErrorType.NOT_ALLOWED);
         }
         return (Integer) claims.get(CLAIMS_ID_USER);
     }

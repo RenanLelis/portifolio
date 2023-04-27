@@ -40,7 +40,7 @@ public class UtilServiceImpl implements UtilService {
      * @return - true if is empty
      */
     public boolean isEmptyString(String str) {
-        return str == null || str.trim().length() == 0 || str.trim().equals("");
+        return str == null || str.trim().length() == 0;
     }
 
     /**
@@ -73,12 +73,12 @@ public class UtilServiceImpl implements UtilService {
     public String generateRandomString(Integer length) {
         char[] chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
         Random random = new Random();
-        String retorno = "";
+        StringBuilder retorno = new StringBuilder();
         for (int i = 0; i < length; i++) {
             int r = random.nextInt(chars.length - 1);
-            retorno += chars[r];
+            retorno.append(chars[r]);
         }
-        return retorno;
+        return retorno.toString();
     }
 
 
