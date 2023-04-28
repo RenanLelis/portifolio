@@ -34,8 +34,6 @@ public interface TaskListRepository extends JpaRepository<TaskList, Integer> {
      *
      * @return - the list
      */
-    @Transactional
-    @Modifying
     @Query(value = "Select t from TaskList t Where t.id = :id And t.user.id = :userID")
     TaskList getListByIdAndUser(
             @Param("id") Integer listId,

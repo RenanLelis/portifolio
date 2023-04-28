@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TaskListDTOMapper implements Function<TaskList, TaskListDTO> {
 
-    private TaskDTOMapper taskDTOMapper;
+    private final TaskDTOMapper taskDTOMapper;
 
     /**
      * Convert a list of tasks (from the same taskList) to a TaskListDTO

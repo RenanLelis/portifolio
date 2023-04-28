@@ -111,9 +111,9 @@ public class MailServiceImpl implements MailService {
      */
     private String generateEmailNewPassword(String newPasswordCode) {
         return "<div style=\" text-align:center; width:450px; margin:10px auto; border-radius:10px;\">"
-                + "<h1 style=\"color:#b67509; font-size: 20px;\">TODO-APP</h1>"
-                + "<p style=\"color:#b67509; font-size: 16px; padding:10px; \">To generate a new password use the code below</p>"
-                + "<p style=\"color:#b67509; font-size: 16px;\"> " + newPasswordCode + " </p>" + "</div>";
+                + "<h1 style=\"color:#555555; font-size: 20px;\">TODO-APP</h1>"
+                + "<p style=\"color:#555555; font-size: 16px; padding:10px; \">To generate a new password use the code below</p>"
+                + "<p style=\"color:#555555; font-size: 16px;\"> " + newPasswordCode + " </p>" + "</div>";
     }
 
     /**
@@ -125,9 +125,9 @@ public class MailServiceImpl implements MailService {
      */
     private String generateEmailUserActivation(String activationCode) {
         return "<div style=\" text-align:center; width:450px; margin:10px auto; border-radius:10px;\">"
-                + "<h1 style=\"color:#b67509; font-size: 20px;\">TODO-APP</h1>"
-                + "<p style=\"color:#b67509; font-size: 16px; padding:10px; \">To activate your user use the code below</p>"
-                + "<p style=\"color:#b67509; font-size: 16px;\"> " + activationCode + " </p>" + "</div>";
+                + "<h1 style=\"color:#555555; font-size: 20px;\">TODO-APP</h1>"
+                + "<p style=\"color:#555555; font-size: 16px; padding:10px; \">To activate your user use the code below</p>"
+                + "<p style=\"color:#555555; font-size: 16px;\"> " + activationCode + " </p>" + "</div>";
     }
 
     /**

@@ -40,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
         }
         Optional<User> userOptional = userRepository.findByEmail(email);
         if (userOptional.isEmpty() ||
-                comparePasswordWithHash(userOptional.get().getPassword(), password)) {
+                !comparePasswordWithHash(userOptional.get().getPassword(), password)) {
             throw new BusinessException(MessageUtil.getErrorMessageLogin(),
                     BusinessException.BUSINESS_MESSAGE,
                     AppErrorType.INVALID_INPUT);
@@ -238,7 +238,7 @@ public class AuthServiceImpl implements AuthService {
         return utilService.isMail(email)
                 && newPasswordCode != null
                 && newPassword != null
-                && newPasswordCode.trim().length() != User.LENGTH_NEW_PASSWORD_CODE
+                && newPasswordCode.trim().length() >= User.LENGTH_NEW_PASSWORD_CODE
                 && newPassword.trim().length() >= User.MIN_LENGTH_PASSWORD;
     }
 

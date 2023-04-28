@@ -107,7 +107,10 @@ public class TaskServiceImpl implements TaskService {
      * @throws BusinessException - for invalid user, list or other errors
      */
     private void updateStatusTasksFromList(Integer listID, Integer userID, Integer status) throws BusinessException {
-        if (listID == null || listID <= 0 || status == null || status <= 0 || userID == null || userID <= 0)
+        if (listID == null || listID <= 0
+                || status == null
+                || (!status.equals(Task.STATUS_COMPLETE) && !status.equals(Task.STATUS_INCOMPLETE))
+                || userID == null || userID <= 0)
             throw new BusinessException(MessageUtil.getErrorMessageInputValues()
                     , BusinessException.BUSINESS_MESSAGE
                     , AppErrorType.INVALID_INPUT);
