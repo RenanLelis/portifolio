@@ -173,23 +173,19 @@ public class TaskListServiceImpl implements TaskListService {
      */
     public void deleteTaskList(Integer listID, Integer userID) throws BusinessException {
         try {
+            List<TaskList> lists = taskListRepository.getListsByUser(userID);
+            if (lists == null || lists.size() == 0) {
+                throw new BusinessException(
+                        MessageUtil.getErrorMessageInputValues(),
+                        BusinessException.BUSINESS_MESSAGE,
+                        AppErrorType.INVALID_INPUT
+                );
+            }
             taskService.deleteTasksFromList(listID, userID);
             taskListRepository.deleteTaskList(listID, userID);
         } catch (Exception e) {
             handleException(e);
         }
-    }
-
-    /**
-     * Find a list by id and user
-     *
-     * @param listId - list id
-     * @param userID - user id
-     *
-     * @return - the list
-     */
-    public TaskList getListByIdAndUser(Integer listId, Integer userID) {
-        return taskListRepository.getListByIdAndUser(listId, userID);
     }
 
     /**

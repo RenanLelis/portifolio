@@ -30,7 +30,13 @@ export class UserService {
     let headers: HttpHeaders = new HttpHeaders({
       "Content-Type": "application/json",
     });
-    return this.http.put(this.URL_UPDATE_PROFILE, { "firstName": firstName, "lastName": lastName }, { headers });
+    return this.http.put(this.URL_UPDATE_PROFILE, { "firstName": firstName, "lastName": lastName }, { headers })
+    .pipe(tap(value => {
+      let user = this.user.value;
+      user!.lastName = lastName;
+      user!.name = firstName;
+      this.user.next(user);
+    }));
   }
 
   updateUserPassword(password: string) {

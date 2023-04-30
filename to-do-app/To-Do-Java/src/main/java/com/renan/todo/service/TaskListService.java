@@ -73,15 +73,5 @@ public interface TaskListService {
      */
     public void deleteTaskList(Integer listID, Integer userID) throws BusinessException;
 
-    /**
-     * Find a list by id and user
-     *
-     * @param listId - list id
-     * @param userID - user id
-     *
-     * @return - the list
-     */
-    public TaskList getListByIdAndUser(Integer listId, Integer userID);
-
 
 }

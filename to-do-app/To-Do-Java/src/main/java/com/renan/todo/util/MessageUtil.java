@@ -12,6 +12,7 @@ public class MessageUtil {
     private static final String MSE05 = "MSE05"; // E-mail already exists.
     private static final String MSE06 = "MSE06"; // E-mail not found.
     private static final String MSE07 = "MSE07"; // User not activated.
+    private static final String MSE08 = "MSE08"; // Cannot delete only list of the user
 
     /**
      * return a error message about the input values
@@ -74,6 +75,15 @@ public class MessageUtil {
      */
     public static String getErrorMessageUserNotActive() {
         return MSE07;
+    }
+
+    /**
+     * return an error message saying that the user cannot delete it's only list
+     *
+     * @return - code for error message
+     */
+    public static String getErrorMessageDeleteOnlyListOfUser() {
+        return MSE08;
     }
 
 }
