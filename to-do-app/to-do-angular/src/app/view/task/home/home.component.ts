@@ -59,10 +59,13 @@ export class HomeComponent implements OnInit {
 
   onMenuClick() {
     this.showMenu = !this.showMenu;
+    if (this.showMenu) {
+      this.getTasksLists();
+    }
   }
 
   showAllTasks() {
-    this.taskService.showAllTasks();
+    this.taskService.setShowAllTasks();
     this.onMenuClick();
     this.router.navigate(['/home'])
   }

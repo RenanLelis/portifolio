@@ -54,6 +54,7 @@ export const messages: Map<string, string> = new Map<string, string>([
     ["MSE05", "E-mail already exists."],
     ["MSE06", "E-mail not found."],
     ["MSE07", "User not activated."],
+    ["MSE08", "Cannot delete only list of the user."],
     ["MS01", "Operation Succeded."],
     ["MS02", "Delete the list?"],
     ["MS03", "Complete all tasks?."],

@@ -1,0 +1,68 @@
+.list-select {
+    min-width: 250px;
+    background-color: rgba(250, 250, 250, 1);
+    padding: 20px;
+    text-align: center;
+    border-radius: 2px;
+    border: 1px solid rgba(250, 250, 250, 1);
+}
+
+.content {
+    width: 100%;
+}
+
+.actions {
+    margin: 15px;
+    display: flex;
+    justify-content: center;
+}
+
+.actions button {
+    margin: 0 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    border-radius: 30px;
+    transition: .3s;
+    border: none;
+    color: #F0F0F0;
+    background-color: #589fa1;
+}
+
+.actions button:hover {
+    color: #FFFFFF;
+    background-color: #387f81;
+}
+
+.my-task-lists {
+    margin-top: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+.my-task-lists ul {
+    list-style-type: none;
+    width: 100%;
+}
+
+.my-task-lists ul li {
+    width: 100%;
+}
+
+.my-task-lists ul li:hover span {
+    background-color: rgba(215, 215, 215, 0.95);
+    cursor: pointer;
+}
+
+.my-task-lists ul li span {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #A1A1A1;
+    display: block;
+    transition: 0.2s;
+    width: 100%;
+}
+
+.my-task-lists ul li:hover span {
+    color: #387f81;
+}

@@ -1,1 +1,14 @@
-<p>success-message works!</p>
+<div class="background" *ngIf="message!= null && message.length > 0">
+
+    <div class="message success-message">
+        <div class="close-button">
+            <i class="fa fa-close" (click)="close()"></i>
+        </div>
+        <div>
+            <h2>Info</h2>
+            <p> {{ message }} </p>
+        </div>
+    </div>
+
+
+</div>

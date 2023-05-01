@@ -1,0 +1,22 @@
+<div class="background" *ngIf="lists && lists !== null && lists.length > 0">
+
+    <div class="message list-select">
+        <div class="content">
+            <h2>Select the list</h2>
+
+            <div class="my-task-lists">
+                <ul>
+                    <li (click)="selectList(taskList)" *ngFor="let taskList of lists; index as i">
+                        <span>{{ taskList.listName }}</span>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="actions">
+                <button (click)="close()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+
+</div>

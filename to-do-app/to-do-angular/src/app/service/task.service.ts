@@ -31,7 +31,7 @@ export class TaskService {
   isSetShowAllTasks = new BehaviorSubject<boolean>(false);
   tasks = new BehaviorSubject<Task[]>([]);
 
-  showAllTasks() {
+  setShowAllTasks() {
     this.isSetShowAllTasks.next(true);
     this.selectedList.next(null);
     this.tasks.next(this.getAllTasks());
@@ -69,7 +69,6 @@ export class TaskService {
     if (this.lists.value != null) {
       for (let j = 0; j < this.lists.value.length; j++) {
         const list = this.lists.value[j];
-        console.log(list);
         if (list.tasks !== null && list.tasks.length > 0) {
           for (let i = 0; i < list.tasks.length; i++) {
             const task = list.tasks[i];
@@ -116,15 +115,27 @@ export class TaskService {
     });
     return this.http.get(this.URL_TASK_LIST, { headers: headers }).pipe(tap(resData => {
       let lists = resData as TaskList[];
-      if (!this.showAllTasks && this.selectedList.value !== null && !this.isSelectedListOnLists(lists)) {
-        if (lists.length > 0) {
-          this.selectTaskList(lists[0]);
-        } else {
-          this.selectTaskList(null);
+      this.lists.next(lists)
+      if (!this.isSetShowAllTasks.value && this.selectedList.value !== null && lists !== null && lists.length > 0) {
+        const selectedList = this.getSelectedListFromLists(lists);
+        if (selectedList !== null) {
+          this.selectTaskList(selectedList);
+        }
+      } else if (!this.isSetShowAllTasks.value) {
+        this.selectTaskList(this.getDefaultList());
+      }
+    }));
+  }
+
+  getSelectedListFromLists(lists: TaskList[]): TaskList | null {
+    if (this.selectedList.value !== null) {
+      for (let i = 0; i < lists.length; i++) {
+        if (lists[i].id.toString() === this.selectedList.value!.id.toString()) {
+          return lists[i];
         }
       }
-      this.lists.next(lists)
-    }));
+    }
+    return null;
   }
 
   isSelectedListOnLists(lists: TaskList[]): boolean {
@@ -144,7 +155,7 @@ export class TaskService {
     });
     return this.http.get(this.URL_LIST, { headers: headers }).pipe(tap(resData => {
       const lists = resData as TaskList[];
-      if (!this.showAllTasks && this.selectedList.value !== null && !this.isSelectedListOnLists(lists)) {
+      if (!this.isSetShowAllTasks && this.selectedList.value !== null && !this.isSelectedListOnLists(lists)) {
         if (lists.length > 0) {
           this.selectTaskList(lists[0]);
         } else {
@@ -214,16 +225,16 @@ export class TaskService {
           if (lists[i].id.toString() === idList.toString()) {
             lists[i].listName = listName;
             lists[i].listDescription = listDescription;
-            this.lists.next(lists);
             break;
           }
         }
         for (let i = 0; i < lists.length; i++) {
           if (this.isSelectedList(lists[i].id)) {
             this.selectTaskList(lists[i]);
-            return;
+            break;
           }
         }
+        this.lists.next(lists);
       }
     }));
   }
@@ -232,12 +243,12 @@ export class TaskService {
     let headers: HttpHeaders = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.delete(this.URL_TASK_LIST.concat(`/${idList}`), { headers }).pipe(
       tap((value) => {
-        if (!this.showAllTasks && this.selectedList.value !== null) {
-          this.selectTaskList(this.getDefaultList());
-        }
         this.lists.next(this.lists.value.filter(list => {
           return list.id === null || list.id!.toString() !== idList.toString()
         }));
+        if (!this.isSetShowAllTasks.value) {
+          this.selectTaskList(this.getDefaultList());
+        }
       }));
   }
 
@@ -249,9 +260,9 @@ export class TaskService {
       this.URL_TASK_LISTS_MOVE_FROM_LIST,
       { listIdOrigin: listIdOrigin, listIdDestiny: listIdDestiny },
       { headers }
-    ).pipe(tap( () => {
-      let indexOrigin : number | null = null;
-      let indexDestiny : number | null = null;
+    ).pipe(tap(() => {
+      let indexOrigin: number | null = null;
+      let indexDestiny: number | null = null;
       const lists = this.lists.value;
       for (let i = 0; i < lists.length; i++) {
         if (lists[i].id.toString() === listIdOrigin.toString()) { indexOrigin = i; }
@@ -264,13 +275,11 @@ export class TaskService {
         lists[indexOrigin].tasks = []
         this.lists.next(lists);
       }
+      this.tasks.next([]);
     }));
   }
 
-  completeTasksFromList(listId: number | null) {
-    if (listId === null) {
-      listId = 0;
-    }
+  completeTasksFromList(listId: number) {
     let headers: HttpHeaders = new HttpHeaders({
       'Content-Type': 'application/json',
     });
@@ -279,14 +288,11 @@ export class TaskService {
       null,
       { headers }
     ).pipe(tap((value) => {
-      this.updateStatusTasks(this.getTasksFromList(listId!), STATUS_COMPLETE)
+      this.updateStatusTasks(listId, STATUS_COMPLETE)
     }));
   }
 
-  uncompleteTasksFromList(listId: number | null) {
-    if (listId === null) {
-      listId = 0;
-    }
+  uncompleteTasksFromList(listId: number) {
     let headers: HttpHeaders = new HttpHeaders({
       'Content-Type': 'application/json',
     });
@@ -295,7 +301,7 @@ export class TaskService {
       null,
       { headers }
     ).pipe(tap((value) => {
-      this.updateStatusTasks(this.getTasksFromList(listId!), STATUS_INCOMPLETE)
+      this.updateStatusTasks(listId, STATUS_INCOMPLETE)
     }));
   }
 
@@ -444,28 +450,15 @@ export class TaskService {
     }));
   }
 
-  updateStatusTasks(tasksIDs: number[], status: number) {
-    let tasks: Task[] = []
-    tasks.push(...this.tasks.value)
-    for (let i = 0; i < tasks.length; i++) {
-      if (tasksIDs.indexOf(tasks[i].id) >= 0) {
-        tasks[i].taskStatus = status;
+  updateStatusTasks(listId: number, status: number) {
+    for (let i = 0; i < this.lists.value.length; i++) {
+      if (this.lists.value[i].id.toString() === listId.toString()) {
+        this.lists.value[i].tasks.forEach(task => task.taskStatus = status)
+        this.lists.next(this.lists.value);
+        this.tasks.next(this.lists.value[i].tasks);
+        return;
       }
     }
-    this.tasks.next(tasks);
-
-    let lists: TaskList[] = [];
-    lists.push(...this.lists.value);
-    for (let i = 0; i < lists.length; i++) {
-      if (lists[i].tasks !== null) {
-        for (let j = 0; j < lists[i].tasks!.length; j++) {
-          if (tasksIDs.indexOf(lists[i].tasks![j].id) >= 0) {
-            lists[i].tasks![j].taskStatus = status;
-          }
-        }
-      }
-    }
-    this.lists.next(lists);
   }
 
   updateStatusTask(taskID: number, status: number) {

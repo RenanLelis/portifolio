@@ -1,0 +1,13 @@
+<div class="task" [ngClass]="{'completed': taskComplete}">
+    <div class="task-completion">
+        <input type="checkbox" [checked]="taskComplete" (change)="changeStatusTask()" />
+    </div>
+    <div class="task-name">
+        <span>{{ task.taskName }}</span>
+    </div>
+    <div class="actions">
+        <button (click)="move()" *ngIf="lists.length > 1"><i class="fa-solid fa-arrow-up-right-from-square"></i></button>
+        <button (click)="edit()"><i class="fa fa-pencil"></i></button>
+        <button (click)="delete()"><i class="fa fa-trash delete"></i></button>
+    </div>
+</div>

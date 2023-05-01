@@ -18,7 +18,7 @@ export class InterceptorService {
       return next.handle(modifiedReq)
         .pipe(
           tap(resData => {
-            console.log(resData);
+            // console.log(resData);
             if (resData instanceof HttpResponse && (<HttpResponse<any>>resData).headers && (<HttpResponse<any>>resData).headers.get('AUTH')) {
               let header = (<HttpResponse<any>>resData).headers.get('AUTH')
               if (header != null) {

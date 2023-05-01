@@ -1,4 +1,4 @@
-<!-- <div class="container">
+<div class="container">
     <app-header (onMenuClick)="onMenuClick()"></app-header>
     <div class="content">
         <router-outlet></router-outlet>
@@ -10,15 +10,18 @@
     <div class="close-button">
         <i class="fa fa-close" (click)="onMenuClick()"></i>
     </div>
-    <app-lists [taskLists]="taskLists" (onNewTaskList)="onNewTaskList()" (onShowAllTasks)="showAllTasks()"
+    <app-lists 
+        [taskLists]="taskLists" 
+        (onNewTaskList)="onNewTaskList()" 
+        (onShowAllTasks)="showAllTasks()"
         (onSelectTaskList)="selectTaskList($event)"></app-lists>
     <hr class="solid">
     <div class="user-options">
-        <i class="fa fa-user-circle"> User Options</i>
+        <i class="fa fa-user-circle"><span> User Options</span></i>
         <ul>
             <li (click)="onMenuClick()"><a routerLink="/home/profile">My Profile</a></li>
             <li (click)="onMenuClick()"><a routerLink="/home/mypassword">Change My Password</a></li>
             <li (click)="onMenuClick()"><a routerLink="/logout">Logout</a></li>
         </ul>
     </div>
-</div> -->
+</div>

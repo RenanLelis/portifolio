@@ -22,6 +22,13 @@ import { ConfirmMessageComponent } from './view/components/confirm-message/confi
 import { SuccessMessageComponent } from './view/components/success-message/success-message.component';
 import { FooterComponent } from './view/components/footer/footer.component';
 import { HeaderComponent } from './view/components/header/header.component';
+import { ProfileComponent } from './view/user/profile/profile.component';
+import { PasswordUpdateComponent } from './view/user/password-update/password-update.component';
+import { ListsComponent } from './view/task/lists/lists.component';
+import { TaskComponent } from './view/task/task/task.component';
+import { ListEditComponent } from './view/task/list-edit/list-edit.component';
+import { TaskEditComponent } from './view/task/task-edit/task-edit.component';
+import { ListSelectorComponent } from './view/components/list-selector/list-selector.component';
 
 @NgModule({
   declarations: [
@@ -41,7 +48,14 @@ import { HeaderComponent } from './view/components/header/header.component';
     ConfirmMessageComponent,
     SuccessMessageComponent,
     FooterComponent,
-    HeaderComponent
+    HeaderComponent,
+    ProfileComponent,
+    PasswordUpdateComponent,
+    ListsComponent,
+    TaskComponent,
+    ListEditComponent,
+    TaskEditComponent,
+    ListSelectorComponent
   ],
   imports: [
     BrowserModule,

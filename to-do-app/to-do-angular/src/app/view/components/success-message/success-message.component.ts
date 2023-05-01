@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-success-message',
@@ -6,5 +6,13 @@ import { Component } from '@angular/core';
   styleUrls: ['./success-message.component.css']
 })
 export class SuccessMessageComponent {
+
+  @Input() message = "";
+  @Output() onClose: EventEmitter<any> = new EventEmitter();
+
+  close() {
+    this.message = "";
+    this.onClose.emit();
+  }
 
 }

@@ -1,18 +1,14 @@
 package com.renan.todo.service;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Objects;
-import java.util.Random;
-
 /**
  * Service for general utilities
  */
 public interface UtilService {
 
-    public static final String DATE_FORMAT = "MM/dd/yyyy";
-    public static final Integer LENGTH_STRING_RANDOM = 6;
-    public static final String HASH_ALGORITHM = "SHA-256";
+//    static final String DATE_FORMAT = "dd/MM/yyyy";
+    String DATE_FORMAT = "yyyy-MM-dd";
+    Integer LENGTH_STRING_RANDOM = 6;
+    String HASH_ALGORITHM = "SHA-256";
 
     /**
      * Check if the string has email format
@@ -21,7 +17,7 @@ public interface UtilService {
      *
      * @return - true if is valid, false if invalid
      */
-    public boolean isMail(String str);
+    boolean isMail(String str);
 
     /**
      * Check if the string is empty
@@ -30,7 +26,7 @@ public interface UtilService {
      *
      * @return - true if is empty
      */
-    public boolean isEmptyString(String str);
+    boolean isEmptyString(String str);
 
     /**
      * Check if the string is not empty
@@ -39,14 +35,14 @@ public interface UtilService {
      *
      * @return - true if is not empty
      */
-    public boolean isNotEmptyString(String str);
+    boolean isNotEmptyString(String str);
 
     /**
      * Generate random string with fixed size
      *
      * @return - the random generate string
      */
-    public String generateRandomString();
+    String generateRandomString();
 
     /**
      * Generate a random string on the specified size
@@ -55,7 +51,7 @@ public interface UtilService {
      *
      * @return - the random generate string
      */
-    public String generateRandomString(Integer length);
+    String generateRandomString(Integer length);
 
 
     /**
@@ -65,7 +61,7 @@ public interface UtilService {
      *
      * @return - true if is valid
      */
-    public boolean isValidDate(String dateStr);
+    boolean isValidDate(String dateStr);
 
     /**
      * Generate a byte[] with the String's hash
@@ -73,7 +69,7 @@ public interface UtilService {
      * @param text - text
      * @return - a byte[] with the String's hash
      */
-    public byte[] generateHash(String text);
+    byte[] generateHash(String text);
 
     /**
      * Generate a String with the text's hash
@@ -81,7 +77,7 @@ public interface UtilService {
      * @param text - text
      * @return - a String with the text's hash
      */
-    public String generateHashString(String text);
+    String generateHashString(String text);
 
 
 }

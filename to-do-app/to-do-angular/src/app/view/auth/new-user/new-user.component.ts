@@ -30,7 +30,6 @@ export class NewUserComponent {
       this.errorMessage = getErrorMessageInputValues();
     } else {
       this.loading = true;
-      console.log(this.formUserRegistration);
       this.userService.registerUser(
           this.formUserRegistration.get('email')!.value.trim(), 
           this.formUserRegistration.get('password')!.value.trim(),

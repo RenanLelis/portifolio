@@ -37,7 +37,6 @@ export class UserActivationRequestComponent implements OnInit {
     this.loading = true;
     this.userService.requestUserActivation(this.email).subscribe(
       response => {
-        console.log(response);
         this.loading = false;
         this.router.navigate(['/useractivation/' + this.email]);
       },

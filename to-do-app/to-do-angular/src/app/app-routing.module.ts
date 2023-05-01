@@ -12,12 +12,23 @@ import { UserActivationComponent } from './view/auth/user-activation/user-activa
 import { UserActivationRequestComponent } from './view/auth/user-activation-request/user-activation-request.component';
 import { NotFoundComponent } from './view/not-found/not-found.component';
 import { LogoutGuardService } from './service/logout-guard.service';
+import { PasswordUpdateComponent } from './view/user/password-update/password-update.component';
+import { ProfileComponent } from './view/user/profile/profile.component';
+import { ListEditComponent } from './view/task/list-edit/list-edit.component';
+import { TaskEditComponent } from './view/task/task-edit/task-edit.component';
 
 const routes: Routes = [
   {
     path: 'home', component: HomeComponent, canActivate: [AuthGuardService],
     children: [
       { path: '', component: TaskViewComponent, canActivate: [AuthGuardService] },
+      { path: 'list', component: ListEditComponent, canActivate: [AuthGuardService] },
+      { path: 'list/:id', component: ListEditComponent, canActivate: [AuthGuardService] },
+      { path: 'task', component: TaskEditComponent, canActivate: [AuthGuardService] },
+      { path: 'task/:id', component: TaskEditComponent, canActivate: [AuthGuardService] },
+
+      { path: 'mypassword', component: PasswordUpdateComponent, canActivate: [AuthGuardService] },
+      { path: 'profile', component: ProfileComponent, canActivate: [AuthGuardService] },
     ]
   },
 

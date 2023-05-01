@@ -216,7 +216,8 @@ func IsDeadlineInvalid(deadline string) bool {
 	if len(deadlineFormatted) != 10 {
 		return true
 	}
-	_, err := time.Parse("01/02/2006", deadline)
+	//_, err := time.Parse("01/02/2006", deadline)
+	_, err := time.Parse("2006-02-01", deadline) //yyyy-MM-dd
 	return err != nil
 }
 

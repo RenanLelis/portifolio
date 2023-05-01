@@ -1,0 +1,31 @@
+<div class="task-form">
+    <h2>Task</h2>
+    <form [formGroup]="formTask" (submit)="save()">
+        <div class="label-field">
+            <label class="label">Task Name</label>
+            <input formControlName="taskName" type="text" required class="text-field">
+            <p *ngIf="formTask.get('taskName')!.invalid && formTask.get('taskName')!.touched"
+                class="error-field-message">
+                Error on task name input.
+            </p>
+        </div>
+        <div class="label-field">
+            <label class="label">Task Description</label>
+            <textarea formControlName="taskDescription" class="textarea"></textarea>
+        </div>
+        <div class="label-field">
+            <label class="label">Task Deadline</label>
+            <input type="date" formControlName="taskDeadline" class="text-field">
+        </div>
+        <div class="div-submit-button">
+            <button type="button" (click)="cancel()" class="action-button">Cancel</button>
+            <button [disabled]="formTask.invalid" type="submit" class="action-button">Send</button>
+        </div>
+    </form>
+</div>
+
+<div *ngIf="loading">
+    <app-loading></app-loading>
+</div>
+
+<app-error-message [errorMessage]="errorMessage" (onClose)="closeErrorMessage()" />

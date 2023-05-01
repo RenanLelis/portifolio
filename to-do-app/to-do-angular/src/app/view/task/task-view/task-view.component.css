@@ -1,0 +1,135 @@
+.container {
+    max-width: 90%;
+    width: 700px;
+    margin: 30px auto;
+    height: 100%;
+    padding: 30px;
+}
+
+.list-info {
+    padding-bottom: 2px;
+    margin-bottom: 3px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #A0A0A0;
+}
+
+.list-actions-dropdown {
+    margin: 5px;
+    position: relative;
+    display: inline-block;
+}
+
+.list-actions-dropdown i {
+    color: #A0A0A0;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.list-actions-dropdown-content ul {
+    list-style-type: none;
+    width: 230px;
+}
+
+.list-actions-dropdown-content ul li {
+    width: 100%;
+    padding: 8px 5px;
+}
+
+.list-actions-dropdown-content ul li:hover {
+    background-color: rgba(225, 225, 225, 0.95);
+    cursor: pointer;
+}
+
+.list-actions-dropdown-content ul li i {
+    color: #589fA1;
+}
+
+.list-actions-dropdown-content ul li span {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #589fA1;
+    transition: 0.2s;
+    width: 100%;
+}
+
+.list-actions-dropdown-content ul li:hover i,
+.list-actions-dropdown-content ul li:hover span {
+    color: #387f81;
+}
+
+.list-actions-dropdown-content {
+    display: block;
+    position: absolute;
+    right: 0;
+    background-color: #f9f9f9;
+    min-width: 100px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.list-actions-dropdown-content ul li.delete i {
+    color: #A22029;
+}
+
+.list-actions-dropdown-content ul li.delete i span {
+    color: #A22029;
+}
+
+.list-actions-dropdown-content ul li.delete:hover i {
+    color: #820009;
+}
+
+.list-actions-dropdown-content ul li.delete:hover i span {
+    color: #820009;
+}
+
+/* ----------------------- */
+
+.option-menu {
+    padding: 5px;
+    font-size: 16px;
+}
+
+/* ----------------------------- */
+/* Tasks */
+
+.tasks {
+    width: 100%;
+    margin: 10px auto;
+}
+
+.exib-options {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin: 10px 5px;
+}
+
+.exib-options i {
+    padding: 5px;
+    cursor: pointer;
+}
+
+.send-button {
+    max-width: 200px;
+}
+
+.card-tasks {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.list-tasks {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+

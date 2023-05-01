@@ -37,6 +37,10 @@ i {
     color: #589fa1;
 }
 
+i span {
+    font-family: sans-serif;
+}
+
 hr.solid {
     border-top: 3px solid #bbb;
     margin: 2px 0;

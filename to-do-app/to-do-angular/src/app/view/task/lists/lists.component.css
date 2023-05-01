@@ -1,0 +1,53 @@
+.list-nav-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.title {
+    width: 100%;
+}
+
+.title h3 {
+    padding: 0 0 20px 0;
+}
+
+.title button {
+    margin: 5px 10%;
+    max-width: 80%;
+}
+
+.my-task-lists {
+    margin-top: 20px;
+    text-align: center;
+    width: 100%;
+}
+
+.my-task-lists ul {
+    list-style-type: none;
+    width: 100%;
+}
+
+.my-task-lists ul li {
+    width: 100%;
+}
+
+.my-task-lists ul li:hover span {
+    background-color: rgba(215, 215, 215, 0.95);
+    cursor: pointer;
+}
+
+.my-task-lists ul li span {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 18px;
+    color: #A1A1A1;
+    display: block;
+    transition: 0.2s;
+    width: 100%;
+}
+
+.my-task-lists ul li:hover span {
+    color: #387f81;
+}

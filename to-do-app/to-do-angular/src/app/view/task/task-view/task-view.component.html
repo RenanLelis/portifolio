@@ -1,1 +1,96 @@
-<p>task-view works!</p>
+<div class="container" (click)="closeMenuList()">
+
+    <!-- ----------------  selected list  ---------------- -->
+
+    <div class="list">
+        <div class="list-info">
+            <div *ngIf="isSetShowAllTasks"><!--spacer--></div>
+            <h2 *ngIf="isSetShowAllTasks">All My Tasks</h2>
+            <div><!--spacer--></div>
+            <h2 *ngIf="!isSetShowAllTasks && selectedList">{{ selectedList.listName }}</h2>
+            <div *ngIf="!isSetShowAllTasks && selectedList" class="list-actions-dropdown">
+                <i class="fa fa-ellipsis-v" (click)="dropMenuList($event)"></i>
+
+                <div *ngIf="showMenuList" class="list-actions-dropdown-content">
+                    <ul>
+                        <li (click)="newList()">
+                            <i class="fa fa-plus">
+                                <span> New List</span>
+                            </i>
+                        </li>
+
+                        <li *ngIf="!isSetShowAllTasks && selectedList.id !== null && selectedList.id > 0"
+                            (click)="editList()">
+                            <i class="fa-solid fa-pen-to-square">
+                                <span> Edit List</span>
+                            </i>
+                        </li>
+
+                        <li *ngIf="!isSetShowAllTasks && tasks.length > 0" (click)="completeList()">
+                            <i class="fa fa-check-square">
+                                <span> Complete All tasks</span>
+                            </i>
+                        </li>
+
+                        <li *ngIf="!isSetShowAllTasks && tasks.length > 0" (click)="uncompleteList()">
+                            <i class="fa fa-square">
+                                <span> Uncomplete all tasks</span>
+                            </i>
+                        </li>
+
+                        <li *ngIf="!isSetShowAllTasks && tasks.length > 0 && lists.length > 1" (click)="showMoveTaskOption(null)">
+                            <i class="fa-solid fa-arrow-up-right-from-square">
+                                <span> Move tasks to...</span>
+                            </i>
+                        </li>
+
+                        <li *ngIf="!isSetShowAllTasks && selectedList.id !== null && selectedList.id > 0"
+                            (click)="deleteList()" class="delete">
+                            <i class="fa fa-trash">
+                                <span> Delete List</span>
+                            </i>
+                        </li>
+
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ----------------  tasks  ---------------- -->
+
+    <div class="exib-options">
+        <button class="send-button" (click)="newTask()">New Task</button>
+    </div>
+    <div class="tasks">
+        <div class="list-tasks" *ngIf="exibTasks">
+            <div *ngFor="let task of tasks; index as i; trackBy: trackItem">
+                <app-task 
+                    [task]="task" 
+                    (onEdit)="editTask(task)" 
+                    (onDelete)="deleteTask(task.id)"
+                    (onCoplete)="completeTask(task.id)" 
+                    (onUncomplete)="uncompleteTask(task.id)"
+                    (onMove)="showMoveTaskOption(task.id)" />
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div *ngIf="showListSelector">
+    <app-list-selector [lists]="getListsToSelect()" (onClose)="closeListSelector()" (onSelectList)="selectListToMoveTask($event)"></app-list-selector>
+</div>
+
+<div *ngIf="loading">
+    <app-loading></app-loading>
+</div>
+
+<app-error-message [errorMessage]="errorMessage" (onClose)="closeErrorMessage()" />
+<app-confirm-message [message]="confirmMessageDelete" (onClose)="closeConfirmMessageDelete()"
+    (onConfirm)="confirmDeleteList()" />
+<app-confirm-message [message]="confirmMessageCompleteList" (onClose)="closeConfirmMessageCompleteList()"
+    (onConfirm)="confirmCompleteList()" />
+<app-confirm-message [message]="confirmMessageUncompleteList" (onClose)="closeConfirmMessageUncompleteList()"
+    (onConfirm)="confirmUncompleteList()" />

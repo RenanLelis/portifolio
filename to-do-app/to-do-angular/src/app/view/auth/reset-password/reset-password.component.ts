@@ -36,7 +36,6 @@ export class ResetPasswordComponent implements OnInit {
     this.loading = true;
     this.userService.registerNerPasswordFromCode(this.email, this.formPasswordReset.value.newPassword, this.formPasswordReset.value.newPasswordCode).subscribe(
       response => {
-        console.log(response);
         this.loading = false;
         this.router.navigate(['/']);
       },
