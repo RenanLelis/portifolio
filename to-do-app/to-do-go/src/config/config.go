@@ -11,16 +11,13 @@ import (
 
 var (
 	StringDataBaseConnection = ""
-
-	Port = 0
-
-	SecretKey []byte
-
-	MailFrom     = ""
-	SystemEmail  = ""
-	MailPassword = ""
-	SmtpPort     = 0
-	SmtpHost     = ""
+	Port                     = 0
+	SecretKey                []byte
+	MailFrom                 = ""
+	SystemEmail              = ""
+	MailPassword             = ""
+	SmtpPort                 = 0
+	SmtpHost                 = ""
 )
 
 // Load will load the path variables

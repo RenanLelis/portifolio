@@ -12,6 +12,22 @@
     scroll-behavior: smooth;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+hr {
+    margin: 25px 0;
+    padding: .4px;
+    background-color: #606060;
+}
+
 .title {
     display: flex;
     justify-content: center;
@@ -51,6 +67,25 @@
     padding-bottom: 8px;
 }
 
+.button {
+    margin-top: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.button a {
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 25px;
+    font-weight: 400;
+    background: #0672A4;
+    color: #fff;
+    border: 2px solid transparent;
+    cursor: pointer;
+    margin: auto;
+}
+
 /* ------------------------------------------ */
 
 /* Scroll Bar CSS */
@@ -77,7 +112,7 @@
 /* Menu de navegacao */
 
 nav {
-    position: fixed;
+    /* position: fixed; */
     width: 100%;
     padding: 10px 0;
     z-index: 998;
@@ -149,7 +184,6 @@ nav .navbar .menu li {
 /* Menu de navegação lateral CSS */
 nav .menu-btn,
 .navbar .menu .cancel-btn {
-    position: absolute;
     color: #fff;
     right: 30px;
     top: 20px;
@@ -157,6 +191,10 @@ nav .menu-btn,
     cursor: pointer;
     transition: all 0.3s ease;
     display: none;
+}
+
+.cancel-btn {
+    position: absolute;
 }
 
 nav .menu-btn {
@@ -169,15 +207,78 @@ nav .menu-btn {
 
 /* ------------------------------------------ */
 
+/* projects container */
+.projects-container {
+    width: 100%;
+    margin: auto;
+    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+}
+
+.projects-container .project {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.projects-container .project .image {
+    width: 50%;
+    padding: 10px;
+}
+
+.projects-container .project .image img {
+    width: 100%;
+}
+
+.projects-container .project .content {
+    width: 50%;
+    padding: 10px;
+    color: #757575;
+}
+
+.projects-container .project .content h3 {
+    text-align: center;
+    font-size: 30px;
+    font-weight: 600;
+    font-family: 'Poppins', sans-serif;
+}
+
+.projects-container .project .content p {
+    text-align: justify;
+    margin: 10px 0;
+    letter-spacing: 1.3px;
+}
+
+/* ------------------------------------------ */
+/* ------------------------------------------ */
+
+/* Footer */
+footer {
+    background: #0672A4;
+    padding: 15px 0;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    width: 100%;
+}
+
+footer .text span {
+    font-size: 17px;
+    font-weight: 400;
+    color: #fff;
+}
+
+/* ------------------------------------------ */
+
 /* ------------------------------------------ */
 
 @media (max-width: 750px) {
     nav .navbar {
         width: 90%;
-    }
-
-    nav .navbar .separator {
-        display: block;
     }
 
     nav .navbar .menu {
@@ -192,11 +293,11 @@ nav .menu-btn {
         flex-direction: column;
         align-items: center;
         transition: all 0.5s ease;
+        justify-content: flex-start;
     }
 
     .navbar.active .menu {
         left: 0;
-        justify-content: flex-start;
     }
 
     nav .navbar .menu a {
@@ -210,7 +311,7 @@ nav .menu-btn {
         color: #0672A4;
     }
 
-    nav .navbar .icones_media_branco {
+    nav .navbar .icones_media_branco, .separator {
         display: none;
     }
 
@@ -218,4 +319,21 @@ nav .menu-btn {
     .navbar .menu .cancel-btn {
         display: block;
     }
+}
+
+@media (max-width: 900px) {
+
+    .projects-container .project {
+        flex-direction: column;
+    }
+
+    .projects-container .project .image {
+        width: 100%;
+    }
+
+    .projects-container .project .content {
+        width: 100%;
+        margin-top: 25px;
+    }
+
 }

@@ -1,0 +1,115 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.sections {
+    flex: 1;
+}
+
+/* ---------------project page--------------- */
+
+.title-project {
+    text-align: center;
+    padding: 30px;
+    font-size: 26px;
+    color: #757575;
+}
+
+.technologies {
+    margin: 10px auto;
+    max-width: 85%;
+}
+
+.technologies h2 {
+    text-align: center;
+    padding: 30px;
+    font-size: 26px;
+    color: #757575;
+}
+
+.technologies p {
+    text-align: justify;
+    font-size: 16px;
+    color: #757575;
+}
+
+.technologies p.check-code {
+    text-align: center;
+    padding: 20px;
+}
+
+.code {
+    margin-top: 30px;
+    width: 100%;
+}
+
+.links-to-code {
+    margin: 10px auto;
+    max-width: 90%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.button-code {
+    display: flex;
+    justify-content: center;
+    margin: 5px;
+}
+
+.button-code a {
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 400;
+    background: #0672A4;
+    color: #fff;
+    border: 2px solid transparent;
+    cursor: pointer;
+    margin: auto;
+}
+
+
+/* ------------------------------------------ */
+/* -------------------Images----------------- */
+
+.images {
+    width: 90%;
+    margin: 10px auto;
+    /* max-height: 300px; */
+}
+
+.slide {
+    display: none;
+}
+
+img {
+    vertical-align: middle;
+    max-height: 370px;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+/* Fading animation */
+.fade {
+    animation-name: fade;
+    animation-duration: 1s;
+}
+
+@keyframes fade {
+    from {
+        opacity: .4
+    }
+
+    to {
+        opacity: 1
+    }
+}
+
+
+
+/* ------------------------------------------ */
