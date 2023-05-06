@@ -90,12 +90,10 @@ public class UtilServiceImpl implements UtilService {
      * @return - true if is valid
      */
     public boolean isValidDate(String dateStr) {
-        System.out.println(dateStr);
         DateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
         sdf.setLenient(false);
         try {
             sdf.parse(dateStr);
-            System.out.println("OK");
         } catch (ParseException e) {
             e.printStackTrace();
             return false;

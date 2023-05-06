@@ -42,17 +42,11 @@ public class TaskListDTOMapper implements Function<TaskList, TaskListDTO> {
     public List<TaskListDTO> convertMultipleListsAndTasks(List<Task> tasks) {
         List<TaskListDTO> result = new ArrayList<>();
         if (tasks != null && tasks.size() > 0) {
-            List<TaskDTO> tasksWithoutList = new ArrayList<>();
             List<TaskList> listsTasks = new ArrayList<>();
             for (Task task : tasks) {
-                if (task.getList() == null || task.getList().getId() == null) {
-                    tasksWithoutList.add(taskDTOMapper.apply(task));
-                } else if (!listsTasks.contains(task.getList())) {
+                if (!listsTasks.contains(task.getList())) {
                     listsTasks.add(task.getList());
                 }
-            }
-            if (tasksWithoutList.size() > 0) {
-                result.add(new TaskListDTO(null, null, null, tasksWithoutList));
             }
             result = this.convertMultipleListsAndTasks(listsTasks, tasks);
         }

@@ -1,19 +1,11 @@
 package com.renan.todo.service;
 
 import com.renan.todo.util.MessageUtil;
-import jakarta.mail.Address;
-import jakarta.mail.Message;
-import jakarta.mail.MessagingException;
-import jakarta.mail.Session;
-import jakarta.mail.Transport;
-import jakarta.mail.PasswordAuthentication;
-import jakarta.mail.Authenticator;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-
-import jakarta.mail.internet.AddressException;
+import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Properties;
@@ -38,12 +30,6 @@ public class MailServiceImpl implements MailService {
 
     /**
      * Send email to the user (destination)
-     *
-     * @param destination - user email
-     * @param subject     - email subject
-     * @param message     - message to be sent
-     *
-     * @throws BusinessException - In case of any fail
      */
     public void sendEmail(String destination, String subject, String message) throws BusinessException {
         Session session = getSession();
@@ -62,12 +48,6 @@ public class MailServiceImpl implements MailService {
 
     /**
      * Send email to the users (destinationList)
-     *
-     * @param destinationList - list of users emails
-     * @param subject         - email subject
-     * @param message         - message to be sent
-     *
-     * @throws BusinessException - In case of any fail
      */
     public void sendEmail(List<String> destinationList, String subject, String message) throws BusinessException {
         StringBuilder dest = new StringBuilder();
@@ -80,23 +60,13 @@ public class MailServiceImpl implements MailService {
 
     /**
      * Send email to the user to reset the password
-     *
-     * @param destination     - user email
-     * @param newPasswordCode - the code to change the password
-     *
-     * @throws BusinessException - In case of any fail
      */
     public void sendNewPasswordEmail(String destination, String newPasswordCode) throws BusinessException {
         sendEmail(destination, NEW_PASSWORD_SUBJECT, generateEmailNewPassword(newPasswordCode));
     }
 
     /**
-     * Send email to the user to activate him on the systema
-     *
-     * @param destination    - user email
-     * @param activationCode - the code to activate the user
-     *
-     * @throws BusinessException - In case of any fail
+     * Send email to the user to activate him on the system
      */
     public void sendActivationEmail(String destination, String activationCode) throws BusinessException {
         sendEmail(destination, USER_ACTIVATION_SUBJECT, generateEmailUserActivation(activationCode));

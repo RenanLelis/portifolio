@@ -50,24 +50,6 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
             @Param("listID") Integer listID,
             @Param("userID") Integer userID);
 
-//    /**
-//     * Create a new task on the database
-//     *
-//     * @param taskName        - task name
-//     * @param taskDescription - description
-//     * @param deadline        - task deadline
-//     * @param listID          - list of the new task
-//     * @param userID          - user id
-//     *
-//     * @return - the task created
-//     */
-//    @Transactional
-//    @Modifying
-//    @Query(nativeQuery = true
-//            , value = "INSERT INTO TASK (TASK_NAME, TASK_DESCRIPTION, DEADLINE, TASK_STATUS, ID_USER, ID_LIST) " +
-//            "VALUES (:taskName , :taskDescription , :deadline , :userID , :listID)")
-//    Task createTask(@Param("taskName") String taskName, @Param("taskDescription") String taskDescription
-//            , @Param("deadline") String deadline, @Param("listID") Integer listID, @Param("userID") Integer userID);
 
     /**
      * Update the task on database
