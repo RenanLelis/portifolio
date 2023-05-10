@@ -20,7 +20,7 @@ h6,
 p {
     text-align: center;
     font: sans-serif;
-    color: #286f71;
+    color: #0672A4;
 }
 
 hr {
@@ -28,13 +28,13 @@ hr {
 }
 
 body {
-    background-color: #F6F6F6;
+    background-color: #FDFDFD;
     min-height: 100vh;
     height: 100%;
 }
 
 i {
-    color: #589fa1;
+    color: #0672A4;
 }
 
 i span {
@@ -162,7 +162,8 @@ hr.solid {
 .container-auth .card-auth {
     background-color: #FEFEFE;
     padding: 30px 50px 50px 50px;
-    box-shadow: #C0C0C0 3px 3px 6px;
+    border-radius: 25px;
+    box-shadow: rgba(100, 120, 180, 0.5) 0 2px 4px;
     margin-bottom: 35px;
     max-width: 90%;
     min-width: 600px;
@@ -213,14 +214,14 @@ hr.solid {
     transition: background .35s;
     border-radius: 50px;
     outline: none;
-    border: 1px solid #589fa1;
+    border: 1px solid #0672A4;
     color: #FAFAFA;
-    background-color: #589fa1;
+    background-color: #0672A4;
 }
 
 .send-button:hover {
-    background-color: #387f81;
-    border: 1px solid #387f81;
+    background-color: #006698;
+    border: 1px solid #006698;
     color: #FFFFFF;
     border: 1px solid #FFFFFF;
 }
@@ -260,7 +261,7 @@ hr.solid {
     font-style: normal;
     text-transform: uppercase;
     letter-spacing: 1px;
-    color: #589fa1;
+    color: #006698;
 }
 
 /* ------------------------------------------------------- */
@@ -294,14 +295,14 @@ hr.solid {
     transition: background .35s;
     border-radius: 50px;
     outline: none;
-    border: 1px solid #589fa1;
+    border: 1px solid #006698;
     color: #FAFAFA;
-    background-color: #589fa1;
+    background-color: #006698;
 }
 
 .action-button:hover {
-    background-color: #387f81;
-    border: 1px solid #387f81;
+    background-color: #006698;
+    border: 1px solid #006698;
     color: #FFFFFF;
     border: 1px solid #FFFFFF;
 }

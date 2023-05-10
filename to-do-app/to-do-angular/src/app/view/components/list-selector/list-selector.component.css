@@ -25,12 +25,12 @@
     transition: .3s;
     border: none;
     color: #F0F0F0;
-    background-color: #589fa1;
+    background-color: #0672A4;
 }
 
 .actions button:hover {
     color: #FFFFFF;
-    background-color: #387f81;
+    background-color: #006698;
 }
 
 .my-task-lists {
@@ -64,5 +64,5 @@
 }
 
 .my-task-lists ul li:hover span {
-    color: #387f81;
+    color: #006698;
 }

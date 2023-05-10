@@ -43,21 +43,21 @@
 }
 
 .list-actions-dropdown-content ul li i {
-    color: #589fA1;
+    color: #0672A4;
 }
 
 .list-actions-dropdown-content ul li span {
     padding: 8px;
     text-decoration: none;
     font-size: 18px;
-    color: #589fA1;
+    color: #0672A4;
     transition: 0.2s;
     width: 100%;
 }
 
 .list-actions-dropdown-content ul li:hover i,
 .list-actions-dropdown-content ul li:hover span {
-    color: #387f81;
+    color: #006698;
 }
 
 .list-actions-dropdown-content {

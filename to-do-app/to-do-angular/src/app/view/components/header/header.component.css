@@ -13,7 +13,7 @@ header .list-menu {
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    color: #589fa1;
+    color: #0672A4;
     margin: auto 10px;
     padding: 10px;
     height: 100%;
@@ -28,7 +28,7 @@ header .logo {
 }
 
 header .logo a {
-    color: #589fa1;
+    color: #0672A4;
     text-align: center;
     align-items: center;
     justify-content: center;
