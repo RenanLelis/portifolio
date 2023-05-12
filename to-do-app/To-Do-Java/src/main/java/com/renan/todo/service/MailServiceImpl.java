@@ -4,7 +4,8 @@ import com.renan.todo.util.MessageUtil;
 import jakarta.mail.*;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,27 +15,25 @@ import java.util.Properties;
  * Service for sending e-mail for the users
  */
 @Service
+@RequiredArgsConstructor
 public class MailServiceImpl implements MailService {
 
     public static final String NEW_PASSWORD_SUBJECT = "Change your password - TODO-APP";
     public static final String USER_ACTIVATION_SUBJECT = "Activate your user - TODO-APP";
 
-    @Value("${MAIL_FROM}")
-    private String emailFrom;
-    @Value("${MAIL_PASSWORD}")
-    private String password;
-    @Value("${MAIL_SMTP_HOST}")
-    private String smtpHost;
-    @Value("${MAIL_SMTP_PORT}")
-    private String smtpPort;
+    private final Environment environment;
+
+    private final String MAIL_FROM = "MAIL_FROM";
 
     /**
      * Send email to the user (destination)
      */
     public void sendEmail(String destination, String subject, String message) throws BusinessException {
+        String emailFrom = environment.getProperty(MAIL_FROM);
         Session session = getSession();
         MimeMessage mimeMessage = new MimeMessage(session);
         try {
+            assert emailFrom != null;
             mimeMessage.setFrom(new InternetAddress(emailFrom));
             Address[] toUser = InternetAddress.parse(destination);
             mimeMessage.setRecipients(Message.RecipientType.TO, toUser);
@@ -106,6 +105,9 @@ public class MailServiceImpl implements MailService {
      * @return - session
      */
     private Session getSession() {
+        String emailFrom = environment.getProperty(MAIL_FROM);
+        String MAIL_PASSWORD = "MAIL_PASSWORD";
+        String password = environment.getProperty(MAIL_PASSWORD);
         return Session.getInstance(getProperties(), new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -120,6 +122,10 @@ public class MailServiceImpl implements MailService {
      * @return - properties loaded
      */
     private Properties getProperties() {
+        String MAIL_SMTP_HOST = "MAIL_SMTP_HOST";
+        String MAIL_SMTP_PORT = "MAIL_SMTP_PORT";
+        String smtpHost = environment.getProperty(MAIL_SMTP_HOST);
+        String smtpPort = environment.getProperty(MAIL_SMTP_PORT);
         Properties props = new Properties();
         props.put("mail.smtp.host", smtpHost);
         props.put("mail.smtp.socketFactory.port", smtpPort);
