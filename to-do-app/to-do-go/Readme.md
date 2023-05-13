@@ -1,5 +1,19 @@
 # To-Do App - GO
 
+Para executar o projeto é necessário a criação de um arquivo .env na raiz do projeto contendo os valores, ou criação das variáveis de ambiente a seguir
+
+- MAIL_FROM - email da aplicação que enviará os emails de recuperação de senha ou ativação de usuário
+- MAIL_PASSWORD - senha do email
+- MAIL_SMTP_HOST - host do email (smtp.gmail.com por exemplo)
+- MAIL_SMTP_PORT - porta de acesso ao host de email
+
+- DB_USER - usuário do banco de dados
+- DB_PASSWORD - senha do banco de dados
+- DB_NAME - schema do banco de dados
+
+- SECRET_KEY - utilizado para geração de jwt
+- API_PORT - porta onde a aplicação vai rodar, pode ser 8080
+
 As tabelas de banco de dados não são criadas ou alteradas pela aplicação, mas foi disponibilizado script criado para definição das tabelas.  
 
 ![SQL script for the project](./assets/database_sql.jpg "SQL script")
