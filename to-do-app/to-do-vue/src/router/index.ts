@@ -1,6 +1,8 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import { useUserStore } from '@/stores/user_store';
+import HomeVue from '@/views/Home.vue';
+import LoginVue from '@/views/auth/Login.vue';
+import NotFoundVue from '@/views/NotFound.vue';
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,21 +10,23 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: HomeView,
-      beforeEnter: (to, from) => { if (isUserAuth()) { return { name: 'Login' }; } },
+      component: HomeVue,
+      beforeEnter: (to, from) => {if (!isUserAuth()) { return { name: 'login' }; }}
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      path: '/login',
+      name: 'login',
+      component: LoginVue,
+      beforeEnter: (to, from) => {if (isUserAuth()) { return { name: 'home' }; }}
+    },
+    { 
+      path: '/:pathMatch(.*)*', 
+      component: NotFoundVue 
     }
   ]
 })
 
-function isUserAuth(): boolean {
+const isUserAuth = (): boolean => {
   const userStore = useUserStore();
   return userStore.isUserLoggedIn;
 }

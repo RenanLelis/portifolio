@@ -15,7 +15,7 @@ export interface UserData {
     email: string;
     jwt: string;
     id: number;
-    status: number;
+    userStatus: number;
     expiresIn: number;
     name: string;
     lastName?: string;

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia"
 
-export const useUserStore = defineStore('task', () => {
+export const useTaskStore = defineStore('task', () => {
 
     const fetchTasksAndLists = () => {
         //TODO
