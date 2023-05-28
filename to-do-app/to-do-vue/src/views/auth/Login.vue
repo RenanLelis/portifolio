@@ -11,26 +11,18 @@
             <div class="label-field">
                 <label class="label">E-mail</label>
                 <input type="email" v-model="email" required class="text-field">
-                <!-- <p *ngIf="formLogin.get('email')!.invalid && formLogin.get('email')!.touched"
-                    class="error-field-message">
-                    Error on e-mail input.
-                </p> -->
             </div>
             <div class="label-field">
                 <label class="label">Password</label>
                 <input type="password" v-model="password" required class="text-field">
-                <!-- <p *ngIf="formLogin.get('password')!.invalid && formLogin.get('password')!.touched"
-                    class="error-field-message">
-                    Error on password input.
-                </p> -->
             </div>
             <div>
                 <div class="div-submit-button">
                     <button type="submit" class="send-button">Send</button>
                 </div>
                 <div class="action-links">
-                    <router-link to="/recoverpassword">Forgot password?</router-link>
-                    <router-link to="/userregistration">New user?, Register here</router-link>
+                    <router-link class="side-link" to="/recoverpassword">Forgot password?</router-link>
+                    <router-link class="side-link" to="/userregistration">New user?, Register here</router-link>
                 </div>
             </div>
         </form>
@@ -68,7 +60,7 @@ const login = () => {
         userStore.login(email.value.trim().toLocaleLowerCase(), password.value.trim())
             .then(() => {
                 loading.value = false;
-                router.push({name: 'home'})
+                router.push({name: 'taskview'})
             })
             .catch(err => {
                 loading.value = false;

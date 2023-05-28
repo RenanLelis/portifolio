@@ -1,6 +1,9 @@
 export const BASE_URL = "http://localhost:8080";
 export const USER_DATA = "USER_DATA";
 
+export const LENGTH_NEW_PASSWORD_CODE = 6;
+export const LENGTH_ACTIVATION_CODE = 6;
+
 export const URL_UPDATE_PROFILE: string = BASE_URL + "/api/user/profile";
 export const URL_UPDATE_PASSWORD: string = BASE_URL + "/api/user/password";
 

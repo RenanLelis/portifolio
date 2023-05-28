@@ -12,6 +12,9 @@ export const sendHttpRequest = (url: string, method: string, body: string) => {
 
 
 
-    return fetch(url, { method: method, headers: header, body: body })
+    if (body.trim().length > 0) {
+        return fetch(url, { method: method, headers: header, body: body })
+    }
+    return fetch(url, { method: method, headers: header })
 
 }
