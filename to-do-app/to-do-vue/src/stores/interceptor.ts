@@ -6,10 +6,8 @@ export const sendHttpRequest = (url: string, method: string, body: string) => {
     const userStore = useUserStore();
     let header: {} = { 'Content-Type': 'application/json' };
     if (userStore.isUserLoggedIn) {
-        header = { 'Content-Type': 'application/json', 'AUTH': userStore.user!.jwt };
+        header = { 'Content-Type': 'application/json', 'AUTHORIZATION': 'Bearer ' + userStore.user!.jwt };
     }
-    //TODO Get the auth header on return and update user on userStore
-
 
 
     if (body.trim().length > 0) {

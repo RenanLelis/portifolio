@@ -95,8 +95,9 @@ public class JwtServiceImpl implements JwtService {
      * @throws RuntimeException - in case of errors
      */
     public Claims validateJWT(String jwt) throws RuntimeException {
+        String token = jwt.startsWith("Bearer") ? jwt.substring(7) : jwt;
         try {
-            return Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(jwt).getBody();
+            return Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token).getBody();
         } catch (Exception e) {
             throw new RuntimeException("JWT Validation Error " + e.getMessage());
         }
@@ -110,8 +111,9 @@ public class JwtServiceImpl implements JwtService {
      * @throws RuntimeException - in case of errors
      */
     public Boolean validateJWTToken(String jwt) throws RuntimeException {
+        String token = jwt.startsWith("Bearer") ? jwt.substring(7) : jwt;
         try {
-            Claims claims = Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(jwt).getBody();
+            Claims claims = Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token).getBody();
             return claims.containsKey(CLAIMS_ID_USER) && claims.containsKey(CLAIMS_ID_STATUS);
         } catch (Exception e) {
             throw new RuntimeException("JWT Validation Error " + e.getMessage());

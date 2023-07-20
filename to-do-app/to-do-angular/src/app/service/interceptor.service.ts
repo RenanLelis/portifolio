@@ -14,13 +14,13 @@ export class InterceptorService {
   intercept(req: HttpRequest<any>, next: HttpHandler) {
     if (this.userService.isUserLoggedIn()) {
       let user: User = this.userService.user.value!
-      const modifiedReq = req.clone({ headers: new HttpHeaders({ 'AUTH': user.jwt }) });
+      const modifiedReq = req.clone({ headers: new HttpHeaders({ 'AUTHORIZATION': 'Bearer ' + user.jwt }) });
       return next.handle(modifiedReq)
         .pipe(
           tap(resData => {
             // console.log(resData);
             if (resData instanceof HttpResponse && (<HttpResponse<any>>resData).headers && (<HttpResponse<any>>resData).headers.get('AUTH')) {
-              let header = (<HttpResponse<any>>resData).headers.get('AUTH')
+              let header = (<HttpResponse<any>>resData).headers.get('AUTHORIZATION')
               if (header != null) {
                 try {
                   let newUser: UserData = JSON.parse(header!);

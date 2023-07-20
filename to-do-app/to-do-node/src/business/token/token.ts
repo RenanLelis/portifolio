@@ -3,9 +3,9 @@ import { User } from '../../model/user';
 import { Request } from 'express';
 
 const SECRET = process.env.SECRET_KEY ? process.env.SECRET_KEY : "07J0PpNnASqADC9LVooxIVREQs6jUq0yyvVpGVQXJkAPtwLZ7cMQSiBbT9aSv8O1n7q3YKbW2l1niOWCbcz3ng==";
-const EXP_TIME = 2 * 60 * 60 // 2 horas
+const EXP_TIME = 2 * 60 * 60 * 1000 // 2 horas
 
-const AUTH: string = "AUTH"
+const AUTH: string = "AUTHORIZATION"
 
 const generateToken = (user: User) => {
     let token = jwt.sign({
@@ -21,7 +21,8 @@ const generateToken = (user: User) => {
 }
 
 const getUserData = (tokenString: string): UserData => {
-    const decodedToken = jwt.verify(tokenString, SECRET) as UserDataToken;
+    const token = (tokenString.startsWith('Bearer')) ? tokenString.substring(7) : tokenString;
+    const decodedToken = jwt.verify(token, SECRET) as UserDataToken;
     return {
         userID: decodedToken.USER_ID,
         email: decodedToken.EMAIL,
@@ -67,7 +68,8 @@ export interface UserData {
 const getJwt = (req: Request) => {
     const jwt = req.header(AUTH);
     if (!jwt) return null
-    return jwt;
+    const token = (jwt.startsWith('Bearer')) ? jwt.substring(7) : jwt;
+    return token;
 }
 
 const getUserID = (req: Request) => {

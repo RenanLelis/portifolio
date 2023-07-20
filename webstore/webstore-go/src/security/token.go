@@ -9,8 +9,8 @@ import (
 	"time"
 
 	jwt "github.com/golang-jwt/jwt"
-	"renanlelis.github.io/portfolio/to-do-go/src/business/messages"
-	"renanlelis.github.io/portfolio/to-do-go/src/config"
+	"renanlelis.github.io/portfolio/webstore-go/src/business/messages"
+	"renanlelis.github.io/portfolio/webstore-go/src/config"
 )
 
 const AUTH string = "AUTHORIZATION"
@@ -20,12 +20,13 @@ const CLAIMS_FIRST_NAME string = "FIRST_NAME"
 const CLAIMS_LAST_NAME string = "LAST_NAME"
 const CLAIMS_EMAIL string = "EMAIL"
 const CLAIMS_ID_STATUS string = "STATUS"
+const CLAIMS_ROLE string = "ROLE"
 const CLAIMS_AUTHORIZED string = "AUTHORIZED"
 const CLAIMS_EXP_TIME string = "exp"
 const EXP_TIME int64 = 2 * 60 * 60 * 1000
 
 // CreateToken creates a JWT Token for the user
-func CreateToken(userID uint64, userStatus uint64, userEmail, firstName, lastName string) (string, error) {
+func CreateToken(userID uint64, userStatus uint64, userEmail, firstName, lastName, role string) (string, error) {
 	claims := jwt.MapClaims{}
 	claims[CLAIMS_AUTHORIZED] = true
 	claims[CLAIMS_EXP_TIME] = time.Now().Unix() + EXP_TIME
@@ -34,6 +35,7 @@ func CreateToken(userID uint64, userStatus uint64, userEmail, firstName, lastNam
 	claims[CLAIMS_FIRST_NAME] = firstName
 	claims[CLAIMS_LAST_NAME] = lastName
 	claims[CLAIMS_ID_STATUS] = userStatus
+	claims[CLAIMS_ROLE] = role
 	jwtToken := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
 	return jwtToken.SignedString([]byte(config.SecretKey))
 }
@@ -53,11 +55,11 @@ func ValidateToken(r *http.Request) error {
 
 // RefreshToken, recriate the token with the old token
 func RefreshToken(jwtToken string) (string, error) {
-	userID, status, email, firstName, lastName, err := GetUserDataFromToken(jwtToken)
+	userID, status, email, firstName, lastName, role, err := GetUserDataFromToken(jwtToken)
 	if err != nil {
 		return "", err
 	}
-	tokenString, err := CreateToken(userID, status, email, firstName, lastName)
+	tokenString, err := CreateToken(userID, status, email, firstName, lastName, role)
 	if err != nil {
 		return "", errors.New(messages.GetErrorMessageToken())
 	}
@@ -66,11 +68,11 @@ func RefreshToken(jwtToken string) (string, error) {
 
 // RefreshTokenFromRequest, recriate the token with the old token, receiving the request object
 func RefreshTokenFromRequest(r *http.Request) (string, error) {
-	userID, status, email, firstName, lastName, err := GetUserData(r)
+	userID, status, email, firstName, lastName, role, err := GetUserData(r)
 	if err != nil {
 		return "", err
 	}
-	tokenString, err := CreateToken(userID, status, email, firstName, lastName)
+	tokenString, err := CreateToken(userID, status, email, firstName, lastName, role)
 	if err != nil {
 		return "", errors.New(messages.GetErrorMessageToken())
 	}
@@ -95,10 +97,10 @@ func GetUserID(r *http.Request) (uint64, error) {
 }
 
 // GetUserDataFromToken gets the userID, status, email, name and last name from the jwt token
-func GetUserDataFromToken(tokenString string) (uint64, uint64, string, string, string, error) {
+func GetUserDataFromToken(tokenString string) (uint64, uint64, string, string, string, string, error) {
 	token, err := jwt.Parse(tokenString, getValidationKey)
 	if err != nil {
-		return 0, 0, "", "", "", err
+		return 0, 0, "", "", "", "", err
 	}
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		userID, err := strconv.ParseUint(fmt.Sprintf("%.0f", claims[CLAIMS_ID_USER]), 10, 64)
@@ -106,16 +108,17 @@ func GetUserDataFromToken(tokenString string) (uint64, uint64, string, string, s
 		email := fmt.Sprint(claims[CLAIMS_EMAIL])
 		firstName := fmt.Sprint(claims[CLAIMS_FIRST_NAME])
 		lastName := fmt.Sprint(claims[CLAIMS_LAST_NAME])
+		role := fmt.Sprint(claims[CLAIMS_ROLE])
 		if err != nil || userID == 0 {
-			return 0, 0, "", "", "", err
+			return 0, 0, "", "", "", "", err
 		}
-		return userID, status, email, firstName, lastName, nil
+		return userID, status, email, firstName, lastName, role, nil
 	}
-	return 0, 0, "", "", "", errors.New(messages.GetErrorMessageToken())
+	return 0, 0, "", "", "", "", errors.New(messages.GetErrorMessageToken())
 }
 
 // GetUserData gets the userID, status, email, name and last name from the jwt token on the request
-func GetUserData(r *http.Request) (uint64, uint64, string, string, string, error) {
+func GetUserData(r *http.Request) (uint64, uint64, string, string, string, string, error) {
 	tokenString := extractToken(r)
 	return GetUserDataFromToken(tokenString)
 }

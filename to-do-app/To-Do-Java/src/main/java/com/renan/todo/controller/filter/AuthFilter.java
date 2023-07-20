@@ -20,7 +20,7 @@ import java.io.IOException;
 public class AuthFilter implements Filter {
 
     private final JwtService jwtService;
-    public static final String AUTH = "AUTH";
+    public static final String AUTH = "AUTHORIZATION";
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
