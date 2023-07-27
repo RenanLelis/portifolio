@@ -1,20 +1,11 @@
 package com.renan.todo.service
 
-import com.renan.todo.util.API_KEY
-import com.renan.todo.util.CLAIMS_AUTHORIZED
-import com.renan.todo.util.CLAIMS_EMAIL
-import com.renan.todo.util.CLAIMS_FIRST_NAME
-import com.renan.todo.util.CLAIMS_ID_STATUS
-import com.renan.todo.util.CLAIMS_ID_USER
-import com.renan.todo.util.CLAIMS_LAST_NAME
-import com.renan.todo.util.SIGNATURE_ALGORITHM
-import com.renan.todo.util.TIMEOUT
-import com.renan.todo.util.getErrorMessageToken
+import com.renan.todo.util.*
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
+import org.springframework.stereotype.Service
 import java.util.*
 import javax.crypto.spec.SecretKeySpec
-import org.springframework.stereotype.Service
 
 /**
  * Service for jwt Operations - JSON Web Token
@@ -103,8 +94,9 @@ class JwtServiceImpl : JwtService {
      */
     @Throws(RuntimeException::class)
     override fun validateJWT(jwt: String?): Claims {
+        val token = if (jwt != null && jwt.startsWith("Bearer")) jwt.substring(7) else jwt
         return try {
-            Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(jwt).body
+            Jwts.parserBuilder().setSigningKey(getSignKey()).build().parseClaimsJws(token).body
         } catch (e: Exception) {
             throw RuntimeException("JWT Validation Error " + e.message)
         }

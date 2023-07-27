@@ -18,7 +18,7 @@ import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
 import java.io.IOException
 
-const val AUTH = "AUTH"
+const val AUTH = "AUTHORIZATION"
 
 /**
  * Filter some endpoints checking if the user is authenticated
