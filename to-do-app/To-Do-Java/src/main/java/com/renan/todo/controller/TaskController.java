@@ -190,33 +190,4 @@ public class TaskController {
         taskService.moveTaskToList(id, form.getListId(), userID);
     }
 
-    /**
-     * Handle de business exceptions and return the response entity with the status code
-     *
-     * @param e - the exception
-     *
-     * @return the response entity with the status code and error dto
-     */
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ErrorDTO> handleBusinessExceptions(BusinessException e) {
-        return e.getResponseEntity();
-    }
-
-    /**
-     * Handle exceptions and return the response entity with the status code
-     *
-     * @param e - the exception
-     *
-     * @return the response entity with the status code and error dto
-     */
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorDTO> handleExceptions(Exception e) {
-        e.printStackTrace();
-        if (e instanceof BusinessException) {
-            return ((BusinessException) e).getResponseEntity();
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorDTO(MessageUtil.getErrorMessage()));
-    }
-
 }

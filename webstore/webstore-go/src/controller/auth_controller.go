@@ -1,25 +1,14 @@
 package controller
 
 import (
-	"encoding/json"
-	"io/ioutil"
-
 	"github.com/gin-gonic/gin"
 	"renanlelis.github.io/portfolio/webstore-go/src/controller/form"
 )
 
 // Login implements the controller for login requests
 func Login(ctx *gin.Context) {
-	reqBody, err := ioutil.ReadAll(ctx.Request.Body)
-	if err != nil {
-		// response.Err(w, http.StatusUnprocessableEntity, err, r)
-		return
-	}
 	var form form.LoginForm
-	if err := json.Unmarshal(reqBody, &form); err != nil {
-		// response.Err(w, http.StatusBadRequest, err, r)
-		return
-	}
+	ctx.BindJSON(&form)
 	//TODO
 }
 

@@ -1,16 +1,10 @@
 package com.renan.todo.controller;
 
 import com.renan.todo.controller.form.*;
-import com.renan.todo.dto.ErrorDTO;
 import com.renan.todo.dto.UserDTO;
 import com.renan.todo.service.AuthService;
-import com.renan.todo.service.BusinessException;
-import com.renan.todo.util.MessageUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -102,34 +96,6 @@ public class AuthController {
         authService.requestUserActivation(form.getEmail() != null ? form.getEmail().trim().toLowerCase() : null);
     }
 
-    /**
-     * Handle de business exceptions and return the response entity with the status code
-     *
-     * @param e - the exception
-     *
-     * @return the response entity with the status code and error dto
-     */
-    @ExceptionHandler(BusinessException.class)
-    public ResponseEntity<ErrorDTO> handleBusinessExceptions(BusinessException e) {
-        return e.getResponseEntity();
-    }
-
-    /**
-     * Handle exceptions and return the response entity with the status code
-     *
-     * @param e - the exception
-     *
-     * @return the response entity with the status code and error dto
-     */
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<ErrorDTO> handleExceptions(Exception e) {
-        e.printStackTrace();
-        if (e instanceof BusinessException) {
-            return ((BusinessException) e).getResponseEntity();
-        }
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ErrorDTO(MessageUtil.getErrorMessage()));
-    }
+    
 
 }

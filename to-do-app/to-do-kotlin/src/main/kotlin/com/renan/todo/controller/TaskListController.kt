@@ -68,25 +68,4 @@ class TaskListController(val taskListService: TaskListService, val jwtService: J
     fun getTasksAndLists(@RequestHeader(AUTH) jwt: String?) =
         taskListService.getTasksAndLists(jwtService.getIdUser(jwt))
 
-    /**
-     * Handle de business exceptions and return the response entity with the status code
-     */
-    @ExceptionHandler(BusinessException::class)
-    fun handleBusinessExceptions(e: BusinessException) = e.generateResponseEntity()
-
-    /**
-     * Handle exceptions and return the response entity with the status code
-     */
-    @ExceptionHandler(Exception::class)
-    fun handleExceptions(e: Exception): ResponseEntity<ErrorDTO> {
-        e.printStackTrace()
-        return if (e is BusinessException) {
-            e.generateResponseEntity()
-        } else {
-            ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ErrorDTO(getErrorMessage()))
-        }
-    }
-
 }

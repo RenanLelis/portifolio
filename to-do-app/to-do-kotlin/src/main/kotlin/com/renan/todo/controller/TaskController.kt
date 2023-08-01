@@ -142,25 +142,4 @@ class TaskController(val taskService: TaskService, val jwtService: JwtService) {
         @RequestBody form: MoveTaskToListForm
     ) = taskService.moveTaskToList(id, form.listId, jwtService.getIdUser(jwt))
 
-    /**
-     * Handle de business exceptions and return the response entity with the status code
-     */
-    @ExceptionHandler(BusinessException::class)
-    fun handleBusinessExceptions(e: BusinessException) = e.generateResponseEntity()
-
-    /**
-     * Handle exceptions and return the response entity with the status code
-     */
-    @ExceptionHandler(Exception::class)
-    fun handleExceptions(e: Exception): ResponseEntity<ErrorDTO> {
-        e.printStackTrace()
-        return if (e is BusinessException) {
-            e.generateResponseEntity()
-        } else {
-            ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ErrorDTO(getErrorMessage()))
-        }
-    }
-
 }

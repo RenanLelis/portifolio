@@ -96,25 +96,4 @@ class AuthController(val authService: AuthService) {
             .lowercase(Locale.getDefault()))
     }
 
-    /**
-     * Handle de business exceptions and return the response entity with the status code
-     */
-    @ExceptionHandler(BusinessException::class)
-    fun handleBusinessExceptions(e: BusinessException) = e.generateResponseEntity()
-
-    /**
-     * Handle exceptions and return the response entity with the status code
-     */
-    @ExceptionHandler(Exception::class)
-    fun handleExceptions(e: Exception): ResponseEntity<ErrorDTO> {
-        e.printStackTrace()
-        return if (e is BusinessException) {
-            e.generateResponseEntity()
-        } else {
-            ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ErrorDTO(getErrorMessage()))
-        }
-    }
-
 }
