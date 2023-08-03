@@ -26,10 +26,12 @@ func init() {
 func main() {
 	fmt.Println("Starting application")
 	config.Load()
-	r := gin.Default()
-	router.ConfigRoutes(r)
-	r.Use(cors.New(cors.DefaultConfig()))
+	// server := gin.Default()
+	server := gin.New()
+	server.Use(gin.Recovery(), gin.Logger())
+	router.ConfigRoutes(server)
+	server.Use(cors.New(cors.DefaultConfig()))
 	fmt.Printf("Listenning on port %d\n", config.Port)
 	// r.Run(fmt.Sprintf(":%d", config.Port))
-	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", config.Port), r))
+	log.Fatal(http.ListenAndServe(fmt.Sprintf(":%d", config.Port), server))
 }

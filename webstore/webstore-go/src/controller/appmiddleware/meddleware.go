@@ -2,16 +2,20 @@ package appmiddleware
 
 import "github.com/gin-gonic/gin"
 
-func ValidateAdmin(next func(ctx *gin.Context)) func(ctx *gin.Context) {
+func ValidateAuth() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		//TODO Implement
-		next(ctx)
+		// before request
+		ctx.Next()
+		// after request
 	}
 }
 
-func ValidateAuth(next func(ctx *gin.Context)) func(ctx *gin.Context) {
+func ValidateAdmin() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		//TODO Implement
-		next(ctx)
+		// before request
+		ctx.Next()
+		// after request
 	}
 }
