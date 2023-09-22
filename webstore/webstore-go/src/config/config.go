@@ -1,7 +1,6 @@
 package config
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"strconv"
@@ -11,6 +10,7 @@ import (
 
 var (
 	StringDataBaseConnection = ""
+	DatabaseName = ""
 	Port                     = 0
 	SecretKey                []byte
 	MailFrom                 = ""
@@ -33,11 +33,9 @@ func Load() {
 		Port = 8080
 	}
 
-	StringDataBaseConnection = fmt.Sprintf("%s:%s@/%s?charset=utf8&parseTime=True&loc=Local",
-		os.Getenv("DBgodotenv"),
-		os.Getenv("DB_PASSWORD"),
-		os.Getenv("DB_NAME"),
-	)
+	StringDataBaseConnection = os.Getenv("DB_WEBSTORE_URL")
+
+	DatabaseName = os.Getenv("DB_WEBSTORE_NAME")
 
 	SecretKey = []byte(os.Getenv("SECRET_KEY"))
 
