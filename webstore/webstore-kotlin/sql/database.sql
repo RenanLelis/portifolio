@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS USER_WEBSTORE(
 CREATE TABLE IF NOT EXISTS CATEGORY(
     ID int auto_increment primary key,
     NAME varchar(50) not null,
-    ID_UPPER_CATEGORY int not null,
+    ID_UPPER_CATEGORY int,
         FOREIGN KEY (ID_UPPER_CATEGORY)
         REFERENCES CATEGORY(ID)
         ON DELETE CASCADE

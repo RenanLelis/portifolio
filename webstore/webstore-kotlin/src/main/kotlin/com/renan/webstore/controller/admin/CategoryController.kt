@@ -18,15 +18,15 @@ class CategoryController(
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    fun createCategory(@RequestBody form: CategoryForm): String = categoryService.createCategory(form)
+    fun createCategory(@RequestBody form: CategoryForm): CategoryDTO = categoryService.createCategory(form)
 
     @PutMapping("/{id}")
     fun updateCategory(
         @RequestBody form: CategoryForm,
-        @PathParam("id") id: String
+        @PathVariable("id") id: Int
     ) = categoryService.updateCategory(form, id)
 
-    @DeleteMapping("/{id}")
-    fun deleteCategory(@PathParam("id") id: String) = categoryService.deleteCategory(id)
+    @DeleteMapping(value=["/{id}"])
+    fun deleteCategory(@PathVariable("id") id: Int) = categoryService.deleteCategory(id)
 
 }

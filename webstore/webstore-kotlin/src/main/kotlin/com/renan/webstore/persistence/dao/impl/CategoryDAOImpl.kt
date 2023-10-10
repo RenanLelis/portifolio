@@ -17,7 +17,7 @@ class CategoryDAOImpl(
         return if (opt.isPresent) opt.get() else null
     }
 
-    override fun save(category: Category): Int = repository.save(category).id!!
+    override fun save(category: Category): Category = repository.save(category)
 
     override fun delete(id: Int) {
         repository.deleteById(id)

@@ -22,7 +22,7 @@ class CategoryServiceImpl(
         return categoryDTOMapper.convertCategoriesToDTO(categories)
     }
 
-    override fun createCategory(form: CategoryForm): Int {
+    override fun createCategory(form: CategoryForm): CategoryDTO {
         if (form.name.isBlank()) throw BusinessException(
             message = getErrorMessageInputValues(),
             businessMessage = true,
@@ -37,10 +37,13 @@ class CategoryServiceImpl(
                     errorType = AppErrorType.INVALID_INPUT
                 )
         }
-        return categoryDAO.save(Category(
-            name = form.name,
-            upperCategory = cat
-        ))
+        val newCat = categoryDAO.save(
+            Category(
+                name = form.name,
+                upperCategory = cat
+            )
+        )
+        return categoryDTOMapper.apply(newCat)
     }
 
     override fun updateCategory(form: CategoryForm, id: Int) {

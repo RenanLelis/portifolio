@@ -12,6 +12,6 @@ data class Category(
     @Column(name = "NAME", nullable = false)
     var name: String,
     @ManyToOne
-    @JoinColumn(name = "ID_UPPER_CATEGORY", nullable = false)
+    @JoinColumn(name = "ID_UPPER_CATEGORY")
     var upperCategory: Category?
 )

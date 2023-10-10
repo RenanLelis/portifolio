@@ -9,7 +9,7 @@ interface CategoryService {
     fun getCategories(): List<CategoryDTO>
 
     @Throws(BusinessException::class)
-    fun createCategory(form: CategoryForm): Int
+    fun createCategory(form: CategoryForm): CategoryDTO
 
     @Throws(BusinessException::class)
     fun updateCategory(form: CategoryForm, id: Int)
